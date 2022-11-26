@@ -1,0 +1,89 @@
+package com.example.speedsideproject.post;
+
+
+import com.example.speedsideproject.account.entity.Account;
+import com.example.speedsideproject.aws_s3.S3UploadUtil;
+import com.example.speedsideproject.error.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.speedsideproject.error.ErrorCode.CANNOT_FIND_POST_NOT_EXIST;
+import static com.example.speedsideproject.error.ErrorCode.NOT_FOUND_USER;
+
+@Service
+public class PostService {
+    private final PostRepository postRepository;
+    private final S3UploadUtil s3UploadUtil;
+
+    @Autowired
+    public PostService(PostRepository postRepository, S3UploadUtil s3UploadUtil) {
+        this.postRepository = postRepository;
+        this.s3UploadUtil = s3UploadUtil;
+    }
+
+
+    // 모든 글 읽어오기
+    public List<PostResponseDto> getAllpost() {
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
+
+    //글 쓰기
+    @Transactional
+    public PostResponseDto createPost(PostRequestDto postRequestDto, MultipartFile imgFile, Account account) throws IOException {
+        if (!(imgFile == null)) {
+            var r = s3UploadUtil.upload(imgFile, "side-post");
+            Post post = new Post(postRequestDto, account, r);
+            postRepository.save(post);
+            return new PostResponseDto(post);
+        } else {
+            Post post = new Post(postRequestDto, account);
+            postRepository.save(post);
+            return new PostResponseDto(post);
+        }
+    }
+
+    //글 수정
+    @Transactional
+    public PostResponseDto updatePost(PostRequestDto requestDto, Long id, Account account) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
+        );
+
+        if (!account.getEmail().equals(post.getEmail())) {
+            throw new CustomException(NOT_FOUND_USER);
+        }
+        post.update(requestDto);
+        return new PostResponseDto(post);
+    }
+
+    //글 삭제
+    @Transactional
+    public String deletePost(Long id, Account account) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
+        );
+        if (!account.getEmail().equals(post.getEmail())) {
+            throw new CustomException(NOT_FOUND_USER);
+        }
+        postRepository.deleteById(id);
+        if (!(post.getUrlKey() == null)) {
+            s3UploadUtil.delete(post.getUrlKey());
+        }
+        return "delete success";
+    }
+
+    //글 1개 get
+    public PostResponseDto getOnePost(Account account) {
+
+        Post post = postRepository.findById(account.getId()).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+
+        return new PostResponseDto(post);
+    }
+
+}
