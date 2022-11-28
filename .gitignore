@@ -23,6 +23,7 @@
 *.tar.gz
 *.rar
 # 우리 프로젝트에서 추가
+application_secret.properties
 application-mail.yml
 application-jwtToken.properties
 keystore.p12
