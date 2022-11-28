@@ -2,6 +2,7 @@ package com.example.speedsideproject.account.entity;
 
 
 import com.example.speedsideproject.account.dto.AccountReqDto;
+import lombok.Builder;
 import com.example.speedsideproject.account.dto.UserInfoDto;
 import com.example.speedsideproject.comment.entity.Comment;
 import lombok.Getter;
@@ -28,6 +29,19 @@ public class Account {
     private String nickname;
     private String imgUrl;
     private String imgKey;
+    @Column
+    private Boolean isAccepted = false;
+    @Column
+    private Boolean isDeleted;
+
+    @Builder
+    public Account(String email, String nickname, String imgUrl, Boolean isAccepted, Boolean isDeleted){
+        this.email = email;
+        this.nickname = nickname;
+        this.imgUrl = imgUrl;
+        this.isAccepted = isAccepted;
+        this.isDeleted = isDeleted;
+    }
 
     @OneToMany(mappedBy = "account")
     private List<Comment> commentList;

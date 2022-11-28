@@ -18,6 +18,7 @@ public enum ErrorCode {
     DONT_USE_THIS_TOKEN(HttpStatus.BAD_REQUEST.value(), "U006","유효하지 않은 토큰 입니다."),
     NOT_MATCHED_PASSWORD(HttpStatus.BAD_REQUEST.value(), "U006","비밀번호가 틀렸습니다."),
     OVERLAP_CHECK(HttpStatus.BAD_REQUEST.value(), "U007","email이 중복입니다"),
+    DELETED_USER_EXCEPTION(HttpStatus.BAD_REQUEST.value(),"U008" ,"이미 탈퇴한 계정입니다.\n다른 계정으로 시도해 주세요." ),
 
     //CHAT-USER
     NOT_FOUND_USER_IN_CHAT(HttpStatus.NOT_FOUND.value(), "CU001","해당 유저를 찾을 수 없습니다."),
