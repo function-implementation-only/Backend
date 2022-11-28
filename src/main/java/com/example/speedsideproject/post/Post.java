@@ -96,13 +96,6 @@ public class Post extends Timestamped {
         this.postType = requestDto.getType();
     }
 
-    public Post(String contents, Account account) {
-        this.contents = contents;
-        this.title = "";
-        this.account = account;
-        this.email = account.getEmail();
-    }
-
     public Post(PostRequestDto requestDto, Map<String, String> urlMap) {
         this.contents = requestDto.getContents();
         // this.title = requestDto.getTitle();

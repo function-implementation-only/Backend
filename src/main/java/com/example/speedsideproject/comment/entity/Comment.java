@@ -5,6 +5,7 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.comment.dto.CommentRequestDto;
 import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.post.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +37,11 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "post")
     private Post post;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn
+    private Account account;
+
     public Comment(CommentRequestDto requestDto) {
         this.comments = requestDto.getComments();
     }
@@ -49,4 +55,5 @@ public class Comment extends Timestamped {
     public void update(CommentRequestDto requestDto) {
         this.comments = requestDto.getComments();
     }
+
 }
