@@ -11,7 +11,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 
-@RequestMapping("/api/post")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 @RestController
 public class PostController {

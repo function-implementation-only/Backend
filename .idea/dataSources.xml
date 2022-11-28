@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="velocesdb@velocesdb.caxoy99zrlqo.ap-northeast-2.rds.amazonaws.com" uuid="891ccd89-dc84-46bd-ba3f-0e121ac0f8a4">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://velocesdb.caxoy99zrlqo.ap-northeast-2.rds.amazonaws.com:3306/velocesdb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
