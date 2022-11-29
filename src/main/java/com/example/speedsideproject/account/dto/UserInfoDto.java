@@ -17,12 +17,9 @@ public class UserInfoDto {
     private String email;
     private String nickname;
 
-    private List<Optional<Post>> post;
-
     public UserInfoDto(Account account) {
         this.email = account.getEmail();
         this.nickname = account.getNickname();
-      //  this.post = account.
     }
 
 }

@@ -3,19 +3,18 @@ package com.example.speedsideproject.account.service;
 
 import com.example.speedsideproject.account.dto.AccountReqDto;
 import com.example.speedsideproject.account.dto.LoginReqDto;
+import com.example.speedsideproject.account.dto.UserInfoDto;
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.entity.RefreshToken;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.account.repository.RefreshTokenRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.comment.dto.CommentResponseDto;
-import com.example.speedsideproject.comment.entity.Comment;
 import com.example.speedsideproject.comment.repository.CommentRepository;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
-import com.example.speedsideproject.post.Post;
 import com.example.speedsideproject.post.PostRepository;
 import com.example.speedsideproject.post.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.*;
 
@@ -91,46 +89,41 @@ public class AccountService {
 
     //내 글목록 가져오기
     public List<PostResponseDto> getMyPost(Account account) {
-
-        var posts = postRepository.findAllByEmail(account.getEmail());
-        var postResponseDtos = new ArrayList<PostResponseDto>() {
-            public String testNickname = account.getNickname();
-        };
-        for (Post post : posts) {
-            postResponseDtos.add(new PostResponseDto(post, account));
-        }
-        return postResponseDtos;
+        return postRepository.findAllByAccount(account).stream().map(post -> new PostResponseDto(post, account)).collect(Collectors.toList());
     }
 
+    // 내 댓글 가져오기
     public List<CommentResponseDto> getMyComment(Account account) {
-        var comments = commentRepository.findAllByEmail(account.getEmail());
-        var commentResponseDtos = new ArrayList<CommentResponseDto>();
-        for (Comment comment : comments) {
-            commentResponseDtos.add(new CommentResponseDto(comment));
-        }
-        return commentResponseDtos;
+        return commentRepository.findAllByAccount(account).stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 
     //logout 기능
     @Transactional
-    public ResponseDto<?> logout(String email) throws Exception {
+    public ResponseDto<?> logout(String email) {
         var refreshToken = refreshTokenRepository.findByAccountEmail(email).orElseThrow(
-                ()-> new CustomException(REFRESH_TOKEN_IS_EXPIRED)
+                () -> new CustomException(REFRESH_TOKEN_IS_EXPIRED)
         );
         refreshTokenRepository.delete(refreshToken);
         return ResponseDto.success("Delete Success");
     }
 
     //profile edit 기능
-    public ResponseDto<?> editMyInfo(Account account, AccountReqDto accountReqDto, MultipartFile file) throws IOException {
+    public ResponseDto<?> editMyInfo(Account account, UserInfoDto userInfoDto, MultipartFile imgFile) throws IOException {
         // 아이디 존재 여부 체크
-        accountRepository.findById(account.getId()).orElseThrow(
-                ()->new CustomException(NOT_FOUND_USER)
-        );
-        //img 업로드 & return 값 받기
-        Map<String, String> profile = s3UploadUtil.upload(file, "profile");
+        Account editMyAccount = accountRepository.findById(account.getId()).orElseThrow(() -> new CustomException(NOT_FOUND_USER));
         // Account repo에 url 및 key 저장
-        account.update(accountReqDto,profile);
+        if (!(imgFile == null)) {
+            var r = s3UploadUtil.upload(imgFile, "profile-img");
+            editMyAccount.update(userInfoDto, r);
+        } else {
+            editMyAccount.update(userInfoDto);
+        }
         return ResponseDto.success("Profile edited");
     }
+
+    //Methods
+    public void accountCheck(Account account) {
+        accountRepository.findById(account.getId()).orElseThrow(() -> new CustomException(NOT_FOUND_USER));
+    }
+
 }
