@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 () -> new RuntimeException("Not Found Account")
         );
 
-        UserDetailsImpl userDetails = new UserDetailsImpl();
+        UserDetailsImpl userDetails = new UserDetailsImpl(account);
         userDetails.setAccount(account);
 
         return userDetails;
