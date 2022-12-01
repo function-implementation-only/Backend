@@ -28,11 +28,13 @@ jobs:
         java-version: 11
     
     - name: Grant execute permission for gradlew
+      env:
+       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
       run: chmod +x gradlew
     
     - name: Build with Gradle
       env:
-       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORDS }}
+       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
       run: ./gradlew clean build
      
      
