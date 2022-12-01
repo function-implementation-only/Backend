@@ -21,6 +21,7 @@ import java.util.Map;
 public class Account {
 
     @Id
+    @Column(name = "account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
