@@ -32,5 +32,19 @@ jobs:
        jasypt.encryptor.password: ${{ env.CODE_DEPLOY_APPLICATION_NAME }}
       run: ./gradlew clean build
        
+   # 새로 추가 된 부분 
+    - name: Make zip file
+      run: zip -r ./$GITHUB_SHA.zip .
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: ${{ secrets.CICD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CICD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$springbootcicdtest/$GITHUB_SHA.zip   
      
      
