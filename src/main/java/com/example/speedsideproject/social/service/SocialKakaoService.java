@@ -38,7 +38,7 @@ import java.util.Optional;
 public class SocialKakaoService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String kakaoClientId;
-    @Value("%{spring.security.oauth2.client.registration.kakao.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String kakaoClientSecret;
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirect_uri;
@@ -55,20 +55,21 @@ public class SocialKakaoService {
 
         //인가코드를 통해 access_token 발급받기
         String accessToken = issuedAccessToken(code);
-
+        System.out.println("accessToken = " + accessToken);
         //access_token을 통해 사용자 정보가져오기
         SocialUserInfoDto socialUserInfoDto = getKakaoUserInfo(accessToken);
-
+        System.out.println("socialUserInfoDto = " + socialUserInfoDto);
         //사용자정보를 토대로 가입진행하기(일단 DB에 저장이 되어있는지 확인후)
         Account account = saveAccount(socialUserInfoDto);
-
+        System.out.println("account = " + account);
         //강제 로그인 처리
         forceLoginUser(account);
-
+        System.out.println("account = " + account);
         //토큰 발급후 response
         createToken(account,response);
-
+        System.out.println("account = " + account);
         UserInfoDto userInfoDto = new UserInfoDto(account);
+        System.out.println("userInfoDto = " + userInfoDto);
 
         return ResponseDto.success("kakao signup success");
     }

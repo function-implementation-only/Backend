@@ -54,8 +54,7 @@ public class Post extends Timestamped {
     private Tech tech;
 
     @Column(nullable = true)
-    private LocalDate startDate;
-
+    private String startDate;
 
     @Column(nullable = true)
     private String urlToString;
@@ -105,7 +104,7 @@ public class Post extends Timestamped {
         this.account = account;
         this.urlToString = urlMap.get("url");
         this.urlKey = urlMap.get("key");
-
+        this.category = requestDto.getCategory();
     }
 
     public Post(PostRequestDto requestDto, Account account) {
