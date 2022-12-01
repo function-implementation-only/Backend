@@ -10,8 +10,8 @@ name: Spring Boot & Gradle CI/CD
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+env:
+  jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
 
 jobs:
   build:
