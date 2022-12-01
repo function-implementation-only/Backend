@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class SpeedSideProject {
 
+
     public static void main(String[] args) {
         SpringApplication.run(SpeedSideProject.class, args);
     }

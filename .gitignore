@@ -24,9 +24,8 @@
 *.rar
 # 우리 프로젝트에서 추가
 keystore-veloce.p12
-application-secret.properties
+
 application-mail.yml
-application-jwtToken.properties
 keystore.p12
 .gradle/
 build/

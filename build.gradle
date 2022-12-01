@@ -51,6 +51,9 @@ buildscript {
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
         //카카오 로그인
         implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.6.3'
+        //jasypt
+        implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.4'
+
 
     }
     tasks.named('test') {
