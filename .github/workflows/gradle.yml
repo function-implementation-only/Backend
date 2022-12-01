@@ -32,7 +32,7 @@ jobs:
     
     - name: Build with Gradle
       env:
-       jasypt.encryptor.password: ${{ JASYPT_ENCRYPTOR_PASSWORD }}
+       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORDS }}
       run: ./gradlew clean build
      
      
