@@ -23,10 +23,9 @@
 *.tar.gz
 *.rar
 # 우리 프로젝트에서 추가
-keystore-veloce.p12
 
 application-mail.yml
-keystore.p12
+
 .gradle/
 build/
 SJ-HTTP-REQUEST.http
