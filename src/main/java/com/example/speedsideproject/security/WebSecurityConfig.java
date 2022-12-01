@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("POST","GET","DELETE","PUT","PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*","Accept","Access_Token","Cache-Control","Referer","Refresh_Token","User-Agent"));
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -73,7 +73,17 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/api/account/**").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/test/**").permitAll()
+                .antMatchers("/member/**").permitAll()
+                .antMatchers("/post/**").permitAll()
+                .antMatchers("/posts/**").permitAll()
+                .antMatchers("/issue/**").permitAll()
+                .antMatchers("/comment/**").permitAll()
+                .antMatchers("/create/**").permitAll()
+                .antMatchers("/price/**").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers ( PERMIT_URL_ARRAY ).permitAll ()
                 //swagger
                 .antMatchers ( PERMIT_URL_ARRAY ).permitAll ()
                 .anyRequest().authenticated()
