@@ -26,8 +26,11 @@ jobs:
     
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    
+      
     - name: Build with Gradle
+      env:
+       jasypt.encryptor.password: ${{ env.CODE_DEPLOY_APPLICATION_NAME }}
       run: ./gradlew clean build
+       
      
      
