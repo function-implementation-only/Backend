@@ -33,20 +33,20 @@ public class PostController {
     }
 
     //글 수정
-    @PutMapping("/{id}")
+    @PutMapping("detail/{id}")
     public ResponseDto<?> updatePost(@RequestBody PostRequestDto requestDto, @PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.updatePost(requestDto, id, userDetails.getAccount()));
     }
 
 
     //글 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("detail/{id}")
     public ResponseDto<?> deletePost(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.deletePost(id, userDetails.getAccount()));
     }
 
     //글 1개 읽기
-    @GetMapping("/{id}")
+    @GetMapping("detail/{id}")
     public ResponseDto<?> getOnePost(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.getOnePost(userDetails.getAccount()));
     }

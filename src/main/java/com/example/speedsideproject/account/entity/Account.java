@@ -2,6 +2,8 @@ package com.example.speedsideproject.account.entity;
 
 
 import com.example.speedsideproject.account.dto.AccountReqDto;
+import com.example.speedsideproject.post.Post;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import com.example.speedsideproject.account.dto.UserInfoDto;
 import com.example.speedsideproject.comment.entity.Comment;
@@ -34,6 +36,13 @@ public class Account {
     @Column
     private Boolean isDeleted;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<Post> post;
+
+    @OneToMany(mappedBy = "account")
+    private List<Comment> commentList;
+
     @Builder
     public Account(String email, String nickname, String imgUrl, Boolean isAccepted, Boolean isDeleted){
         this.email = email;
@@ -43,8 +52,6 @@ public class Account {
         this.isDeleted = isDeleted;
     }
 
-    @OneToMany(mappedBy = "account")
-    private List<Comment> commentList;
 
     public Account(AccountReqDto accountReqDto) {
         this.email = accountReqDto.getEmail();
