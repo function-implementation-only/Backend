@@ -9,7 +9,7 @@ name: Spring Boot & Gradle CI/CD
 # branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음 
 on:
   push:
-    branches: [ 7-cicd ]
+    branches: [ feature/7-cicd ]
   pull_request:
     branches: [ 7-cicd ]
 
