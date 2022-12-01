@@ -10,9 +10,6 @@ name: Spring Boot & Gradle CI/CD
 on:
   push:
     branches: [ master ]
-env:
-  jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
-
 jobs:
   build:
     # 실행 환경 지정
@@ -28,13 +25,9 @@ jobs:
         java-version: 11
     
     - name: Grant execute permission for gradlew
-      env:
-       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
       run: chmod +x gradlew
     
     - name: Build with Gradle
-      env:
-       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
       run: ./gradlew clean build
      
      
