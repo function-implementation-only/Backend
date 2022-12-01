@@ -55,7 +55,7 @@ public class PostService {
                 () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
 
-        if (!account.getEmail().equals(post.getEmail())) {
+        if (!account.getEmail().equals(post.getAccount().getEmail())) {
             throw new CustomException(NOT_FOUND_USER);
         }
         post.update(requestDto);
@@ -68,7 +68,7 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
-        if (!account.getEmail().equals(post.getEmail())) {
+        if (!account.getEmail().equals(post.getAccount().getEmail())) {
             throw new CustomException(NOT_FOUND_USER);
         }
         postRepository.deleteById(id);
@@ -80,9 +80,7 @@ public class PostService {
 
     //글 1개 get
     public PostResponseDto getOnePost(Account account) {
-
         Post post = postRepository.findById(account.getId()).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-
         return new PostResponseDto(post);
     }
 

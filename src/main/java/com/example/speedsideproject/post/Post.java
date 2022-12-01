@@ -5,11 +5,17 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.comment.entity.Comment;
 import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.likes.Likes;
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Duration;
+import com.example.speedsideproject.post.enums.Place;
+import com.example.speedsideproject.post.enums.Tech;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +31,31 @@ public class Post extends Timestamped {
 
     @Column(nullable = true)
     private String title;
+
     @Column(nullable = true)
     private String contents;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Duration duration;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Place place;
+
+    private Long peopleNum;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Tech tech;
+
     @Column(nullable = true)
-    private String email;
+    private LocalDate startDate;
+
 
     @Column(nullable = true)
     private String urlToString;
@@ -37,7 +64,7 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     private String urlKey;
 
-    @JsonIgnore //JPA 순환참조
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_Id")
     private Account account;
@@ -54,10 +81,6 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     private Long likesLength = 0L;
 
-    @Enumerated(EnumType.STRING)
-    private PostType postType;
-
-
     public Post(String contents, String title) {
         this.contents = contents;
         this.title = title;
@@ -72,7 +95,6 @@ public class Post extends Timestamped {
         this.contents = post.getContents();
         this.title = post.getTitle();
         this.account = post.getAccount();
-        this.email = post.getEmail();
         this.urlToString = post.getUrlToString();
         this.urlKey = post.getUrlKey();
     }
@@ -81,10 +103,8 @@ public class Post extends Timestamped {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
         this.account = account;
-        this.email = account.getEmail();
         this.urlToString = urlMap.get("url");
         this.urlKey = urlMap.get("key");
-        this.postType = requestDto.getType();
 
     }
 
@@ -92,8 +112,6 @@ public class Post extends Timestamped {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
         this.account = account;
-        this.email = account.getEmail();
-        this.postType = requestDto.getType();
     }
 
     public Post(PostRequestDto requestDto, Map<String, String> urlMap) {
