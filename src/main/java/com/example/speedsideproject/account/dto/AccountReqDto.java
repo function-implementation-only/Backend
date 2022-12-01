@@ -25,5 +25,4 @@ public class AccountReqDto {
     public void setEncodePwd(String encodePwd) {
         this.password = encodePwd;
     }
-
 }

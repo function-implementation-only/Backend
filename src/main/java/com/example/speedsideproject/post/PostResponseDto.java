@@ -23,7 +23,7 @@ public class PostResponseDto {
     private Place place;
     private Long peopleNum;
     private Tech tech;
-    private LocalDate startDate;
+    private String startDate;
 
     //null이라면 이 필드 값 ignore
     @JsonInclude(JsonInclude.Include.NON_NULL)
