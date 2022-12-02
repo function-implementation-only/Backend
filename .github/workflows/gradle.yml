@@ -39,11 +39,11 @@ jobs:
           pwd
           ls -a .
           echo "copy properties"
-          echo $jasypt.encryptor.password  > ./application-cicd.properties
+          echo $jasypt_encryptor_password  > ./application-cicd.properties
           cat application-cicd.properties
       shell: bash
       env:
-          jasypt.encryptor.password : ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+          jasypt_encryptor_password : ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
    
    
    
