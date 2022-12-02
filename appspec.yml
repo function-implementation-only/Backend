@@ -5,8 +5,8 @@ files:
     destination: /home/ubuntu/app/deploy
     overwrite: yes
 hooks:
-  BeforeInstall:
-    -runas: ubuntu
+#  BeforeInstall:
+#    -runas: ubuntu
 
   AfterInstall:
     - location: deploy.sh
