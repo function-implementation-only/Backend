@@ -5,7 +5,10 @@ files:
     destination: /home/ubuntu/app/deploy
     overwrite: yes
 hooks:
+  BeforeInstall:
+    -runas: ubuntu
+
   AfterInstall:
     - location: deploy.sh
       timeout: 60
-      runas: root
+      runas: ubuntu
