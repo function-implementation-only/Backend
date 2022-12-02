@@ -36,7 +36,7 @@ public class PostService {
     //글 쓰기
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, MultipartFile imgFile, Account account) throws IOException {
-        if (!(imgFile == null)) {
+        if (imgFile != null) {
             var r = s3UploadUtil.upload(imgFile, "side-post");
             Post post = new Post(postRequestDto, account, r);
             postRepository.save(post);
@@ -50,7 +50,7 @@ public class PostService {
 
     //글 수정
     @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, Long id, Account account) {
+    public PostResponseDto updatePost(PostRequestDto requestDto,MultipartFile imgFile, Long id, Account account) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
