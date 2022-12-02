@@ -53,3 +53,16 @@ jobs:
         aws s3 cp \
          --region ap-northeast-2 \
          --acl private \./springbootcicdtest.zip s3://springbootcicdtest/ 
+
+  # Deploy
+    - name: Deploy
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CICD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CICD_AWS_SECRET_ACCESS_KEY }}
+      run: |
+          aws deploy create-deployment \
+          --application-name springboot-cicd \
+          --deployment-group-name cicdgroup \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=springbootcicdtest,bundleType=zip,key=springbootcicdtest.zip \
+          --region ap-northeast-2
