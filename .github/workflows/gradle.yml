@@ -66,3 +66,4 @@ jobs:
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=springbootcicdtest,bundleType=zip,key=springbootcicdtest.zip \
           --region ap-northeast-2
+
