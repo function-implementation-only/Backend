@@ -11,18 +11,17 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 
-@RequestMapping("/post")
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
     //모든 글 읽어 오기
-    @GetMapping("/auth")
+    @GetMapping("/all")
     public ResponseDto<?> getAllPost() {
         return ResponseDto.success(postService.getAllpost());
     }
-
 
     //글쓰기 + img 업로드
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -33,23 +32,23 @@ public class PostController {
     }
 
     //글 수정
-    @PutMapping("detail/{id}")
-    public ResponseDto<?> updatePost(@RequestBody PostRequestDto requestDto, @PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(postService.updatePost(requestDto, id, userDetails.getAccount()));
+    @PutMapping(name = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseDto<?> updatePost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
+                                     @RequestPart(name = "image", required = false) MultipartFile imgFile,
+                                     @PathVariable Long id,
+                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
+        return ResponseDto.success(postService.updatePost(postRequestDto, imgFile, id, userDetails.getAccount()));
     }
 
-
     //글 삭제
-    @DeleteMapping("detail/{id}")
+    @DeleteMapping("{id}")
     public ResponseDto<?> deletePost(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.deletePost(id, userDetails.getAccount()));
     }
 
     //글 1개 읽기
-    @GetMapping("detail/{id}")
+    @GetMapping("/{id}")
     public ResponseDto<?> getOnePost(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.getOnePost(userDetails.getAccount()));
     }
-
-
 }
