@@ -1,7 +1,7 @@
 REPOSITORY=/home/ubuntu/app/deploy
 cd $REPOSITORY
 
-APP_NAME=SpeedSideProject #1
+APP_NAME=curriculum #1
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
