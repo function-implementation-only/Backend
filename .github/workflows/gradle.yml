@@ -27,6 +27,26 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: make email_pwd.properties
+      if: contains(github.ref, 'main')
+      run: |
+          echo "ls -a . & pwd"
+          pwd
+          ls -a .
+          echo "mkdir & touch"
+          mkdir -p ./src/main/resources 
+          cd ./src/main/resources
+          pwd
+          ls -a .
+          echo "copy properties"
+          echo $JASYPT_ENCRYPTOR_PASSWORD > ./application-cicd.properties
+          cat application-cicd.properties
+      shell: bash
+      env:
+          JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+   
+   
+   
     - name: Build with Gradle
       env:
        jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
