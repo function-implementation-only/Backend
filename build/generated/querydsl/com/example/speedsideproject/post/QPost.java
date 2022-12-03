@@ -39,6 +39,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<Image, QImage> imageList = this.<Image, QImage>createList("imageList", Image.class, QImage.class, PathInits.DIRECT2);
+
     public final ListPath<com.example.speedsideproject.likes.Likes, com.example.speedsideproject.likes.QLikes> likes = this.<com.example.speedsideproject.likes.Likes, com.example.speedsideproject.likes.QLikes>createList("likes", com.example.speedsideproject.likes.Likes.class, com.example.speedsideproject.likes.QLikes.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> likesLength = createNumber("likesLength", Long.class);

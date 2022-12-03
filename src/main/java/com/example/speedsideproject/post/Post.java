@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,55 +81,41 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     private Long likesLength = 0L;
 
-    public Post(String contents, String title) {
-        this.contents = contents;
-        this.title = title;
-    }
+    //one post to many images
+    @OneToMany(mappedBy = "post")
+    private List<Image> imageList = new ArrayList<>();
 
-    public Post(PostRequestDto requestDto) {
-        this.contents = requestDto.getContents();
-        this.title = requestDto.getTitle();
-    }
 
-    public Post(Post post) {
-        this.contents = post.getContents();
-        this.title = post.getTitle();
-        this.account = post.getAccount();
-        this.urlToString = post.getUrlToString();
-        this.urlKey = post.getUrlKey();
-    }
-
-    public Post(PostRequestDto requestDto, Account account, Map<String, String> urlMap) {
+    public Post(PostRequestDto requestDto, Account account, List<Image> imageList) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
         this.account = account;
-        this.urlToString = urlMap.get("url");
-        this.urlKey = urlMap.get("key");
+        this.imageList = imageList;
         this.category = requestDto.getCategory();
     }
-
     public Post(PostRequestDto requestDto, Account account) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
         this.account = account;
     }
 
-    public Post(PostRequestDto requestDto, Map<String, String> urlMap) {
-        this.contents = requestDto.getContents();
-        // this.title = requestDto.getTitle();
-        this.urlToString = urlMap.get("url");
-        this.urlKey = urlMap.get("key");
-    }
 
+
+
+    //method
     //글내용만 업데이트
     public void update(PostRequestDto requestDto) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
     }
-
     //라이크의 갯수를 추가하는 메소드
     public void setLikesLength(boolean likesType) {
         this.likesLength = (likesType) ? this.likesLength + 1L : this.likesLength - 1L;
+    }
+    //연관관계 맵핑
+    public void add(Image image) {
+        this.imageList.add(image);
+        image.setPost(this);
     }
 }
 

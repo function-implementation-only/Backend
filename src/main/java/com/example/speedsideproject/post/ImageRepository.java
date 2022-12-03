@@ -1,2 +1,6 @@
-package com.example.speedsideproject.post;public class ImageRepository {
+package com.example.speedsideproject.post;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ImageRepository extends JpaRepository<Image, Long> {
 }
