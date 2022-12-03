@@ -105,6 +105,9 @@ public class Post extends Timestamped {
         this.urlToString = urlMap.get("url");
         this.urlKey = urlMap.get("key");
         this.category = requestDto.getCategory();
+        this.duration = requestDto.getDuration();
+        this.place = requestDto.getPlace();
+        this.tech = requestDto.getTech();
     }
 
     public Post(PostRequestDto requestDto, Account account) {
