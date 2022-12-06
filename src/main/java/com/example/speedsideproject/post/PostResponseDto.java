@@ -9,8 +9,6 @@ import com.example.speedsideproject.post.enums.Tech;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 public class PostResponseDto {
     private Long postId;
@@ -24,7 +22,8 @@ public class PostResponseDto {
     private Long peopleNum;
     private Tech tech;
     private String startDate;
-
+    private Long likesLength;
+    private Boolean likeCheck;
     //null이라면 이 필드 값 ignore
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String nickname;
@@ -40,6 +39,7 @@ public class PostResponseDto {
         this.peopleNum = post.getPeopleNum();
         this.tech = post.getTech();
         this.startDate = post.getStartDate();
+        this.likesLength = post.getLikesLength();
     }
 
     public PostResponseDto(Post post, Account account) {
@@ -55,5 +55,6 @@ public class PostResponseDto {
         this.peopleNum = post.getPeopleNum();
         this.tech = post.getTech();
         this.startDate = post.getStartDate();
+        this.likesLength = post.getLikesLength();
     }
 }
