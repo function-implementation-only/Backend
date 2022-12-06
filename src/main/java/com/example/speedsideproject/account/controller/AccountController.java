@@ -35,7 +35,7 @@ public class AccountController {
     //로그인
     @PostMapping("/account/login")
     public ResponseDto<?> login(@RequestBody @Valid LoginReqDto loginReqDto, HttpServletResponse response) {
-        return ResponseDto.success(accountService.login(loginReqDto, response));
+        return accountService.login(loginReqDto, response);
     }
     @GetMapping("/issue/token")
     public GlobalResDto issuedToken(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails, HttpServletResponse response) {
