@@ -35,16 +35,17 @@ public class PostController {
         System.out.println("=============================================");
         System.out.println(techList.get(0));
         System.out.println(techList.get(1));
-        return ResponseDto.success(postService.createPost(postRequestDto, imgFiles, userDetails.getAccount()));
+        return ResponseDto.success(postService.createPost(postRequestDto, imgFiles, techList, userDetails.getAccount()));
     }
 
     //글 수정
     @PutMapping(name = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> updatePost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
-                                     @RequestPart(name = "image", required = false) MultipartFile imgFile,
+                                     @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
                                      @PathVariable Long id,
+                                     @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
-        return ResponseDto.success(postService.updatePost(postRequestDto, imgFile, id, userDetails.getAccount()));
+        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, id, userDetails.getAccount()));
     }
 
     //글 삭제

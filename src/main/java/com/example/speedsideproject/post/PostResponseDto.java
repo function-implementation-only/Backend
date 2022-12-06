@@ -5,9 +5,10 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Duration;
 import com.example.speedsideproject.post.enums.Place;
-import com.example.speedsideproject.post.enums.Tech;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class PostResponseDto {
@@ -20,7 +21,10 @@ public class PostResponseDto {
     private Duration duration;
     private Place place;
     private Long peopleNum;
-    private Tech tech;
+
+    //Techs 안에 tech가 있다...
+    //이 부분을 염두하고 코드 수정 바랍니다
+    private List<Techs> techs;
     private String startDate;
     private Long likesLength;
     private Boolean likeCheck;
@@ -37,7 +41,7 @@ public class PostResponseDto {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.peopleNum = post.getPeopleNum();
-        this.tech = post.getTech();
+        this.techs = post.getTechs();
         this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
     }
@@ -53,7 +57,7 @@ public class PostResponseDto {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.peopleNum = post.getPeopleNum();
-        this.tech = post.getTech();
+//        this.tech = post.getTech();
         this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
     }
