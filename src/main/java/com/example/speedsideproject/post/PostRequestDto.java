@@ -1,12 +1,12 @@
 package com.example.speedsideproject.post;
 
-import com.example.speedsideproject.post.enums.*;
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Duration;
+import com.example.speedsideproject.post.enums.Place;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Setter
 @Getter
@@ -19,6 +19,5 @@ public class PostRequestDto {
     private Duration duration;
     private Long peopleNum;
     private Place place;
-    private Tech tech;
     private String startDate;
 }
