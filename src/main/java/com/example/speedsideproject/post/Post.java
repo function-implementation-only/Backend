@@ -92,6 +92,7 @@ public class Post extends Timestamped {
         this.duration = requestDto.getDuration();
         this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
     }
 
     //method
