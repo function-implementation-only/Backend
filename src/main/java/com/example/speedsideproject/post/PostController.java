@@ -1,6 +1,7 @@
 package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.global.dto.ResponseDto;
+import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -28,7 +29,12 @@ public class PostController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> createPost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
+                                     @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
+        //List<Tech> techList 사용
+        System.out.println("=============================================");
+        System.out.println(techList.get(0));
+        System.out.println(techList.get(1));
         return ResponseDto.success(postService.createPost(postRequestDto, imgFiles, userDetails.getAccount()));
     }
 
