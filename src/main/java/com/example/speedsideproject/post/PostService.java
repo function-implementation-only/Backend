@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +21,12 @@ import static com.example.speedsideproject.error.ErrorCode.NOT_FOUND_USER;
 public class PostService {
     private final PostRepository postRepository;
     private final S3UploadUtil s3UploadUtil;
+    private final ImageRepository imageRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, S3UploadUtil s3UploadUtil) {
+    public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil) {
         this.postRepository = postRepository;
+        this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
     }
 
@@ -33,19 +36,20 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
 
-    //글 쓰기
+    //글쓰기
     @Transactional
-    public PostResponseDto createPost(PostRequestDto postRequestDto, MultipartFile imgFile, Account account) throws IOException {
-        if (imgFile != null) {
-            var r = s3UploadUtil.upload(imgFile, "side-post");
-            Post post = new Post(postRequestDto, account, r);
-            postRepository.save(post);
-            return new PostResponseDto(post);
-        } else {
-            Post post = new Post(postRequestDto, account);
-            postRepository.save(post);
-            return new PostResponseDto(post);
+    public PostResponseDto createPost(PostRequestDto postRequestDto, List<MultipartFile> imgFiles, Account account) throws IOException {
+        List<MultipartFile> img = imgFiles;
+        Post post = new Post(postRequestDto, account);
+        List<Image> imageList = new ArrayList<>();
+        for (MultipartFile image : imgFiles) {
+            Image image1 = new Image(s3UploadUtil.upload(image, "side-post"));
+            imageList.add(image1);
+            post.add(image1);
         }
+        imageRepository.saveAll(imageList);
+        postRepository.save(post);
+        return new PostResponseDto(post);
     }
 
     //글 수정

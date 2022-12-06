@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class JasyptConfig {
-    @Value("${jasypt.encryptor.password}")
+    @Value("${jasypt_encryptor_password}")
     private String key;
 
 //    private static String key="testkeys";
