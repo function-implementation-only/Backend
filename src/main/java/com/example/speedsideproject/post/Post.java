@@ -15,10 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @Getter
@@ -50,10 +48,6 @@ public class Post extends Timestamped {
 
     private Long peopleNum;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Tech tech;
-
     @Column(nullable = true)
     private String startDate;
 
@@ -70,11 +64,11 @@ public class Post extends Timestamped {
     private Account account;
 
     //One post to Many comment
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comment;
 
-    // 연관관계
     // One Post To Many Likes
+    //cascade 어떻게 할것인지.....
     @OneToMany(mappedBy = "post")
     private List<Likes> likes;
 
@@ -82,9 +76,12 @@ public class Post extends Timestamped {
     private Long likesLength = 0L;
 
     //one post to many images
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Image> imageList = new ArrayList<>();
 
+    //one post to many tech
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Techs> techs = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, Account account, List<Image> imageList) {
         this.contents = requestDto.getContents();
@@ -93,9 +90,12 @@ public class Post extends Timestamped {
         this.imageList = imageList;
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
-        this.tech = requestDto.getTech();
+        this.techList = techList;
+//        this.tech = requestDto.getTech();
     }
+
     public Post(PostRequestDto requestDto, Account account) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
@@ -103,22 +103,27 @@ public class Post extends Timestamped {
     }
 
 
-
-
     //method
     //글내용만 업데이트
     public void update(PostRequestDto requestDto) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
+//        this.imageList = getImageList();
+        this.category = requestDto.getCategory();
+        this.duration = requestDto.getDuration();
+        this.place = requestDto.getPlace();
     }
+
     //라이크의 갯수를 추가하는 메소드
     public void setLikesLength(boolean likesType) {
         this.likesLength = (likesType) ? this.likesLength + 1L : this.likesLength - 1L;
     }
+
     //연관관계 맵핑
-    public void add(Image image) {
+    public void addImg(Image image) {
         this.imageList.add(image);
         image.setPost(this);
     }
+
 }
 
