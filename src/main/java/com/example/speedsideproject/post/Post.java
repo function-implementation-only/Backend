@@ -8,11 +8,11 @@ import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Duration;
 import com.example.speedsideproject.post.enums.Place;
-import com.example.speedsideproject.post.enums.Tech;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Post extends Timestamped {
 
@@ -83,25 +84,16 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Techs> techs = new ArrayList<>();
 
-    public Post(PostRequestDto requestDto, Account account, List<Image> imageList) {
-        this.contents = requestDto.getContents();
-        this.title = requestDto.getTitle();
-        this.account = account;
-        this.imageList = imageList;
-        this.category = requestDto.getCategory();
-        this.duration = requestDto.getDuration();
-        this.peopleNum = requestDto.getPeopleNum();
-        this.place = requestDto.getPlace();
-        this.techList = techList;
-//        this.tech = requestDto.getTech();
-    }
-
     public Post(PostRequestDto requestDto, Account account) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
         this.account = account;
+        this.category = requestDto.getCategory();
+        this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
+        this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
     }
-
 
     //method
     //글내용만 업데이트
@@ -125,5 +117,8 @@ public class Post extends Timestamped {
         image.setPost(this);
     }
 
+    public void addTechs(Techs techs) {
+        this.techs.add(techs);
+    }
 }
 
