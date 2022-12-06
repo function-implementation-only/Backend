@@ -54,10 +54,12 @@ public class PostService {
 
         //techs 추가
         List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
+        for (Techs techs : techsList) {
+            post.addTechs(techs);
+        }
         techsRepository.saveAll(techsList);
         postRepository.save(post);
         return new PostResponseDto(post);
-
     }
 
     //글 수정
