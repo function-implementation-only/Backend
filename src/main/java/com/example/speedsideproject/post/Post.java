@@ -23,7 +23,7 @@ import java.util.List;
 public class Post extends Timestamped {
 
     @Id
-    @Column(name = "POST_ID")
+    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -98,10 +98,11 @@ public class Post extends Timestamped {
     public void update(PostRequestDto requestDto) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
-//        this.imageList = getImageList();
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
     }
 
     //라이크의 갯수를 추가하는 메소드

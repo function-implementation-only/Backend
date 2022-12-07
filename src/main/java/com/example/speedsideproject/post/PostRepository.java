@@ -13,8 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedAtDesc();
 //    List<Post> findAllByEmail(String email);
     Optional<Post> findById(Long Id);
-
-
+    Post findByIdAndAccount(Long id, Account account);
     List<Post> findAllByAccount(Account account);
 
 }

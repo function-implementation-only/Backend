@@ -42,10 +42,10 @@ public class PostController {
     @PutMapping(name = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> updatePost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
-                                     @PathVariable Long id,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
+                                     @PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
-        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, id, userDetails.getAccount()));
+        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
     }
 
     //글 삭제

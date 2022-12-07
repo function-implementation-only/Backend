@@ -12,7 +12,7 @@ public class CommentResponseDto {
     private String email;
 
     public CommentResponseDto(Comment comment) {
-        this.postId = comment.getPostId();
+//        this.postId = comment.getPostId();
         this.commentId = comment.getId();
         this.comments = comment.getComments();
         this.email = comment.getEmail();

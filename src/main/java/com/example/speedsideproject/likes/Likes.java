@@ -24,13 +24,13 @@ public class Likes {
     //연관관계
     // Many Likes To One Post
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post", nullable = true)
+    @JoinColumn(name = "post_id", nullable = true)
     private Post post;
 
     //연관관계
     // Many Likes To One Account
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account", nullable = true)
+    @JoinColumn(name = "account_id", nullable = true)
     private Account account;
 
     public Likes(Account account, Post post) {
