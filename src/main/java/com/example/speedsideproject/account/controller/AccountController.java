@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-//@RequestMapping
 @RequiredArgsConstructor
 public class AccountController {
 
