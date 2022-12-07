@@ -39,7 +39,7 @@ public class Comment extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn
+    @JoinColumn(name = "account_id")
     private Account account;
 
     public Comment(CommentRequestDto requestDto) {
