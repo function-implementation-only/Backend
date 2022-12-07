@@ -14,7 +14,7 @@ public class JasyptConfig {
     @Value("${jasypt_encryptor_password}")
     private String key;
 
-//    private static String key="testkeys";
+//    private static String key="testkey";
 
     @Bean(name = "jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
