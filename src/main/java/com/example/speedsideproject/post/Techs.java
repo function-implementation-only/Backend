@@ -29,5 +29,6 @@ public class Techs {
     public Techs(Tech tech,Post post){
         this.tech = tech;
         this.post = post;
+        post.addTechs(this);
     }
 }
