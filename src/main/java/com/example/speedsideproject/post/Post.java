@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 public class Post extends Timestamped {
 
@@ -100,10 +98,11 @@ public class Post extends Timestamped {
     public void update(PostRequestDto requestDto) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
-//        this.imageList = getImageList();
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
     }
 
     //라이크의 갯수를 추가하는 메소드

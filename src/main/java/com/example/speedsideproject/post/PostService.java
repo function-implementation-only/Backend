@@ -2,6 +2,7 @@ package com.example.speedsideproject.post;
 
 
 import com.example.speedsideproject.account.entity.Account;
+import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.CANNOT_FIND_POST_NOT_EXIST;
@@ -24,13 +26,16 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository) {
+    public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
+                       AccountRepository accountRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
+        this.accountRepository = accountRepository;
     }
 
 
@@ -54,9 +59,6 @@ public class PostService {
 
         //techs 추가
         List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
-        for (Techs techs : techsList) {
-            post.addTechs(techs);
-        }
         techsRepository.saveAll(techsList);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -64,14 +66,31 @@ public class PostService {
 
     //글 수정
     @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, Long id, Account account) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, Long id,List<Tech> techList, Account account) throws IOException {
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         if (!account.getEmail().equals(post.getAccount().getEmail())) {
             throw new CustomException(NOT_FOUND_USER);
         }
-
         post.update(requestDto);
+
+        // 삭제
+        if (post.getUrlKey() != null) {
+            s3UploadUtil.delete(post.getUrlKey());
+        }
+        // List로 image받은후 저장
+        if(imgFiles != null) {
+            for (MultipartFile file : imgFiles) {
+                Map<String, String> img = s3UploadUtil.upload(file, "side-post");
+                Image image = new Image(img);
+                imageRepository.save(image);
+            }
+        }
+
+        //techs 추가
+        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
+        techsRepository.saveAll(techsList);
+        postRepository.save(post);
+
         return new PostResponseDto(post);
     }
 
