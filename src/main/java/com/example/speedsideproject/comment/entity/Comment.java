@@ -29,12 +29,9 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private Long postId;
-
     // many comment to one post.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +45,6 @@ public class Comment extends Timestamped {
 
     public Comment(CommentRequestDto requestDto, Account account) {
         this.comments = requestDto.getComments();
-        this.postId = requestDto.getPostId();
         this.email = account.getEmail();
     }
 

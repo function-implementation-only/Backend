@@ -24,11 +24,11 @@ public class Account {
     @Column(name = "account_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+
     private String email;
-    @NotBlank
+
     private String password;
-    @NotBlank
+
     private String nickname;
     private String imgUrl;
     private String imgKey;

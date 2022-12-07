@@ -6,6 +6,7 @@ import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +43,6 @@ public class PostService {
     //글쓰기
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, List<MultipartFile> imgFiles, List<Tech> techList, Account account) throws IOException {
-        List<MultipartFile> img = imgFiles;
         Post post = new Post(postRequestDto, account);
         List<Image> imageList = new ArrayList<>();
         for (MultipartFile image : imgFiles) {
@@ -61,12 +61,31 @@ public class PostService {
 
     //글 수정
     @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, Long id, Account account) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        if (!account.getEmail().equals(post.getAccount().getEmail())) {
-            throw new CustomException(NOT_FOUND_USER);
+    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException{
+        Post post = postRepository.findByIdAndAccount(id,account);
+        if(post == null) throw new CustomException(NOT_FOUND_USER);
+
+        List<Image> imageList = post.getImageList();
+
+        for(Image i : imageList) {
+            s3UploadUtil.delete(i.getImgKey());
         }
+        List<Image> images = new ArrayList<>();
+
+        if(images != null){
+            for(MultipartFile m : imgFiles){
+                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m,"side-post")));
+                images.add(i);
+                post.addImg(i);
+            }
+        }
+
+        List<Techs> techLists = post.getTechs();
+        for (Techs t : techLists) {
+            techsRepository.delete(t);
+        }
+        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
+        techsRepository.saveAll(techsList);
 
         post.update(requestDto);
         return new PostResponseDto(post);

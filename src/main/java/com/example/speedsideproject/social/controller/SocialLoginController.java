@@ -1,6 +1,5 @@
 package com.example.speedsideproject.social.controller;
 
-import com.example.speedsideproject.global.dto.GlobalResDto;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.social.service.SocialKakaoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
