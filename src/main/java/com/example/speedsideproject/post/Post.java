@@ -60,6 +60,7 @@ public class Post extends Timestamped {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_Id")
+//    @JoinColumn(name = "account")
     private Account account;
 
     //One post to Many comment

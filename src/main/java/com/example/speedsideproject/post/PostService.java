@@ -112,8 +112,8 @@ public class PostService {
     }
 
     //글 1개 get
-    public PostResponseDto getOnePost(Account account) {
-        Post post = postRepository.findById(account.getId()).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+    public PostResponseDto getOnePost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         return new PostResponseDto(post);
     }
 
