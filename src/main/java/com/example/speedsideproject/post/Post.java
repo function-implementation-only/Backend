@@ -76,7 +76,7 @@ public class Post extends Timestamped {
     private Long likesLength = 0L;
 
     //one post to many images
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Image> imageList = new ArrayList<>();
 
     //one post to many tech
@@ -97,8 +97,8 @@ public class Post extends Timestamped {
     //method
     //글내용만 업데이트
     public void update(PostRequestDto requestDto) {
-        this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
         this.peopleNum = requestDto.getPeopleNum();
