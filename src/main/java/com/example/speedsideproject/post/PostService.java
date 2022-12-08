@@ -6,6 +6,7 @@ import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,13 +15,13 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.CANNOT_FIND_POST_NOT_EXIST;
 import static com.example.speedsideproject.error.ErrorCode.NOT_FOUND_USER;
 
 @Service
+@Slf4j
 public class PostService {
     private final PostRepository postRepository;
     private final S3UploadUtil s3UploadUtil;
@@ -37,7 +38,6 @@ public class PostService {
         this.techsRepository = techsRepository;
         this.accountRepository = accountRepository;
     }
-
 
     // 모든 글 읽어오기
     public List<PostResponseDto> getAllpost() {
@@ -66,14 +66,22 @@ public class PostService {
     //글 수정
     @Transactional
     public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException{
+
         Post post = postRepository.findByIdAndAccount(id,account);
+
         if(post == null) throw new CustomException(NOT_FOUND_USER);
+
+        post.update(requestDto);
 
         List<Image> imageList = post.getImageList();
 
         for(Image i : imageList) {
             s3UploadUtil.delete(i.getImgKey());
+
+//            imageRepository.deleteById(i.getId());
         }
+        imageRepository.deleteAllInBatch(imageList);
+
         List<Image> images = new ArrayList<>();
 
         if(images != null){
@@ -91,7 +99,6 @@ public class PostService {
         List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
         techsRepository.saveAll(techsList);
 
-        post.update(requestDto);
         return new PostResponseDto(post);
     }
 

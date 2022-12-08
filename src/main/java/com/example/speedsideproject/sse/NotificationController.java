@@ -12,8 +12,12 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 public class NotificationController {
 
+    private final NotificationService notificationService;
 //    @GetMapping(value = "/subscribe", produces = "text/event-stream")
 //    public SeeEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
-//                                @RequestHeader(value = ""))
+//                                @RequestHeader(required = false,defaultValue = "")
+//                                String lastEventId) {
+//        return
+//    }
 
 }
