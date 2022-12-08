@@ -45,7 +45,7 @@ public class PostController {
                                      @PathVariable Long id,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
-        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, id, techList,userDetails.getAccount()));
+        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
     }
 
     //글 삭제
