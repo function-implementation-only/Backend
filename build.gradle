@@ -43,6 +43,7 @@ buildscript {
         annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
         // mysql
         runtimeOnly 'mysql:mysql-connector-java'
+        runtimeOnly 'com.h2database:h2'
         //Swagger
         implementation 'io.springfox:springfox-boot-starter:3.0.0'
         implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
