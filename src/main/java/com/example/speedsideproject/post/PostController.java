@@ -4,6 +4,8 @@ import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,14 @@ public class PostController {
     private final PostService postService;
 
     //모든 글 읽어 오기
-    @GetMapping("/all")
-    public ResponseDto<?> getAllPost() {
-        return ResponseDto.success(postService.getAllpost());
+//    @GetMapping("/all")
+//    public ResponseDto<?> getAllPost() {
+//        return ResponseDto.success(postService.getAllpost());
+//    }
+
+    @GetMapping
+    public Page<PostRequestDto> getAllPost(Pageable pageable) {
+        return postService.getAllpost(pageable);
     }
 
     //글쓰기 + img 업로드

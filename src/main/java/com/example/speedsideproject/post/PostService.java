@@ -6,10 +6,13 @@ import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +38,12 @@ public class PostService {
 
 
     // 모든 글 읽어오기
-    public List<PostResponseDto> getAllpost() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+//    public List<PostResponseDto> getAllpost() {
+//        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+//    }
+    @Transactional(readOnly=true)
+    public Page<PostResponseDto> getAllPost(Pageable pageable){
+        return postRepository.findAllMyPost(pageable);
     }
 
     //글쓰기
