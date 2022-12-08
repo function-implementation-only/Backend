@@ -88,7 +88,7 @@ public class AccountService {
 
         setHeader(response, tokenDto);
 
-        return ResponseDto.success("login success");
+        return ResponseDto.success(tokenDto);
     }
 
     private void setHeader(HttpServletResponse response, TokenDto tokenDto) {

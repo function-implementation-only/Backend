@@ -5,6 +5,8 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
+import com.example.speedsideproject.global.dto.GlobalResDto;
+import com.example.speedsideproject.global.dto.GlobalResponseDto;
 import com.example.speedsideproject.post.enums.Tech;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,19 +67,19 @@ public class PostService {
 
     //글 수정
     @Transactional
+
     public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException {
 
         Post post = postRepository.findByIdAndAccount(id, account);
         if (post == null) throw new CustomException(NOT_FOUND_USER);
 
-        List<Image> imageList = post.getImageList();
+
+        List<Image> imageList = imageRepository.findAllByPostId(post.getId());
 
         for (Image i : imageList) {
             s3UploadUtil.delete(i.getImgKey());
-
-//            imageRepository.deleteById(i.getId());
+            imageRepository.delete(i);
         }
-//        imageRepository.deleteAllInBatch(imageList);
 
         List<Image> images = new ArrayList<>();
 
