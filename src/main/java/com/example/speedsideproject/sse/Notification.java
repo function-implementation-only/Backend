@@ -1,15 +1,13 @@
 package com.example.speedsideproject.sse;
 
 import com.example.speedsideproject.global.Timestamped;
-import lombok.Cleanup;
-import lombok.CustomLog;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Notification extends Timestamped {
 
