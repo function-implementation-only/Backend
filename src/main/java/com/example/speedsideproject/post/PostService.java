@@ -57,7 +57,7 @@ public class PostService {
         imageRepository.saveAll(imageList);
 
         //techs 추가
-        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
+        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         techsRepository.saveAll(techsList);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -65,40 +65,38 @@ public class PostService {
 
     //글 수정
     @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException{
+    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException {
 
-        Post post = postRepository.findByIdAndAccount(id,account);
-
-        if(post == null) throw new CustomException(NOT_FOUND_USER);
-
-        post.update(requestDto);
+        Post post = postRepository.findByIdAndAccount(id, account);
+        if (post == null) throw new CustomException(NOT_FOUND_USER);
 
         List<Image> imageList = post.getImageList();
 
-        for(Image i : imageList) {
+        for (Image i : imageList) {
             s3UploadUtil.delete(i.getImgKey());
 
 //            imageRepository.deleteById(i.getId());
         }
-        imageRepository.deleteAllInBatch(imageList);
+//        imageRepository.deleteAllInBatch(imageList);
 
         List<Image> images = new ArrayList<>();
 
-        if(images != null){
-            for(MultipartFile m : imgFiles){
-                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m,"side-post")));
+        if (images != null) {
+            for (MultipartFile m : imgFiles) {
+                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m, "side-post")));
                 images.add(i);
                 post.addImg(i);
             }
         }
 
-        List<Techs> techLists = post.getTechs();
-        for (Techs t : techLists) {
-            techsRepository.delete(t);
-        }
-        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
-        techsRepository.saveAll(techsList);
+        //요거보고 이미지도 바꾸세여?
+        List<Techs> techLists = techsRepository.findAllByPostId(post.getId());
+        techsRepository.deleteAllInBatch(techLists);
 
+
+        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
+        techsRepository.saveAll(techsList);
+        post.update(requestDto);
         return new PostResponseDto(post);
     }
 

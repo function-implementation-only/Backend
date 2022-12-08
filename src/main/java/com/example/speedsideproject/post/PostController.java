@@ -39,7 +39,7 @@ public class PostController {
     }
 
     //글 수정
-    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> updatePost(@PathVariable Long id,
                                      @RequestPart(name = "data", required = true) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = true) List<MultipartFile> imgFiles,
