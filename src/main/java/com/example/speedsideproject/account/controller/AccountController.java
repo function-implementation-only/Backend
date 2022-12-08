@@ -42,11 +42,11 @@ public class AccountController {
         return accountService.login(loginReqDto, response);
     }
 
-    @GetMapping("/issue/token")
-    public GlobalResDto issuedToken(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails, HttpServletResponse response) {
-        response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(userDetails.getAccount().getEmail(), "Access"));
-        return new GlobalResDto("Success IssuedToken", HttpStatus.OK.value());
-    }
+//    @GetMapping("/issue/token")
+//    public GlobalResDto issuedToken(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails, HttpServletResponse response) {
+//        response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(userDetails.getAccount().getEmail(), "Access"));
+//        return new GlobalResDto("Success IssuedToken", HttpStatus.OK.value());
+//    }
 
     //이메일 인증
     @PostMapping("/account/signup/email-check")
