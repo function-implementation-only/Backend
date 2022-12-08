@@ -29,7 +29,7 @@ public class PostController {
 
     @GetMapping
     public Page<PostRequestDto> getAllPost(Pageable pageable) {
-        return postService.getAllpost(pageable);
+        return postService.getAllPost(pageable);
     }
 
     //글쓰기 + img 업로드
