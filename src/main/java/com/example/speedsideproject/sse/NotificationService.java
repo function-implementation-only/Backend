@@ -1,0 +1,12 @@
+package com.example.speedsideproject.sse;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class NotificationService {
+
+
+
+}
