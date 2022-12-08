@@ -30,11 +30,11 @@ public class PostController {
     public ResponseDto<?> createPost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
-                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
+                                     @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         //List<Tech> techList 사용
-        System.out.println("=============================================");
-        System.out.println(techList.get(0));
-        System.out.println(techList.get(1));
+//        System.out.println("=============================================");
+//        System.out.println(techList.get(0));
+//        System.out.println(techList.get(1));
         return ResponseDto.success(postService.createPost(postRequestDto, imgFiles, techList, userDetails.getAccount()));
     }
 
@@ -45,18 +45,19 @@ public class PostController {
                                      @PathVariable Long id,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
-        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, id, techList,userDetails.getAccount()));
+        return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
     }
 
     //글 삭제
-    @DeleteMapping("{id}")
-    public ResponseDto<?> deletePost(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
+    @DeleteMapping("/{id}")
+    public ResponseDto<?> deletePost(@PathVariable Long id,
+                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(postService.deletePost(id, userDetails.getAccount()));
     }
 
     //글 1개 읽기
     @GetMapping("/{id}")
-    public ResponseDto<?> getOnePost(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(postService.getOnePost(userDetails.getAccount()));
+    public ResponseDto<?> getOnePost(@PathVariable Long id) {
+        return ResponseDto.success(postService.getOnePost(id));
     }
 }
