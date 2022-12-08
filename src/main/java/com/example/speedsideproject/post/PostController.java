@@ -40,10 +40,17 @@ public class PostController {
 
     //글 수정
     @PatchMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+<<<<<<< HEAD
     public ResponseDto<?> updatePost(@PathVariable Long id,
                                      @RequestPart(name = "data", required = true) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = true) List<MultipartFile> imgFiles,
                                      @RequestPart(name = "techList", required = true) List<Tech> techList,
+=======
+    public ResponseDto<?> updatePost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
+                                     @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
+                                     @PathVariable Long id,
+                                     @RequestPart(name = "techList", required = false) List<Tech> techList,
+>>>>>>> feature/4-websocket
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
         return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
     }
