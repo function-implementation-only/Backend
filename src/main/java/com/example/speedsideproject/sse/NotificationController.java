@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class NotificationController {
 
+    private final NotificationService notificationService;
 //    @GetMapping(value = "/subscribe", produces = "text/event-stream")
 //    public SeeEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
-//                                @RequestHeader(value = ""))
+//                                @RequestHeader(required = false,defaultValue = "")
+//                                String lastEventId) {
+//        return
+//    }
 
 }
