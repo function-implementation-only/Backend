@@ -5,7 +5,6 @@ import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +27,8 @@ public class PostController {
 //    }
 
     @GetMapping
-    public Page<PostRequestDto> getAllPost(Pageable pageable) {
-        return postService.getAllPost(pageable);
+    public Page<PostRequestDto> getAllPost() {
+        return postService.getAllPost();
     }
 
     //글쓰기 + img 업로드
