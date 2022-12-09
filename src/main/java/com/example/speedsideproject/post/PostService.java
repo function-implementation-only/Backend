@@ -1,12 +1,10 @@
 package com.example.speedsideproject.post;
 
-
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,23 +23,24 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
+    private final PostQueryRepository postQueryRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository) {
+    public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository, PostQueryRepository postQueryRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
+        this.postQueryRepository = postQueryRepository;
     }
 
     // 모든 글 읽어오기
-//    public List<PostResponseDto> getAllpost() {
-//        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
-//    }
+    public List<PostResponseDto> getAllpost() {
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
     @Transactional(readOnly=true)
-    public Page<PostResponseDto> getAllPost(){
-
-        return PostQueryRepository.findAllMyPostWithQuery();
+    public List<Post> getPost(){
+        return postQueryRepository.findAllMyPostWithQuery();
     }
 
     //글쓰기

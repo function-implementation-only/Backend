@@ -23,11 +23,9 @@ public class PostQueryRepository {
     public List<Post> findAllMyPostWithQuery() {
         QPost qPost = post;
 
-        List<Post> fetch = queryFactory
+        return queryFactory
                 .select(post)
                 .from(post)
                 .fetch();
-
-        return fetch;
     }
 }
