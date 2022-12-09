@@ -1,6 +1,5 @@
 package com.example.speedsideproject.post;
 
-
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
@@ -11,9 +10,9 @@ import com.example.speedsideproject.post.enums.Tech;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,7 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
+    private final PostQueryRepository postQueryRepository;
     private final AccountRepository accountRepository;
 
     @Autowired
@@ -39,11 +39,17 @@ public class PostService {
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
         this.accountRepository = accountRepository;
+        this.postQueryRepository = postQueryRepository;
     }
+
 
     // 모든 글 읽어오기
     public List<PostResponseDto> getAllpost() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
+    @Transactional(readOnly=true)
+    public List<Post> getPost(){
+        return postQueryRepository.findAllMyPostWithQuery();
     }
 
     //글쓰기
