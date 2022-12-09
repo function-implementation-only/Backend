@@ -4,8 +4,6 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
-import com.example.speedsideproject.global.dto.GlobalResDto;
-import com.example.speedsideproject.global.dto.GlobalResponseDto;
 import com.example.speedsideproject.post.enums.Tech;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class PostService {
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                       AccountRepository accountRepository) {
+                       AccountRepository accountRepository, PostQueryRepository postQueryRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
