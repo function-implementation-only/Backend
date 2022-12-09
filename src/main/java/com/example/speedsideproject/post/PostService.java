@@ -7,11 +7,9 @@ import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,14 +34,14 @@ public class PostService {
         this.techsRepository = techsRepository;
     }
 
-
     // 모든 글 읽어오기
 //    public List<PostResponseDto> getAllpost() {
 //        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
 //    }
     @Transactional(readOnly=true)
-    public Page<PostResponseDto> getAllPost(Pageable pageable){
-        return postRepository.findAllMyPost(pageable);
+    public Page<PostResponseDto> getAllPost(){
+
+        return PostQueryRepository.findAllMyPostWithQuery();
     }
 
     //글쓰기
