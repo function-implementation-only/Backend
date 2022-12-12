@@ -6,12 +6,11 @@ import com.example.speedsideproject.account.dto.EmailRequestDto;
 import com.example.speedsideproject.account.dto.LoginReqDto;
 import com.example.speedsideproject.account.dto.UserInfoDto;
 import com.example.speedsideproject.account.service.AccountService;
-import com.example.speedsideproject.global.dto.GlobalResDto;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,12 +30,15 @@ public class AccountController {
     private final AccountService accountService;
 
     //회원가입
+    @ApiOperation(value = "회원가입", notes = "email조건 : x, pw조건 : x")
     @PostMapping("/account/signup")
     public ResponseDto<?> signup(@RequestBody @Valid AccountReqDto accountReqDto) {
         return ResponseDto.success(accountService.signup(accountReqDto));
     }
 
     //로그인
+    @ApiOperation(value = "로그인", notes = "로그인시 토큰 발급")
+
     @PostMapping("/account/login")
     public ResponseDto<?> login(@RequestBody @Valid LoginReqDto loginReqDto, HttpServletResponse response) {
         return accountService.login(loginReqDto, response);
