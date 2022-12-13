@@ -47,16 +47,8 @@ public class PostService {
     public List<PostResponseDto> getAllpost() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
-//    @Transactional(readOnly=true)
-//    public List<PostResponseDto> getPost(){
-//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
-//        List<Post> allPosts = postQueryRepository.findAllMyPostWithQuery();
-//        for (Post post : allPosts) {
-//            postResponseDtos.add(new PostResponseDto(post));
-//        }
-//        return postResponseDtos;
-//    }
 
+    // 무한 스크롤 모든 글 읽어오기
     @Transactional(readOnly=true)
     public Page<Post> getPost(Pageable pageable){
         return postQueryRepository.findAllMyPostWithQuery(pageable);
