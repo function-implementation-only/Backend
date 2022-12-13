@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GoogleOauth implements SocialOauth {
 
+//    private final RestTemplate restTemplate;
     //applications.yml 에서 value annotation을 통해서 값을 받아온다.
     @Value("${spring.OAuth2.google.url}")
     private String GOOGLE_SNS_LOGIN_URL;
@@ -34,7 +35,7 @@ public class GoogleOauth implements SocialOauth {
     private String GOOGLE_DATA_ACCESS_SCOPE;
 
     private final ObjectMapper objectMapper;
-    private final RestTemplate restTemplate;
+
 
     @Override
     public String getOauthRedirectURL() {
@@ -80,25 +81,30 @@ public class GoogleOauth implements SocialOauth {
     }
 
     public GoogleOAuthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
-        System.out.println("response.getBody() = " + response.getBody());
+        System.out.println("1.response.getBody() = " + response.getBody());
         GoogleOAuthToken googleOAuthToken = objectMapper.readValue(response.getBody(), GoogleOAuthToken.class);
         return googleOAuthToken;
-
     }
 
     public ResponseEntity<String> requestUserInfo(GoogleOAuthToken oAuthToken) {
+
         String GOOGLE_USERINFO_REQUEST_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
+
+//        String GOOGLE_USERINFO_REQUEST_URL = "https://openidconnect.googleapis.com/v1/userinfo";
+//        String GOOGLE_USERINFO_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 
         //header에 accessToken을 담는다.
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         //HttpEntity를 하나 생성해 헤더를 담아서 restTemplate으로 구글과 통신하게 된다.
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
+        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response =
                 restTemplate.exchange(GOOGLE_USERINFO_REQUEST_URL, HttpMethod.GET, request, String.class);
+        System.out.println("request 통과");
         System.out.println("response.getBody() = " + response.getBody());
-
         System.out.println(response);
         return response;
     }
@@ -107,6 +113,5 @@ public class GoogleOauth implements SocialOauth {
         GoogleUser googleUser = objectMapper.readValue(userInfoRes.getBody(), GoogleUser.class);
         return googleUser;
     }
-
 
 }
