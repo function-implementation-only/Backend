@@ -30,6 +30,8 @@ public class PostController {
         return ResponseDto.success(postService.getAllpost());
     }
 
+    //무한스크롤 적용 전체 게시글 조회
+    @ApiOperation(value = "무한스크롤 전체 조회", notes = "[api/posts/?page=0&size=3]과 같은 양식으로 조회 가능")
     @GetMapping
     public ResponseDto<?> getPost(Pageable pageable) {
         return ResponseDto.success(postService.getPost(pageable));
