@@ -2,6 +2,9 @@ package com.example.speedsideproject.post;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,12 +23,21 @@ public class PostQueryRepository {
     }
 
     //findAllMyPostWithQuery
-    public List<Post> findAllMyPostWithQuery() {
+    public Page<Post> findAllMyPostWithQuery(Pageable pageable) {
         QPost qPost = post;
 
-        return queryFactory
+        List<Post> posts = queryFactory
                 .select(post)
                 .from(post)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long count = queryFactory
+                .select(post.count())
+                .from(post)
+                .fetchOne();
+
+        return new PageImpl<>(posts, pageable, count);
     }
 }

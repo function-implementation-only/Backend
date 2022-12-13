@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> getPost() {
-        return postService.getPost();
+    public ResponseDto<?> getPost(Pageable pageable) {
+        return ResponseDto.success(postService.getPost(pageable));
     }
 
     //글쓰기 + img 업로드
