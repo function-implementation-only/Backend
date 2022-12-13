@@ -50,7 +50,7 @@ public class PostService {
 
     // 무한 스크롤 모든 글 읽어오기
     @Transactional(readOnly=true)
-    public Page<Post> getPost(Pageable pageable){
+    public Page<PostResponseDto> getPost(Pageable pageable){
         return postQueryRepository.findAllMyPostWithQuery(pageable);
     }
 
