@@ -7,6 +7,8 @@ import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,9 +47,19 @@ public class PostService {
     public List<PostResponseDto> getAllpost() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
     }
+//    @Transactional(readOnly=true)
+//    public List<PostResponseDto> getPost(){
+//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+//        List<Post> allPosts = postQueryRepository.findAllMyPostWithQuery();
+//        for (Post post : allPosts) {
+//            postResponseDtos.add(new PostResponseDto(post));
+//        }
+//        return postResponseDtos;
+//    }
+
     @Transactional(readOnly=true)
-    public List<Post> getPost(){
-        return postQueryRepository.findAllMyPostWithQuery();
+    public Page<Post> getPost(Pageable pageable){
+        return postQueryRepository.findAllMyPostWithQuery(pageable);
     }
 
     //글쓰기
