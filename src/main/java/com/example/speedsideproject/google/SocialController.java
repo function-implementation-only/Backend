@@ -40,7 +40,6 @@ public class SocialController {
     public ResponseDto<?> callback(
             @PathVariable(name = "socialLoginType") String socialLoginPath,
             @RequestParam(name = "code") String code) throws IOException {
-        System.out.println("test컨트롤러 들어갑니다");
         System.out.println(">> 소셜 로그인 API 서버로부터 받은 code :" + code);
         SocialLoginType socialLoginType = SocialLoginType.valueOf(socialLoginPath.toUpperCase());
 //        GetSocialOAuthRes getSocialOAuthRes = oAuthService.oAuthLogin(socialLoginType, code);
