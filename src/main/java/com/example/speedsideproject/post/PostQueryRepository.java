@@ -24,7 +24,7 @@ public class PostQueryRepository {
     }
 
     //findAllMyPostWithQuery
-    public Page<Post> findAllMyPostWithQuery(Pageable pageable) {
+    public Page<PostResponseDto> findAllMyPostWithQuery(Pageable pageable) {
         QPost qPost = post;
 
         List<Post> posts = queryFactory
@@ -34,12 +34,13 @@ public class PostQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        List<PostResponseDto> collect = posts.stream().map(PostResponseDto::new).collect(Collectors.toList());
 
         Long count = queryFactory
                 .select(post.count())
                 .from(post)
                 .fetchOne();
 
-        return new PageImpl<>(posts, pageable, count);
+        return new PageImpl<>(collect, pageable, count);
     }
 }
