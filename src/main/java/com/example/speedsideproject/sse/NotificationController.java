@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final NotificationRepository notificationRepository;
 
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -48,7 +47,7 @@ public class NotificationController {
 
     //안읽은 알림갯수
     @ApiOperation(value = "안읽은 알림갯수", notes = "상태가 false인 알림의 갯수를 반환합니다.(토큰필요)")
-    @GetMapping("nureadnotice")
+    @GetMapping("/noreadnotice")
     public Long notReadNotification(@ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return notificationService.notReadNotification(userDetails.getAccount());
     }
