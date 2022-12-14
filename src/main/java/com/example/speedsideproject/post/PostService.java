@@ -1,6 +1,5 @@
 package com.example.speedsideproject.post;
 
-
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
@@ -8,10 +7,12 @@ import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,21 +28,38 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
+    private final PostQueryRepository postQueryRepository;
     private final AccountRepository accountRepository;
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                       AccountRepository accountRepository) {
+                       AccountRepository accountRepository, PostQueryRepository postQueryRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
         this.accountRepository = accountRepository;
+        this.postQueryRepository = postQueryRepository;
     }
+
 
     // 모든 글 읽어오기
     public List<PostResponseDto> getAllpost() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
+    }
+//    @Transactional(readOnly=true)
+//    public List<PostResponseDto> getPost(){
+//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+//        List<Post> allPosts = postQueryRepository.findAllMyPostWithQuery();
+//        for (Post post : allPosts) {
+//            postResponseDtos.add(new PostResponseDto(post));
+//        }
+//        return postResponseDtos;
+//    }
+
+    @Transactional(readOnly=true)
+    public Page<Post> getPost(Pageable pageable){
+        return postQueryRepository.findAllMyPostWithQuery(pageable);
     }
 
     //글쓰기
@@ -57,7 +75,7 @@ public class PostService {
         imageRepository.saveAll(imageList);
 
         //techs 추가
-        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
+        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         techsRepository.saveAll(techsList);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -65,40 +83,38 @@ public class PostService {
 
     //글 수정
     @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException{
 
-        Post post = postRepository.findByIdAndAccount(id,account);
+    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException {
 
-        if(post == null) throw new CustomException(NOT_FOUND_USER);
+        Post post = postRepository.findByIdAndAccount(id, account);
+        if (post == null) throw new CustomException(NOT_FOUND_USER);
 
-        post.update(requestDto);
 
-        List<Image> imageList = post.getImageList();
+        List<Image> imageList = imageRepository.findAllByPostId(post.getId());
 
-        for(Image i : imageList) {
+        for (Image i : imageList) {
             s3UploadUtil.delete(i.getImgKey());
-
-//            imageRepository.deleteById(i.getId());
+            imageRepository.delete(i);
         }
-        imageRepository.deleteAllInBatch(imageList);
 
         List<Image> images = new ArrayList<>();
 
-        if(images != null){
-            for(MultipartFile m : imgFiles){
-                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m,"side-post")));
+        if (images != null) {
+            for (MultipartFile m : imgFiles) {
+                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m, "side-post")));
                 images.add(i);
                 post.addImg(i);
             }
         }
 
-        List<Techs> techLists = post.getTechs();
-        for (Techs t : techLists) {
-            techsRepository.delete(t);
-        }
-        List<Techs> techsList = techList.stream().map(te->new Techs(te,post)).collect(Collectors.toList());
-        techsRepository.saveAll(techsList);
+        //요거보고 이미지도 바꾸세여?
+        List<Techs> techLists = techsRepository.findAllByPostId(post.getId());
+        techsRepository.deleteAllInBatch(techLists);
 
+
+        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
+        techsRepository.saveAll(techsList);
+        post.update(requestDto);
         return new PostResponseDto(post);
     }
 

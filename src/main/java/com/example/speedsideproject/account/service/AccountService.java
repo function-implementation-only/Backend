@@ -48,6 +48,7 @@ public class AccountService {
     private final CommentRepository commentRepository;
     private final S3UploadUtil s3UploadUtil;
 
+
     //mailSender 인증용
     private final JavaMailSender emailSender;
     private String authNum;
@@ -88,7 +89,7 @@ public class AccountService {
 
         setHeader(response, tokenDto);
 
-        return ResponseDto.success("login success");
+        return ResponseDto.success(tokenDto);
     }
 
     private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
