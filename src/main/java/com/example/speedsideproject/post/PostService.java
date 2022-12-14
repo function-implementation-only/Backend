@@ -66,7 +66,9 @@ public class PostService {
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, List<MultipartFile> imgFiles, List<Tech> techList, Account account) throws IOException {
         Post post = new Post(postRequestDto, account);
+
         List<Image> imageList = new ArrayList<>();
+
         for (MultipartFile image : imgFiles) {
             Image image1 = new Image(s3UploadUtil.upload(image, "side-post"));
             imageList.add(image1);
