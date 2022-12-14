@@ -2,6 +2,7 @@ package com.example.speedsideproject.google;
 
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.google.Constant.SocialLoginType;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ public class SocialController {
      * 유저 소셜 로그인으로 리다이렉트 해주는 url
      * [GET] /accounts/auth
      */
-
+    @ApiOperation(value = "구글 간편 로그인 api주소 ", notes = "{socialLoginType}에 GOOGLE 입력")
     @GetMapping("/auth/{socialLoginType}") //GOOGLE이 들어올 것이다.
     public void socialLoginRedirect(@PathVariable(name = "socialLoginType") String SocialLoginPath) throws IOException {
         SocialLoginType socialLoginType = SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
@@ -35,7 +36,7 @@ public class SocialController {
      * @return SNS Login 요청 결과로 받은 Json 형태의 java 객체 (access_token, jwt_token, user_num 등)
      */
 
-//    @GetMapping(value = "/auth/{socialLoginType}/callback")
+    @ApiOperation(value = "구글 간편 로그인 api주소 ", notes = "{socialLoginType}에 GOOGLE 입력")
     @GetMapping(value = "/{socialLoginType}/test")
     public ResponseDto<?> callback(
             @PathVariable(name = "socialLoginType") String socialLoginPath,
