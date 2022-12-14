@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GoogleOauth implements SocialOauth {
 
-//    private final RestTemplate restTemplate;
-    //applications.yml 에서 value annotation을 통해서 값을 받아온다.
+
+    //applications 에서 value annotation을 통해서 값을 받아온다.
     @Value("${spring.OAuth2.google.url}")
     private String GOOGLE_SNS_LOGIN_URL;
 
@@ -81,7 +81,7 @@ public class GoogleOauth implements SocialOauth {
     }
 
     public GoogleOAuthToken getAccessToken(ResponseEntity<String> response) throws JsonProcessingException {
-        System.out.println("1.response.getBody() = " + response.getBody());
+        System.out.println("response.getBody() = " + response.getBody());
         GoogleOAuthToken googleOAuthToken = objectMapper.readValue(response.getBody(), GoogleOAuthToken.class);
         return googleOAuthToken;
     }
@@ -89,9 +89,6 @@ public class GoogleOauth implements SocialOauth {
     public ResponseEntity<String> requestUserInfo(GoogleOAuthToken oAuthToken) {
 
         String GOOGLE_USERINFO_REQUEST_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
-
-//        String GOOGLE_USERINFO_REQUEST_URL = "https://openidconnect.googleapis.com/v1/userinfo";
-//        String GOOGLE_USERINFO_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 
         //header에 accessToken을 담는다.
         HttpHeaders headers = new HttpHeaders();
