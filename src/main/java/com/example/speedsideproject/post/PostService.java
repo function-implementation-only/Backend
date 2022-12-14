@@ -1,7 +1,6 @@
 package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.account.entity.Account;
-import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.enums.Tech;
@@ -29,19 +28,16 @@ public class PostService {
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
     private final PostQueryRepository postQueryRepository;
-    private final AccountRepository accountRepository;
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                       AccountRepository accountRepository, PostQueryRepository postQueryRepository) {
+                       PostQueryRepository postQueryRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
-        this.accountRepository = accountRepository;
         this.postQueryRepository = postQueryRepository;
     }
-
 
     // 모든 글 읽어오기
     public List<PostResponseDto> getAllpost() {
@@ -81,7 +77,6 @@ public class PostService {
         Post post = postRepository.findByIdAndAccount(id, account);
         if (post == null) throw new CustomException(NOT_FOUND_USER);
 
-
         List<Image> imageList = imageRepository.findAllByPostId(post.getId());
 
         for (Image i : imageList) {
@@ -91,7 +86,7 @@ public class PostService {
 
         List<Image> images = new ArrayList<>();
 
-        if (images != null) {
+        if (imgFiles != null) {
             for (MultipartFile m : imgFiles) {
                 Image i = imageRepository.save(new Image(s3UploadUtil.upload(m, "side-post")));
                 images.add(i);
@@ -102,7 +97,6 @@ public class PostService {
         //요거보고 이미지도 바꾸세여?
         List<Techs> techLists = techsRepository.findAllByPostId(post.getId());
         techsRepository.deleteAllInBatch(techLists);
-
 
         List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         techsRepository.saveAll(techsList);
@@ -131,5 +125,4 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         return new PostResponseDto(post);
     }
-
 }
