@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/account")
 public class AccountController {
 
     private final JwtUtil jwtUtil;
@@ -31,7 +32,7 @@ public class AccountController {
 
     //회원가입
     @ApiOperation(value = "회원가입", notes = "email조건 : x, pw조건 : x")
-    @PostMapping("/account/signup")
+    @PostMapping("/signup")
     public ResponseDto<?> signup(@RequestBody @Valid AccountReqDto accountReqDto) {
         return ResponseDto.success(accountService.signup(accountReqDto));
     }
@@ -39,7 +40,7 @@ public class AccountController {
     //로그인
     @ApiOperation(value = "로그인", notes = "로그인시 토큰 발급")
 
-    @PostMapping("/account/login")
+    @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody @Valid LoginReqDto loginReqDto, HttpServletResponse response) {
         return accountService.login(loginReqDto, response);
     }
@@ -52,7 +53,7 @@ public class AccountController {
 
     //이메일 인증
     @ApiOperation(value = "이메일 인증", notes = "회원가입 시 토큰 발급")
-    @PostMapping("/account/signup/email-check")
+    @PostMapping("/signup/email-check")
     public String mailConfirm(@RequestBody @Valid EmailRequestDto email) throws MessagingException, UnsupportedEncodingException {
         return accountService.sendEmail(email.getEmail());
     }
