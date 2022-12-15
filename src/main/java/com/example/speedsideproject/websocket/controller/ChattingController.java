@@ -1,27 +1,35 @@
 package com.example.speedsideproject.websocket.controller;
 
+import com.example.speedsideproject.websocket.domain.Chat;
 import com.example.speedsideproject.websocket.dto.ChatReqDto;
+import com.example.speedsideproject.websocket.dto.ChatResDto;
+import com.example.speedsideproject.websocket.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
 public class ChattingController {
+
+    private final ChatService chatService;
     private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
-    //Client가 SEND할 수 있는 경로
-    //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
-    //"/pub/chat/enter"
-    @MessageMapping(value = "/chat/enter")
-    public void enter(ChatReqDto message){
-        message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-    }
+    @MessageMapping(value = "{roomId}")
+    @SendTo("/sub/{roomId}")
+    public void message(@DestinationVariable Long roomId, @Valid ChatReqDto message) throws MessagingException {
 
-    @MessageMapping(value = "/chat/message")
-    public void message(ChatReqDto message){
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        //채팅 저장
+        Chat chat = chatService.createChat(roomId, message);
+
+        ChatResDto chatResDto = new ChatResDto(message,chat.getSendDate());
+        template.convertAndSend("/sub/" + roomId,chatResDto);
+
     }
 }
