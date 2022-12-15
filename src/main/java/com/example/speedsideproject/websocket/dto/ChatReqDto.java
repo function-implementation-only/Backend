@@ -10,12 +10,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ChatReqDto
 {
-
     @NotNull
-    private String roomId;
-
-    @NotNull
-    private String writer;
+    private String sender;
 
     @NotBlank
     private String message;

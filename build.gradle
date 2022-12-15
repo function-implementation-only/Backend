@@ -32,6 +32,8 @@ buildscript {
         //Websocket 추가
         implementation 'org.springframework.boot:spring-boot-starter-websocket'
         implementation 'org.webjars:stomp-websocket:2.3.3'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'

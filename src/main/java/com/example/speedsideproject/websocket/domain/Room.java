@@ -1,6 +1,8 @@
 package com.example.speedsideproject.websocket.domain;
 
+import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.Post;
+import com.example.speedsideproject.websocket.dto.RoomReqDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
@@ -20,7 +22,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String title;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE ,fetch = FetchType.EAGER, orphanRemoval = true)
@@ -31,18 +33,18 @@ public class Room {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @Builder
-    public Room(String name){
-        this.name = name;
-    }
-    /*
-      * 채팅방 생성
-      * @param name 방 이름
-      * @return Room Entity
-     */
-    public static Room createRoom(String name){
-        return Room.builder()
-                .name(name)
-                .build();
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account postUser;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account joinUser;
+
+    public Room(Account postUser, Account joinUser, Post post){
+        this.postUser = postUser;
+        this.joinUser = joinUser;
+        this.post = post;
+
     }
 }
