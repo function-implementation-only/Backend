@@ -69,7 +69,7 @@ public class Post extends Timestamped {
 
     // One Post To Many Likes
     //cascade 어떻게 할것인지.....
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Likes> likes;
 
     @Column(nullable = true)
