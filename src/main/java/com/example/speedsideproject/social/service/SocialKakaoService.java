@@ -7,7 +7,6 @@ import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.account.repository.RefreshTokenRepository;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.error.ErrorCode;
-import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
@@ -51,27 +50,24 @@ public class SocialKakaoService {
     public final RefreshTokenRepository refreshTokenRepository;
     public final JwtUtil jwtUtil;
 
-    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public TokenDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
         //인가코드를 통해 access_token 발급받기
         String accessToken = issuedAccessToken(code);
-        System.out.println("accessToken = " + accessToken);
+
         //access_token을 통해 사용자 정보가져오기
         SocialUserInfoDto socialUserInfoDto = getKakaoUserInfo(accessToken);
-        System.out.println("socialUserInfoDto = " + socialUserInfoDto);
+
         //사용자정보를 토대로 가입진행하기(일단 DB에 저장이 되어있는지 확인후)
         Account account = saveAccount(socialUserInfoDto);
-        System.out.println("account = " + account);
+
         //강제 로그인 처리
         forceLoginUser(account);
-        System.out.println("account = " + account);
-        //토큰 발급후 response
-        createToken(account,response);
-        System.out.println("account = " + account);
-        UserInfoDto userInfoDto = new UserInfoDto(account);
-        System.out.println("userInfoDto = " + userInfoDto);
 
-        return ResponseDto.success("kakao signup success");
+        UserInfoDto userInfoDto = new UserInfoDto(account);
+
+        //토큰 발급후 response
+        return createToken(account,response);
     }
 
     private String issuedAccessToken(String code) throws JsonProcessingException {
@@ -162,7 +158,7 @@ public class SocialKakaoService {
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-    private void createToken(Account account, HttpServletResponse response) {
+    private TokenDto createToken(Account account, HttpServletResponse response) {
         TokenDto tokenDto = jwtUtil.createAllToken(account.getEmail());
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountEmail(account.getEmail());
 
@@ -173,11 +169,12 @@ public class SocialKakaoService {
             refreshTokenRepository.save(newToken);
         }
 
-        setHeader(response, tokenDto);
+        return setHeader(response, tokenDto);
     }
 
-    private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
+    private TokenDto setHeader(HttpServletResponse response, TokenDto tokenDto) {
         response.addHeader(JwtUtil.ACCESS_TOKEN, tokenDto.getAccessToken());
         response.addHeader(JwtUtil.REFRESH_TOKEN, tokenDto.getRefreshToken());
+        return tokenDto;
     }
 }
