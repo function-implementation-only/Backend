@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.post.QPost.post;
 
@@ -25,15 +24,12 @@ public class PostQueryRepository {
 
     //findAllMyPostWithQuery
     public Page<Post> findAllMyPostWithQuery(Pageable pageable) {
-        QPost qPost = post;
-
         List<Post> posts = queryFactory
                 .select(post)
                 .from(post)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
 
         Long count = queryFactory
                 .select(post.count())
