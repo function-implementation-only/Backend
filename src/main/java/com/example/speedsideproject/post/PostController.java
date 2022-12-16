@@ -33,8 +33,8 @@ public class PostController {
     //무한스크롤 적용 전체 게시글 조회
     @ApiOperation(value = "무한스크롤 전체 조회", notes = "[api/posts/?page=0&size=3]과 같은 양식으로 조회 가능")
     @GetMapping
-    public ResponseDto<?> getPost(Pageable pageable) {
-        return ResponseDto.success(postService.getPost(pageable));
+    public ResponseDto<?> getPost(Pageable pageable, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
+        return ResponseDto.success(postService.getPost(pageable, userDetails.getAccount()));
     }
 
     //글쓰기 + img 업로드
@@ -79,7 +79,8 @@ public class PostController {
     //글 1개 읽기
     @ApiOperation(value = "게시글 조회", notes = "BD에 저장된 하나의 게시글을 조회합니다")
     @GetMapping("/{id}")
-    public ResponseDto<?> getOnePost(@PathVariable Long id) {
-        return ResponseDto.success(postService.getOnePost(id));
+    public ResponseDto<?> getOnePost(@PathVariable Long id,
+                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
+        return ResponseDto.success(postService.getOnePost(id, userDetails.getAccount()));
     }
 }

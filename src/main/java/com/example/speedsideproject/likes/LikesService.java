@@ -29,6 +29,7 @@ public class LikesService {
         //db 데이터가 있으면
         if (r.isPresent()) {
             Likes likes = r.get();
+            likesRepository.delete(likes);
             likes.setLikeCheck(!(likes.getLikeCheck()));
             post.setLikesLength(likes.getLikeCheck());
             return likes.getLikeCheck();
@@ -41,5 +42,4 @@ public class LikesService {
             return likes.getLikeCheck();
         }
     }
-
 }
