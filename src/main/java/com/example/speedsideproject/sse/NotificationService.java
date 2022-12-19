@@ -82,7 +82,7 @@ public class NotificationService {
 
     @Transactional
     public ResponseDto getAllNotification(Account account) {
-        List<Notification> notificationList = notificationRepository.findAllByMemberOrderByIdDesc(account);
+        List<Notification> notificationList = notificationRepository.findAllByAccountOrderByIdDesc(account);
         List<NotificationResponseDto> notificationResponseDtoList = new ArrayList<>();
         for (Notification notification : notificationList) {
             NotificationResponseDto notificationResponseDto = new NotificationResponseDto(notification);
