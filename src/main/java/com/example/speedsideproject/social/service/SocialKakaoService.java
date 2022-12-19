@@ -31,6 +31,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -51,7 +52,7 @@ public class SocialKakaoService {
     public final RefreshTokenRepository refreshTokenRepository;
     public final JwtUtil jwtUtil;
 
-    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws IOException {
 
         //인가코드를 통해 access_token 발급받기
         String accessToken = issuedAccessToken(code);
