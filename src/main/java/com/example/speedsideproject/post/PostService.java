@@ -49,8 +49,8 @@ public class PostService {
     }
 
     // 무한 스크롤 모든 글 읽어오기
-    @Transactional(readOnly=true)
-    public PostListResponseDto getPost(Pageable pageable, Account account){
+    @Transactional(readOnly = true)
+    public PostListResponseDto getPost(Pageable pageable, Account account) {
         Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
         List<Likes> likeList = likesRepository.findLikesByAccount(account);
         List<PostResponseDto> postResponseDtos = new ArrayList<>();
@@ -61,8 +61,8 @@ public class PostService {
     }
 
     private boolean isLikedPost(Post post, List<Likes> likeList) {
-        for(Likes like : likeList){
-            if(like.getPost() != null && like.getPost().getId().equals(post.getId())){
+        for (Likes like : likeList) {
+            if (like.getPost() != null && like.getPost().getId().equals(post.getId())) {
                 return true;
             }
         }
@@ -137,9 +137,12 @@ public class PostService {
             throw new CustomException(NOT_FOUND_USER);
         }
         postRepository.deleteById(id);
-        if (!(post.getUrlKey() == null)) {
-            s3UploadUtil.delete(post.getUrlKey());
-        }
+
+        // post image를 List 형태로 불러와서 삭제해야한다.
+        // 추후 변경 해야 함.
+//        if (!(post.getUrlKey() == null)) {
+//            s3UploadUtil.delete(post.getUrlKey());
+//        }
         return "delete success";
     }
 
