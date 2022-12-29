@@ -5,6 +5,7 @@ import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Duration;
 import com.example.speedsideproject.post.enums.Place;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 import java.util.List;
@@ -32,22 +33,9 @@ public class PostResponseDto {
     private String nickname;
     private String profileImg;
 
-    public PostResponseDto(Post post) {
-        this.postId = post.getId();
-        this.email = post.getAccount().getEmail();
-        this.nickname = post.getAccount().getNickname();
-        this.profileImg=post.getAccount().getImgUrl();
-        this.title = post.getTitle();
-        this.imageList = post.getImageList();
-        this.contents = post.getContents();
-        this.category = post.getCategory();
-        this.duration = post.getDuration();
-        this.place = post.getPlace();
-        this.peopleNum = post.getPeopleNum();
-        this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
-        this.likesLength = post.getLikesLength();
-    }
+
+    //서비스 분리
+ 
 
     public PostResponseDto(Post post, Boolean likeCheck) {
         this.postId = post.getId();
