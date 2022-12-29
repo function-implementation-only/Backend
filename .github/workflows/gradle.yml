@@ -41,10 +41,12 @@ jobs:
           ls -a .
           echo "copy properties"
           echo $jasypt_encryptor_password  >> ./application-cicd.properties
+          echo $slack_webhook_uri >> ./application-cicd.properties
           cat application-cicd.properties
+          
       env:
           jasypt_encryptor_password : ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
-   
+          slack_webhook_uri : ${{ secrets.SLACK_WEBHOOK_URI }}
    
    
     - name: Build with Gradle
