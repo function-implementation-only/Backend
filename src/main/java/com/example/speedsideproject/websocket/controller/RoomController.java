@@ -18,12 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/chat")
 @Slf4j
 
 public class RoomController {
     private final ChatService chatService;
     private final RoomService roomService;
-    @GetMapping("/roomInfo/{roomId}")
+    @GetMapping("/roomInfo/{roaaomId}")
     public GlobalResponseDto<?> joinRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
 //        model.addAttribute("roomId", roomId);
 //        model.addAttribute("chatList", chatList);
