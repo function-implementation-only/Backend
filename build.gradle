@@ -50,7 +50,7 @@ buildscript {
         //aws s3 관련
         implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
         //쿼리 파라미터 로그 외부 라이브러리
-        implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+//        implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
         //소셜로그인ssa
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
         //카카오 로그인

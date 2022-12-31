@@ -22,4 +22,5 @@ public class ChatRoomDTO {
         room.name = name;
         return room;
     }
+
 }
