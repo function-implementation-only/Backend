@@ -29,36 +29,36 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
-    private final PostQueryRepository postQueryRepository;
+//    private final PostQueryRepository postQueryRepository;
     private final LikesRepository likesRepository;
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                       PostQueryRepository postQueryRepository, LikesRepository likesRepository) {
+                        LikesRepository likesRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
-        this.postQueryRepository = postQueryRepository;
+//        this.postQueryRepository = postQueryRepository;
         this.likesRepository = likesRepository;
     }
 
     // 모든 글 읽어오기
-    public List<PostResponseDto> getAllpost() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
-    }
-
-    // 무한 스크롤 모든 글 읽어오기
     @Transactional(readOnly = true)
-    public PostListResponseDto getPost(Pageable pageable, Account account) {
-        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
-        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-        List<PostResponseDto> postResponseDtos = new ArrayList<>();
-        for (Post post : postList) {
-            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
-        }
-        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+    public Page<?> getAllPost(Pageable pageable) {
+        return postRepository.findAllMyPost(pageable);
     }
+//    // 무한 스크롤 모든 글 읽어오기
+//    @Transactional(readOnly = true)
+//    public PostListResponseDto getPost(Pageable pageable, Account account) {
+//        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
+//        List<Likes> likeList = likesRepository.findLikesByAccount(account);
+//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+//        for (Post post : postList) {
+//            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
+//        }
+//        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+//    }
 
     private boolean isLikedPost(Post post, List<Likes> likeList) {
         for (Likes like : likeList) {
