@@ -46,6 +46,4 @@ public class SocialController {
 //        GetSocialOAuthRes getSocialOAuthRes = oAuthService.oAuthLogin(socialLoginType, code);
         return ResponseDto.success(oAuthService.oAuthLogin(socialLoginType, code));
     }
-
-
 }
