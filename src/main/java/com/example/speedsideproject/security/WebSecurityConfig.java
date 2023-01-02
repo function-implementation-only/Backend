@@ -81,7 +81,7 @@ public class WebSecurityConfig {
                 .antMatchers("/posts/**").permitAll()
                 .antMatchers("/comment/**").permitAll()
                 .antMatchers("/create/**").permitAll()
-                .antMatchers("/chat/**").permitAll()
+                .antMatchers("/ws/chat/**").permitAll()
                 .antMatchers("/**").permitAll()
                 //swagger
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
