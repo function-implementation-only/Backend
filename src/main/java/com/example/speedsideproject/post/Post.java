@@ -49,18 +49,10 @@ public class Post extends Timestamped {
 
     @Column(nullable = true)
     private String startDate;
-
-    @Column(nullable = true)
-    private String urlToString;
-
-    @JsonIgnore
-    @Column(nullable = true)
-    private String urlKey;
-
+    
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_Id")
-//    @JoinColumn(name = "account")
     private Account account;
 
     //One post to Many comment
