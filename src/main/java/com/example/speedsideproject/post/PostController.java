@@ -37,7 +37,7 @@ public class PostController {
 
         //체크한 techList 체크
         System.out.println(techList);
-        return ResponseDto.success(postService.getAllPostWithCategory(pageable,techList));
+        return ResponseDto.success(postService.getAllPostWithCategory(pageable, techList));
     }
 
 
@@ -86,7 +86,6 @@ public class PostController {
     public ResponseDto<?> getOnePost(@PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
 
-        System.out.println(userDetails);
 
         return ResponseDto.success(postService.getOnePost(id, userDetails));
     }
