@@ -46,19 +46,24 @@ public class PostService {
     // 모든 글 읽어오기
     @Transactional(readOnly = true)
     public Page<?> getAllPost(Pageable pageable) {
-        return postRepository.findAllMyPost(pageable);
+        return postRepository.findAllPost(pageable);
     }
-//    // 무한 스크롤 모든 글 읽어오기
+    // 모든 글 읽어오기
 //    @Transactional(readOnly = true)
-//    public PostListResponseDto getPost(Pageable pageable, Account account) {
-//        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
-//        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
-//        for (Post post : postList) {
-//            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
-//        }
-//        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+//    public Page<?> getAllPost2(Pageable pageable) {
+//        return postRepository.findAllMyPost(pageable);
 //    }
+////    // 무한 스크롤 모든 글 읽어오기
+////    @Transactional(readOnly = true)
+////    public PostListResponseDto getPost(Pageable pageable, Account account) {
+////        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
+////        List<Likes> likeList = likesRepository.findLikesByAccount(account);
+////        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+////        for (Post post : postList) {
+////            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
+////        }
+////        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+////    }
 
     private boolean isLikedPost(Post post, List<Likes> likeList) {
         for (Likes like : likeList) {
@@ -151,5 +156,12 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         List<Likes> likeList = likesRepository.findLikesByAccount(account);
         return new PostResponseDto(post, isLikedPost(post, likeList));
+    }
+
+    //카테고리별 get
+    @Transactional(readOnly = true)
+    public Page<?> getAllPostWithCategory(Pageable pageable,List<Tech> techlist) {
+
+        return postRepository.findAllPostWithCategory(pageable,techlist);
     }
 }
