@@ -85,6 +85,9 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseDto<?> getOnePost(@PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(postService.getOnePost(id, userDetails.getAccount()));
+
+        System.out.println(userDetails);
+
+        return ResponseDto.success(postService.getOnePost(id, userDetails));
     }
 }
