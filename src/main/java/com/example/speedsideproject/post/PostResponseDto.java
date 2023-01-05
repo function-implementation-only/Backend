@@ -40,7 +40,8 @@ public class PostResponseDto {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
-//        this.profileImg=post.getAccount().getImgUrl();
+//       this.profileImg=post.getAccount().getImgUrl();
+
         this.title = post.getTitle();
         // 미리보기 이미지 한장만 가져오도록 최적화 하여야 함
         this.imageList = post.getImageList();
@@ -59,7 +60,7 @@ public class PostResponseDto {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
-        this.profileImg=post.getAccount().getImgUrl();
+        this.profileImg = post.getAccount().getImgUrl();
         this.title = post.getTitle();
         this.imageList = post.getImageList();
         this.contents = post.getContents();

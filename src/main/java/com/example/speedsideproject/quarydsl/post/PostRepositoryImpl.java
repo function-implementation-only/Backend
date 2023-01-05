@@ -2,9 +2,14 @@ package com.example.speedsideproject.quarydsl.post;
 
 
 import com.example.speedsideproject.account.entity.QAccount;
-import com.example.speedsideproject.post.*;
+import com.example.speedsideproject.post.PostResponseDto;
+import com.example.speedsideproject.post.QPost;
+import com.example.speedsideproject.post.QPostResponseDto;
+import com.example.speedsideproject.post.QTechs;
+import com.example.speedsideproject.post.enums.Tech;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,8 +24,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
-import static com.example.speedsideproject.post.QImage.image;
 import static com.example.speedsideproject.post.QPost.post;
+import static com.example.speedsideproject.post.QTechs.techs;
 
 
 @Slf4j
@@ -48,7 +53,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     //전체글 + 정렬
     @Override
-    public Page<?> findAllMyPost(Pageable pageable) {
+    public Page<?> findAllPost(Pageable pageable) {
         //Qclass 인스턴스
         QPost qPost = QPost.post;
         QAccount qAccount = QAccount.account;
@@ -74,20 +79,30 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         }
 
         List<PostResponseDto> list = query.fetch();
-        log.debug("query 끝");
+        log.info("query 끝");
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }
-}
 
-//카테고리 + 정렬
+
+    //전체글 + 정렬 2
 //    @Override
-//    public Page<?> findAllPostWithCategory(Pageable pageable, String categoryReceived) {
-//        JPAQuery<PostResponseDto> query = queryFactory.
-//                select(new QPostResponseDto(post))
+//    public Page<?> findAllMyPost2(Pageable pageable) {
+//        //Qclass 인스턴스
+//        QPost qPost = QPost.post;
+//        QAccount qAccount = QAccount.account;
+//
+//        JPAQuery<PostResponseDto> query = queryFactory
+//                .select(new QPostResponseDto(post))
 //                .from(post)
-//                .where(post.category.eq(categoryReceived))
+//                .leftJoin(post.account, account).fetchJoin()
 //                .offset(pageable.getOffset())
 //                .limit(pageable.getPageSize());
+//
+//
+//        JPAQuery<Long> countQuery = queryFactory
+//                .select(post.count())
+//                .from(post);
+//
 //
 //        // sorting
 //        for (Sort.Order o : pageable.getSort()) {
@@ -95,15 +110,48 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 //            query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
 //                    pathBuilder.get(o.getProperty())));
 //        }
+//
 //        List<PostResponseDto> list = query.fetch();
-//        JPAQuery<Long> countQuery = queryFactory
-//                .select(post.count())
-//                .from(post)
-//                .where(post.category.eq(categoryReceived));
+//        log.info("query 끝");
 //        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 //    }
-//}
 
+
+    //카테고리 + 정렬 + 동적처리
+    @Override
+    public Page<?> findAllPostWithCategory(Pageable pageable, List<Tech> techList) {
+
+
+        JPAQuery<PostResponseDto> query = queryFactory.
+                select(new QPostResponseDto(post))
+                .from(post)
+                .leftJoin(post.account, account).fetchJoin()
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        //동적 관리
+
+        // sorting
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(post.getType(), post.getMetadata());
+            query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
+                    pathBuilder.get(o.getProperty())));
+        }
+        List<PostResponseDto> list = query.fetch();
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where(checkTechList(techList));
+        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+    }
+
+    /*techList in query where*/
+    private BooleanExpression checkTechList(List<Tech> techList) {
+        return techList.size() == 0 ? null : techs.tech.in(techList);
+    }
+}
 
 //    @Override
 //    public Page<?> findAllPostWithCategory(Pageable pageable, String categoryReceived, Member mem) {
