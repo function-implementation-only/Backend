@@ -166,15 +166,26 @@ public class PostService {
 
     }
 
-    //카테고리별 get
+    //V2 카테고리별 get
     @Transactional(readOnly = true)
     public Page<?> getAllPostWithCategory(Pageable pageable,List<Tech> techlist) {
 
         return postRepository.findAllPostWithCategory(pageable,techlist);
     }
 
+    //V3 카테고리별 get
     public Page<?> getAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
         return postRepository.findAllPostWithCategory3(pageable,techList,category,place);
     }
+    //V4 카테고리별 get
+    public List<?> getAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place) {
+        return postRepository.findAllPostWithCategory4(offset,size, techList, category, place);
+    }
+    //V5 카테고리별 get
+    public Page<?> getAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place) {
+
+        return postRepository.findAllPostWithCategory5(pageable,techList,category,place);
+    }
+
 }
