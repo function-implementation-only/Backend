@@ -32,29 +32,59 @@ public class PostController {
         return ResponseDto.success(postService.getAllPost(pageable));
     }
 
-    //카테고리별 읽어오기
+    /*v2 카테고리별 읽어오기*/
     @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v2/all")
     public ResponseDto<?> getAllPostWithCategory(Pageable pageable, @RequestParam(name = "techList", required = false) List<Tech> techList) {
         return ResponseDto.success(postService.getAllPostWithCategory(pageable, techList));
     }
 
-    //카테고리별 읽어오기
+    /*v3 카테고리별 읽어오기*/
     @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v3/all")
     public ResponseDto<?> getAllPostWithCategory3(Pageable pageable,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
-                                                  @RequestParam(name ="category", required = false) Category category,
-                                                  @RequestParam(name = "place", required = false)Place place) {
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
         System.out.println(techList);
         System.out.println(category);
         System.out.println(place);
 
-        return ResponseDto.success(postService.getAllPostWithCategory3(pageable, techList, category,place));
+        return ResponseDto.success(postService.getAllPostWithCategory3(pageable, techList, category, place));
     }
 
+    /*v4 카테고리별 읽어오기*/
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v4/all")
+    public ResponseDto<?> getAllPostWithCategory4(Long offset, Long size,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place) {
+
+        //체크한 techList 체크
+        System.out.println(techList);
+        System.out.println(category);
+        System.out.println(place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory4(offset,size, techList, category, place));
+    }
+    /*v5 카테고리별 읽어오기*/
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v5/all")
+    public ResponseDto<?> getAllPostWithCategory5(Pageable pageable,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place) {
+
+        //체크한 techList 체크
+        System.out.println(techList);
+        System.out.println(category);
+        System.out.println(place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory5(pageable, techList, category, place));
+    }
 
     //글쓰기 + img 업로드
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")
