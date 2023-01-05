@@ -5,6 +5,8 @@ import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.likes.LikesRepository;
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -169,5 +171,10 @@ public class PostService {
     public Page<?> getAllPostWithCategory(Pageable pageable,List<Tech> techlist) {
 
         return postRepository.findAllPostWithCategory(pageable,techlist);
+    }
+
+    public Page<?> getAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
+
+        return postRepository.findAllPostWithCategory3(pageable,techList,category,place);
     }
 }
