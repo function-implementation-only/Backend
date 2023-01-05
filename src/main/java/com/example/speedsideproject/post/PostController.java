@@ -24,19 +24,22 @@ public class PostController {
     private final PostService postService;
 
     //모든 글 읽어 오기
-    @ApiOperation(value = "전체 게시글 조회", notes = "BD에 저장된 게시글을 전부 조회합니다")
+    @ApiOperation(value = "전체 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/all")
     public ResponseDto<?> getAllPost(Pageable pageable) {
         return ResponseDto.success(postService.getAllPost(pageable));
     }
 
+    //카테고리별 읽어오기
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v2/all")
+    public ResponseDto<?> getAllPostWithCategory(Pageable pageable, @RequestParam(name = "techList", required = false) List<Tech> techList) {
 
-//    //무한스크롤 적용 전체 게시글 조회
-//    @ApiOperation(value = "무한스크롤 전체 조회", notes = "[api/posts/?page=0&size=3]과 같은 양식으로 조회 가능")
-//    @GetMapping
-//    public ResponseDto<?> getPost(Pageable pageable, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-//        return ResponseDto.success(postService.getPost(pageable, userDetails.getAccount()));
-//    }
+        //체크한 techList 체크
+        System.out.println(techList);
+        return ResponseDto.success(postService.getAllPostWithCategory(pageable,techList));
+    }
+
 
     //글쓰기 + img 업로드
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")
@@ -65,7 +68,7 @@ public class PostController {
                                      @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
                                      @PathVariable Long id,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
-                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException{
+                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
         return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
     }
 
@@ -82,6 +85,9 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseDto<?> getOnePost(@PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(postService.getOnePost(id, userDetails.getAccount()));
+
+        System.out.println(userDetails);
+
+        return ResponseDto.success(postService.getOnePost(id, userDetails));
     }
 }
