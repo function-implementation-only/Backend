@@ -1,6 +1,8 @@
 package com.example.speedsideproject.quarydsl.post;
 
 
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ public interface PostRepositoryCustom {
 
     //    post - category 정렬
     Page<?> findAllPostWithCategory(Pageable pageable, List<Tech> techList);
+    Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place);
 
     //post -category - search
 //    Page<?> findAllPostWithCategoryWithSearch(Pageable pageable, String category, String search);
