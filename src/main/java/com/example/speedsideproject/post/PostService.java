@@ -6,6 +6,7 @@ import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.likes.LikesRepository;
 import com.example.speedsideproject.post.enums.Tech;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -152,10 +153,15 @@ public class PostService {
     }
 
     //글 1개 get
-    public PostResponseDto getOnePost(Long id, Account account) {
+    public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
+
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-        return new PostResponseDto(post, isLikedPost(post, likeList));
+        if(userDetails!=null) {
+            List<Likes> likeList = likesRepository.findLikesByAccount(userDetails.getAccount());
+            return new PostResponseDto(post, isLikedPost(post, likeList));
+        }
+        return new PostResponseDto(post);
+
     }
 
     //카테고리별 get
