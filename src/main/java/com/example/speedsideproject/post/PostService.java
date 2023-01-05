@@ -6,6 +6,7 @@ import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.likes.LikesRepository;
 import com.example.speedsideproject.post.enums.Tech;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,19 +47,24 @@ public class PostService {
     // 모든 글 읽어오기
     @Transactional(readOnly = true)
     public Page<?> getAllPost(Pageable pageable) {
-        return postRepository.findAllMyPost(pageable);
+        return postRepository.findAllPost(pageable);
     }
-//    // 무한 스크롤 모든 글 읽어오기
+    // 모든 글 읽어오기
 //    @Transactional(readOnly = true)
-//    public PostListResponseDto getPost(Pageable pageable, Account account) {
-//        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
-//        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-//        List<PostResponseDto> postResponseDtos = new ArrayList<>();
-//        for (Post post : postList) {
-//            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
-//        }
-//        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+//    public Page<?> getAllPost2(Pageable pageable) {
+//        return postRepository.findAllMyPost(pageable);
 //    }
+////    // 무한 스크롤 모든 글 읽어오기
+////    @Transactional(readOnly = true)
+////    public PostListResponseDto getPost(Pageable pageable, Account account) {
+////        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
+////        List<Likes> likeList = likesRepository.findLikesByAccount(account);
+////        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+////        for (Post post : postList) {
+////            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
+////        }
+////        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
+////    }
 
     private boolean isLikedPost(Post post, List<Likes> likeList) {
         for (Likes like : likeList) {
@@ -147,9 +153,21 @@ public class PostService {
     }
 
     //글 1개 get
-    public PostResponseDto getOnePost(Long id, Account account) {
+    public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
+
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-        return new PostResponseDto(post, isLikedPost(post, likeList));
+        if(userDetails!=null) {
+            List<Likes> likeList = likesRepository.findLikesByAccount(userDetails.getAccount());
+            return new PostResponseDto(post, isLikedPost(post, likeList));
+        }
+        return new PostResponseDto(post);
+
+    }
+
+    //카테고리별 get
+    @Transactional(readOnly = true)
+    public Page<?> getAllPostWithCategory(Pageable pageable,List<Tech> techlist) {
+
+        return postRepository.findAllPostWithCategory(pageable,techlist);
     }
 }
