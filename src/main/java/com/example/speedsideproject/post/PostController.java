@@ -1,6 +1,8 @@
 package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.global.dto.ResponseDto;
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,10 +36,23 @@ public class PostController {
     @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v2/all")
     public ResponseDto<?> getAllPostWithCategory(Pageable pageable, @RequestParam(name = "techList", required = false) List<Tech> techList) {
+        return ResponseDto.success(postService.getAllPostWithCategory(pageable, techList));
+    }
+
+    //카테고리별 읽어오기
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v3/all")
+    public ResponseDto<?> getAllPostWithCategory3(Pageable pageable,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name ="category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false)Place place) {
 
         //체크한 techList 체크
         System.out.println(techList);
-        return ResponseDto.success(postService.getAllPostWithCategory(pageable,techList));
+        System.out.println(category);
+        System.out.println(place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory3(pageable, techList, category,place));
     }
 
 
@@ -86,7 +101,6 @@ public class PostController {
     public ResponseDto<?> getOnePost(@PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
 
-        System.out.println(userDetails);
 
         return ResponseDto.success(postService.getOnePost(id, userDetails));
     }

@@ -6,7 +6,10 @@ import com.example.speedsideproject.post.PostResponseDto;
 import com.example.speedsideproject.post.QPost;
 import com.example.speedsideproject.post.QPostResponseDto;
 import com.example.speedsideproject.post.QTechs;
+import com.example.speedsideproject.post.enums.Category;
+import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
+import com.querydsl.core.FilteredClause;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -131,7 +134,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
-        //동적 관리
 
         // sorting
         for (Sort.Order o : pageable.getSort()) {
@@ -147,10 +149,55 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }
 
+    //카테고리 + 정렬 + 동적처리 v3
+    @Override
+    public Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
+
+
+        JPAQuery<PostResponseDto> query = queryFactory.
+                select(new QPostResponseDto(post))
+                .from(post)
+                .leftJoin(post.account, account).fetchJoin()
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .where(checkCategory(category))
+                .where(checkPlace(place))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+
+        // sorting
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(post.getType(), post.getMetadata());
+            query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
+                    pathBuilder.get(o.getProperty())));
+        }
+        List<PostResponseDto> list = query.fetch();
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where(checkTechList(techList));
+        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+    }
+
+
+    //동적 관리
     /*techList in query where*/
     private BooleanExpression checkTechList(List<Tech> techList) {
-        return techList.size() == 0 ? null : techs.tech.in(techList);
+        return techList == null ? null : techs.tech.in(techList);
     }
+
+    /*category in query where*/
+    private BooleanExpression checkCategory(Category category) {
+        return category == null ? null : post.category.eq(category);
+    }
+
+    /*place in query where*/
+    private BooleanExpression checkPlace(Place place) {
+        return place == null ? null :post.place.eq(place);
+    }
+
+
 }
 
 //    @Override
