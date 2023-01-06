@@ -29,6 +29,9 @@ public interface PostRepositoryCustom {
     List<?> findAllPostWithCategory4(Long offset,Long size, List<Tech> techList, Category category, Place place);
     Page<?> findAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place);
 
+    List<?> findAllPostWithCategory6(String sort,Long size, Long page, List<Tech> techList, Category category, Place place);
+    Page<?> findAllPostWithCategory7( Pageable pageable,String sort, List<Tech> techList, Category category, Place place);
+
 
 
 }

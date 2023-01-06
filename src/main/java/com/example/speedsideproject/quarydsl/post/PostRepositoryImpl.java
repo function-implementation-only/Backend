@@ -22,7 +22,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
 import static com.example.speedsideproject.post.QPost.post;
@@ -40,7 +42,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-//    @Override
+    //    @Override
 //    public List<Post> findAllMyLikes(Member mem) {
 //        QPost qPost = post;
 //        QLike qLike = like;
@@ -51,11 +53,96 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 //                .join(post.likes, like).on(like.member.eq(mem))
 //                .fetch();
 //    }
+    //카테고리 + 정렬 + 동적처리 v7
+    @Override
+    public Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
+        log.info("v7시작");
+
+        List<PostResponseDto> list = queryFactory.
+                select(new QPostResponseDto(post))
+                .from(post)
+                .leftJoin(post.account, account).fetchJoin()
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(getSort(sort))
+                .fetch();
+
+        /*count query*/
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct();
 
 
+        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+    }
+
+    //카테고리 + 정렬 + 동적처리 v6
+    @Override
+    public List<?> findAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place) {
+        log.info("v6시작");
+
+        List<PostResponseDto> fetch = queryFactory.
+                select(new QPostResponseDto(post))
+                .from(post)
+                .leftJoin(post.account, account).fetchJoin()
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct()
+                .offset(getPage(page))
+                .limit(getSize(size))
+                .orderBy(getSort(sort))
+                .fetch();
+        /*count query*/
+        List<Long> count = queryFactory
+                .select(post.count())
+                .from(post)
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct()
+                .fetch();
 
 
+        Map<List<?>, List<?>> map = new HashMap<>();
+        map.put(count, fetch);
+//        System.out.println(map);
 
+        return fetch;
+    }
+
+    //동적관리 method
+    /*getSort*/
+    private OrderSpecifier<Long> getSort(String sort) {
+        return sort == null ? post.id.desc() : getSortValue(sort);
+    }
+
+    /*minor method*/
+    private OrderSpecifier<Long> getSortValue(String sort) {
+        if (sort.equals("postId")) {
+            return post.id.desc();
+        } else if (sort.equals("likesLength")) {
+            return post.likesLength.desc();
+        } else return null;
+    }
+
+    /*getPage*/
+    private Long getPage(Long page) {
+        return page == null ? 0 : page;
+    }
+
+    /*get size*/
+    private Long getSize(Long size) {
+        return size == null ? 100 : size;
+    }
 
     //카테고리 + 정렬 + 동적처리 v5
     @Override
@@ -79,7 +166,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
             query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
                     pathBuilder.get(o.getProperty())));
         }
-        List<PostResponseDto> list = query.fetch();
+
+        List<PostResponseDto> list
+                = query.fetch();
         JPAQuery<Long> countQuery = queryFactory
                 .select(post.count())
                 .from(post)
@@ -90,6 +179,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
 
     }
+
     //카테고리 + 정렬 + 동적처리 v4
     @Override
     public List<?> findAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place) {
@@ -121,7 +211,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 //        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
         return list;
     }
-//    //카테고리 + 정렬 + 동적처리 v3
+
+    //    //카테고리 + 정렬 + 동적처리 v3
     @Override
     public Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
@@ -148,8 +239,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     .from(post)
                     .where(checkTechList(techList));
             return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
-        }
-        else {
+        } else {
             JPAQuery<PostResponseDto> query = queryFactory.
                     select(new QPostResponseDto(post))
                     .from(post)
@@ -171,7 +261,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     .where(checkTechList(techList));
             return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
         }
-        }
+    }
 
 //}
     //전체글 + 정렬 2
@@ -235,6 +325,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(checkTechList(techList));
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }
+
     //전체글 + 정렬
     @Override
     public Page<?> findAllPost(Pageable pageable) {
