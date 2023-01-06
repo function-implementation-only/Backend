@@ -32,12 +32,12 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
-//    private final PostQueryRepository postQueryRepository;
+    //    private final PostQueryRepository postQueryRepository;
     private final LikesRepository likesRepository;
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                        LikesRepository likesRepository) {
+                       LikesRepository likesRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
@@ -158,7 +158,7 @@ public class PostService {
     public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
 
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        if(userDetails!=null) {
+        if (userDetails != null) {
             List<Likes> likeList = likesRepository.findLikesByAccount(userDetails.getAccount());
             return new PostResponseDto(post, isLikedPost(post, likeList));
         }
@@ -168,24 +168,33 @@ public class PostService {
 
     //V2 카테고리별 get
     @Transactional(readOnly = true)
-    public Page<?> getAllPostWithCategory(Pageable pageable,List<Tech> techlist) {
+    public Page<?> getAllPostWithCategory(Pageable pageable, List<Tech> techlist) {
 
-        return postRepository.findAllPostWithCategory(pageable,techlist);
+        return postRepository.findAllPostWithCategory(pageable, techlist);
     }
 
     //V3 카테고리별 get
     public Page<?> getAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
-        return postRepository.findAllPostWithCategory3(pageable,techList,category,place);
+        return postRepository.findAllPostWithCategory3(pageable, techList, category, place);
     }
+
     //V4 카테고리별 get
     public List<?> getAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory4(offset,size, techList, category, place);
+        return postRepository.findAllPostWithCategory4(offset, size, techList, category, place);
     }
+
     //V5 카테고리별 get
     public Page<?> getAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
-        return postRepository.findAllPostWithCategory5(pageable,techList,category,place);
+        return postRepository.findAllPostWithCategory5(pageable, techList, category, place);
     }
-
+    //V6 카테고리별 get
+    public List<?> getAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place) {
+        return postRepository.findAllPostWithCategory6(sort, size, page, techList, category, place);
+    }
+    //V7 카테고리별 get
+    public Object getAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
+        return postRepository.findAllPostWithCategory7(pageable,sort,techList, category, place);
+    }
 }
