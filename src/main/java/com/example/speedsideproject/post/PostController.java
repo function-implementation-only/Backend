@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,9 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.io.IOException;
 import java.util.List;
 
+import static java.lang.String.valueOf;
+
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/posts")
@@ -40,7 +44,7 @@ public class PostController {
     }
 
     /*v3 카테고리별 읽어오기*/
-    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v3/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v3/all")
     public ResponseDto<?> getAllPostWithCategory3(Pageable pageable,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
@@ -56,7 +60,7 @@ public class PostController {
     }
 
     /*v4 카테고리별 읽어오기*/
-    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v4/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v4/all")
     public ResponseDto<?> getAllPostWithCategory4(Long offset, Long size,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
@@ -68,10 +72,11 @@ public class PostController {
         System.out.println(category);
         System.out.println(place);
 
-        return ResponseDto.success(postService.getAllPostWithCategory4(offset,size, techList, category, place));
+        return ResponseDto.success(postService.getAllPostWithCategory4(offset, size, techList, category, place));
     }
+
     /*v5 카테고리별 읽어오기*/
-    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v2/all?page=0&size=3&sort=postId,DESC]")
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v5/all?page=0&size=3&sort=postId,DESC]")
     @GetMapping("/v5/all")
     public ResponseDto<?> getAllPostWithCategory5(Pageable pageable,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
@@ -84,6 +89,45 @@ public class PostController {
         System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory5(pageable, techList, category, place));
+    }
+
+    /*v6 카테고리별 읽어오기*/
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v6/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v6/all")
+    public ResponseDto<?> getAllPostWithCategory6(@RequestParam(name = "sort", required = false) String sort,
+                                                  @RequestParam(name = "size", required = false) Long size,
+                                                  @RequestParam(name = "page", required = false) Long page,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place) {
+
+        //params 체크
+        log.info("sort: {}", sort);
+        log.info("size: {}", size);
+        log.info("page: {}", page);
+        log.info("techList: {}", techList);
+        log.info("category: {}", category);
+        log.info("place: {}", place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory6(sort, size, page, techList, category, place));
+    }
+
+    /*v7 카테고리별 읽어오기*/
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v6/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v7/all")
+    public ResponseDto<?> getAllPostWithCategory7(Pageable pageable,
+                                                  @RequestParam(name = "sort", required = false) String sort,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place) {
+
+        //params 체크
+        log.info("sort: {}", sort);
+        log.info("techList: {}", techList);
+        log.info("category: {}", category);
+        log.info("place: {}", place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory7(pageable, sort, techList, category, place));
     }
 
     //글쓰기 + img 업로드
