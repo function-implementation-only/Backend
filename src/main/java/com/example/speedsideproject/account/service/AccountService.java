@@ -18,6 +18,7 @@ import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.post.PostRepository;
 import com.example.speedsideproject.post.PostResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -191,4 +193,9 @@ public class AccountService {
         return authNum; //인증 코드 반환
     }
 
+    /*email 중복 체크*/
+    public boolean emailCheck(String email) {
+        log.info(email);
+        return accountRepository.existsByEmail(email);
+    }
 }
