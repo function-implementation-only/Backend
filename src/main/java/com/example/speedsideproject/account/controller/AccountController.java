@@ -87,5 +87,10 @@ public class AccountController {
         return accountService.editMyInfo(userDetails.getAccount(), userInfoDto, profileImg);
     }
 
+    /*이메일 중복체크*/
+    @PostMapping("/email")
+    public ResponseDto<?> emailCheck(@RequestPart String email) {
+        return ResponseDto.success(accountService.emailCheck(email));
+    }
 }
 
