@@ -2,16 +2,15 @@ package com.example.speedsideproject.account.entity;
 
 
 import com.example.speedsideproject.account.dto.AccountReqDto;
+import com.example.speedsideproject.account.dto.UserInfoDto;
+import com.example.speedsideproject.comment.entity.Comment;
 import com.example.speedsideproject.post.Post;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
-import com.example.speedsideproject.account.dto.UserInfoDto;
-import com.example.speedsideproject.comment.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +27,14 @@ public class Account {
     private String email;
 
     private String password;
-
+    @Column(nullable = false)
     private String nickname;
     private String imgUrl;
     private String imgKey;
+    /*본인 개발 직군*/
+    private String field;
+    /*본인 소개글 */
+    private String introduction;
     @Column
     private Boolean isAccepted = false;
     @Column
@@ -45,7 +48,7 @@ public class Account {
     private List<Comment> commentList;
 
     @Builder
-    public Account(String email, String nickname, String imgUrl, Boolean isAccepted, Boolean isDeleted){
+    public Account(String email, String nickname, String imgUrl, Boolean isAccepted, Boolean isDeleted) {
         this.email = email;
         this.nickname = nickname;
         this.imgUrl = imgUrl;
@@ -68,8 +71,10 @@ public class Account {
     }
 
     public void update(UserInfoDto userInfoDto) {
-        this.nickname = userInfoDto.getNickname();
+        this.nickname = (userInfoDto.getNickname().isBlank()) ? this.getNickname() : userInfoDto.getNickname();
+        this.field = (userInfoDto.getField().isBlank()) ? this.getField() : userInfoDto.getField();
+        this.introduction = (userInfoDto.getIntroduction().isBlank()) ? this.getIntroduction() : userInfoDto.getIntroduction();
+    }
     }
 
-}
 
