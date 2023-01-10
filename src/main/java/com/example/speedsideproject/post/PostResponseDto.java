@@ -33,6 +33,10 @@ public class PostResponseDto {
     private String nickname;
     private String profileImg;
 
+    //count
+    private Long backendNum;
+    private Long frontendNum;
+    private Long designNum;
 
     //서비스 분리
     @QueryProjection
@@ -56,7 +60,7 @@ public class PostResponseDto {
         this.postState = post.getPostState();
     }
 
-
+    //단일
     public PostResponseDto(Post post, Boolean likeCheck) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
@@ -76,6 +80,52 @@ public class PostResponseDto {
         this.postState = post.getPostState();
     }
 
+    //단일
+    public PostResponseDto(Post post, Boolean likeCheck, List<Long> countList) {
+        this.postId = post.getId();
+        this.email = post.getAccount().getEmail();
+        this.nickname = post.getAccount().getNickname();
+        this.profileImg = post.getAccount().getImgUrl();
+        this.title = post.getTitle();
+        this.imageList = post.getImageList();
+        this.contents = post.getContents();
+        this.category = post.getCategory();
+        this.duration = post.getDuration();
+        this.place = post.getPlace();
+        this.peopleNum = post.getPeopleNum();
+        this.techs = post.getTechs();
+        this.startDate = post.getStartDate();
+        this.likeCheck = likeCheck;
+        this.likesLength = post.getLikesLength();
+        this.postState = post.getPostState();
+        this.backendNum = countList.get(0);
+        this.frontendNum = countList.get(1);
+        this.designNum = countList.get(2);
+    }
+
+    //단일 + no auth
+    public PostResponseDto(Post post, List<Long> countList) {
+        this.postId = post.getId();
+        this.email = post.getAccount().getEmail();
+        this.nickname = post.getAccount().getNickname();
+        this.profileImg = post.getAccount().getImgUrl();
+        this.title = post.getTitle();
+        this.imageList = post.getImageList();
+        this.contents = post.getContents();
+        this.category = post.getCategory();
+        this.duration = post.getDuration();
+        this.place = post.getPlace();
+        this.peopleNum = post.getPeopleNum();
+        this.techs = post.getTechs();
+        this.startDate = post.getStartDate();
+//        this.likeCheck = likeCheck;
+        this.likesLength = post.getLikesLength();
+        this.postState = post.getPostState();
+        this.backendNum = countList.get(0);
+        this.frontendNum = countList.get(1);
+        this.designNum = countList.get(2);
+    }
+
     public PostResponseDto(Post post, Account account) {
         this.postId = post.getId();
         this.title = post.getTitle();
@@ -91,4 +141,6 @@ public class PostResponseDto {
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
     }
+
+
 }

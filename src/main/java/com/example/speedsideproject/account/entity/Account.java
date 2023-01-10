@@ -3,7 +3,7 @@ package com.example.speedsideproject.account.entity;
 
 import com.example.speedsideproject.account.dto.AccountReqDto;
 import com.example.speedsideproject.account.dto.UserInfoDto;
-import com.example.speedsideproject.comment.entity.Comment;
+import com.example.speedsideproject.applyment.entity.Applyment;
 import com.example.speedsideproject.post.Post;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
@@ -45,7 +45,7 @@ public class Account {
     private List<Post> post;
 
     @OneToMany(mappedBy = "account")
-    private List<Comment> commentList;
+    private List<Applyment> applymentList;
 
     @Builder
     public Account(String email, String nickname, String imgUrl, Boolean isAccepted, Boolean isDeleted) {
