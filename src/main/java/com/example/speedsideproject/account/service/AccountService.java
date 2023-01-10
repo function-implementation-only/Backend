@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.*;
 
+@Transactional
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,7 @@ public class AccountService {
     private final JavaMailSender emailSender;
     private String authNum;
 
-    @Transactional
+
     public ResponseDto<?> signup(AccountReqDto accountReqDto) {
         // email 중복 검사
         if (accountRepository.findByEmail(accountReqDto.getEmail()).isPresent()) {
@@ -69,7 +70,7 @@ public class AccountService {
         return ResponseDto.success("Signup success");
     }
 
-    @Transactional
+
     public ResponseDto<?> login(LoginReqDto loginReqDto, HttpServletResponse response) {
 
         Account account = accountRepository.findByEmail(loginReqDto.getEmail()).orElseThrow(() -> new RuntimeException("Not found Account"));
@@ -110,7 +111,7 @@ public class AccountService {
     }
 
     //logout 기능
-    @Transactional
+
     public ResponseDto<?> logout(String email) {
         var refreshToken = refreshTokenRepository.findByAccountEmail(email).orElseThrow(
                 () -> new CustomException(REFRESH_TOKEN_IS_EXPIRED)
@@ -121,6 +122,7 @@ public class AccountService {
 
     //profile edit 기능
     public ResponseDto<?> editMyInfo(Account account, UserInfoDto userInfoDto, MultipartFile imgFile) throws IOException {
+        System.out.println("서비스 시작");
         // 아이디 존재 여부 체크
         Account editMyAccount = accountRepository.findById(account.getId()).orElseThrow(() -> new CustomException(NOT_FOUND_USER));
         // Account repo에 url 및 key 저장
@@ -139,7 +141,7 @@ public class AccountService {
     }
 
 
-    //랜덤 인증 코드 생성
+    /*랜덤 인증 코드 생성*/
     public void createCode() {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
@@ -162,7 +164,7 @@ public class AccountService {
         authNum = key.toString();
     }
 
-    //메일 양식 작성
+    /*메일 양식 작성*/
     public MimeMessage createEmailForm(String email) throws MessagingException, UnsupportedEncodingException {
 
         createCode(); //인증 코드 생성
@@ -184,7 +186,7 @@ public class AccountService {
         return message;
     }
 
-    //실제 메일 전송
+    /*실제 메일 전송*/
     public String sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
         //메일전송에 필요한 정보 설정
         MimeMessage emailForm = createEmailForm(toEmail);
