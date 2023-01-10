@@ -6,10 +6,9 @@ import com.example.speedsideproject.comment.entity.Comment;
 import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.post.enums.Category;
-import com.example.speedsideproject.post.enums.Duration;
 import com.example.speedsideproject.post.enums.Place;
+import com.example.speedsideproject.post.enums.PostState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,15 +32,14 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     private String contents;
 
-    @Column
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Duration duration;
+    @Column(nullable = true)
+    private Long duration;
 
-    @Column
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Place place;
 
@@ -75,6 +73,11 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Techs> techs = new ArrayList<>();
 
+    //모집중 or 모집완료
+    @Column(nullable = true)
+    @Enumerated(EnumType.STRING)
+    private PostState postState;
+
     public Post(PostRequestDto requestDto, Account account) {
         this.contents = requestDto.getContents();
         this.title = requestDto.getTitle();
@@ -84,6 +87,7 @@ public class Post extends Timestamped {
         this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
         this.startDate = requestDto.getStartDate();
+        this.postState = requestDto.getPostState();
     }
 
     //method
@@ -96,6 +100,7 @@ public class Post extends Timestamped {
         this.peopleNum = requestDto.getPeopleNum();
         this.place = requestDto.getPlace();
         this.startDate = requestDto.getStartDate();
+        this.postState = requestDto.getPostState();
     }
 
     //라이크의 갯수를 추가하는 메소드

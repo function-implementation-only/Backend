@@ -2,8 +2,8 @@ package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.enums.Category;
-import com.example.speedsideproject.post.enums.Duration;
 import com.example.speedsideproject.post.enums.Place;
+import com.example.speedsideproject.post.enums.PostState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -17,10 +17,10 @@ public class PostResponseDto {
     private String contents;
     private String email;
     private Category category;
-    private Duration duration;
+    private Long duration;
     private Place place;
     private Long peopleNum;
-
+    private PostState postState;
     //Techs 안에 tech가 있다...
     //이 부분을 염두하고 코드 수정 바랍니다
     private List<Techs> techs;
@@ -53,6 +53,7 @@ public class PostResponseDto {
         this.techs = post.getTechs();
         this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
+        this.postState = post.getPostState();
     }
 
 
@@ -72,6 +73,7 @@ public class PostResponseDto {
         this.startDate = post.getStartDate();
         this.likeCheck = likeCheck;
         this.likesLength = post.getLikesLength();
+        this.postState = post.getPostState();
     }
 
     public PostResponseDto(Post post, Account account) {
@@ -87,5 +89,6 @@ public class PostResponseDto {
 //        this.tech = post.getTech();
         this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
+        this.postState = post.getPostState();
     }
 }
