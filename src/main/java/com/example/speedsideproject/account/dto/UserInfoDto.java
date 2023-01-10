@@ -1,25 +1,23 @@
 package com.example.speedsideproject.account.dto;
 
-
 import com.example.speedsideproject.account.entity.Account;
-import com.example.speedsideproject.post.Post;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @NoArgsConstructor
-@Getter
+@Data
 public class UserInfoDto {
 
-    private String email;
-    private String nickname;
+    private String nickname="";
+    private String introduction="";
+    private String field="";
 
+    @Builder
     public UserInfoDto(Account account) {
-        this.email = account.getEmail();
         this.nickname = account.getNickname();
+        this.introduction = account.getIntroduction();
+        this.field = account.getField();
     }
-
 }

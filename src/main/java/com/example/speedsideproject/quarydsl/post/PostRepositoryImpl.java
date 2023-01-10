@@ -53,6 +53,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 //                .join(post.likes, like).on(like.member.eq(mem))
 //                .fetch();
 //    }
+
+
     //카테고리 + 정렬 + 동적처리 v7
     @Override
     public Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
@@ -217,6 +219,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
         if (techList != null) {
+
             JPAQuery<PostResponseDto> query = queryFactory.
                     select(new QPostResponseDto(post))
                     .from(post)
