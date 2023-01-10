@@ -1,6 +1,9 @@
 package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.account.entity.Account;
+import com.example.speedsideproject.applyment.Position;
+import com.example.speedsideproject.applyment.dto.ApplymentResponseDto;
+import com.example.speedsideproject.applyment.repository.ApplymentRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.likes.Likes;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.speedsideproject.applyment.Position.*;
 import static com.example.speedsideproject.error.ErrorCode.CANNOT_FIND_POST_NOT_EXIST;
 import static com.example.speedsideproject.error.ErrorCode.NOT_FOUND_USER;
 
@@ -32,18 +36,19 @@ public class PostService {
     private final S3UploadUtil s3UploadUtil;
     private final ImageRepository imageRepository;
     private final TechsRepository techsRepository;
-    //    private final PostQueryRepository postQueryRepository;
     private final LikesRepository likesRepository;
+    private final ApplymentRepository applymentRepository;
+
 
     @Autowired
     public PostService(PostRepository postRepository, ImageRepository imageRepository, S3UploadUtil s3UploadUtil, TechsRepository techsRepository,
-                       LikesRepository likesRepository) {
+                       LikesRepository likesRepository, ApplymentRepository applymentRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
         this.s3UploadUtil = s3UploadUtil;
         this.techsRepository = techsRepository;
-//        this.postQueryRepository = postQueryRepository;
         this.likesRepository = likesRepository;
+        this.applymentRepository = applymentRepository;
     }
 
     // 모든 글 읽어오기
@@ -51,22 +56,6 @@ public class PostService {
     public Page<?> getAllPost(Pageable pageable) {
         return postRepository.findAllPost(pageable);
     }
-    // 모든 글 읽어오기
-//    @Transactional(readOnly = true)
-//    public Page<?> getAllPost2(Pageable pageable) {
-//        return postRepository.findAllMyPost(pageable);
-//    }
-////    // 무한 스크롤 모든 글 읽어오기
-////    @Transactional(readOnly = true)
-////    public PostListResponseDto getPost(Pageable pageable, Account account) {
-////        Page<Post> postList = postQueryRepository.findAllMyPostWithQuery(pageable);
-////        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-////        List<PostResponseDto> postResponseDtos = new ArrayList<>();
-////        for (Post post : postList) {
-////            postResponseDtos.add(new PostResponseDto(post, isLikedPost(post, likeList)));
-////        }
-////        return new PostListResponseDto(postResponseDtos, postList.getTotalElements());
-////    }
 
     private boolean isLikedPost(Post post, List<Likes> likeList) {
         for (Likes like : likeList) {
@@ -83,14 +72,14 @@ public class PostService {
         Post post = new Post(postRequestDto, account);
 
         List<Image> imageList = new ArrayList<>();
-
-        for (MultipartFile image : imgFiles) {
-            Image image1 = new Image(s3UploadUtil.upload(image, "side-post"));
-            imageList.add(image1);
-            post.addImg(image1);
+        if(imgFiles!=null) {
+            for (MultipartFile image : imgFiles) {
+                Image image1 = new Image(s3UploadUtil.upload(image, "side-post"));
+                imageList.add(image1);
+                post.addImg(image1);
+            }
+            imageRepository.saveAll(imageList);
         }
-        imageRepository.saveAll(imageList);
-
         //techs 추가
         List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         techsRepository.saveAll(techsList);
@@ -158,11 +147,20 @@ public class PostService {
     public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
 
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+
+        //포지션별 카운트
+        List<Long> countList = new ArrayList<>();
+
+        countList.add(applymentRepository.countByPostAndPosition(post, BACKEND));
+        countList.add(applymentRepository.countByPostAndPosition(post, FRONTEND));
+        countList.add(applymentRepository.countByPostAndPosition(post, DESIGN));
+
         if (userDetails != null) {
-            List<Likes> likeList = likesRepository.findLikesByAccount(userDetails.getAccount());
-            return new PostResponseDto(post, isLikedPost(post, likeList));
+//            List<Likes> likeList = likesRepository.findLikesByAccount(userDetails.getAccount());
+            return new PostResponseDto(post, likesRepository.findLikeCheckByAccountAndPost(userDetails.getAccount(),post),countList);
         }
-        return new PostResponseDto(post);
+
+        return new PostResponseDto(post,countList);
 
     }
 
@@ -189,12 +187,14 @@ public class PostService {
 
         return postRepository.findAllPostWithCategory5(pageable, techList, category, place);
     }
+
     //V6 카테고리별 get
     public List<?> getAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place) {
         return postRepository.findAllPostWithCategory6(sort, size, page, techList, category, place);
     }
+
     //V7 카테고리별 get
     public Object getAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory7(pageable,sort,techList, category, place);
+        return postRepository.findAllPostWithCategory7(pageable, sort, techList, category, place);
     }
 }
