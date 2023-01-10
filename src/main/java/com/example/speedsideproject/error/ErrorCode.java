@@ -48,6 +48,10 @@ public enum ErrorCode {
     ONLY_CAN_DELETE_COMMENT_WRITER(HttpStatus.FORBIDDEN.value(), "C004","댓글을 작성한 유저만 삭제할 수 있습니다."),
     PLEASE_ENTER_TEXT_OR_VOICE(HttpStatus.BAD_REQUEST.value(), "C005","댓글을 입력해 주시기 바랍니다."),
 
+    //APPLYMENT
+    DOESNT_EXIST_APPLYMENT_FOR_READ(HttpStatus.NOT_FOUND.value(), "A002","해당하는 지원이 존재하지 않습니다"),
+    ONLY_CAN_UPDATE_APPLYMENT_WRITER(HttpStatus.FORBIDDEN.value(), "A003","댓글을 작성한 유저만 수정할 수 있습니다."),
+    ONLY_CAN_DELETE_APPLYMENT_WRITER(HttpStatus.FORBIDDEN.value(), "A004","댓글을 작성한 유저만 삭제할 수 있습니다."),
 
     //VOICE
     VOICE_FILE_INVALID(HttpStatus.BAD_REQUEST.value(), "V001","잘못된 파일 형식입니다."),

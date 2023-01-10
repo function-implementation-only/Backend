@@ -2,7 +2,7 @@ package com.example.speedsideproject.post;
 
 
 import com.example.speedsideproject.account.entity.Account;
-import com.example.speedsideproject.comment.entity.Comment;
+import com.example.speedsideproject.applyment.entity.Applyment;
 import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.post.enums.Category;
@@ -47,15 +47,15 @@ public class Post extends Timestamped {
 
     @Column(nullable = true)
     private String startDate;
-    
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_Id")
     private Account account;
 
-    //One post to Many comment
+    //One post to Many applyment
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comment;
+    private List<Applyment> applyment = new ArrayList<>();
 
     // One Post To Many Likes
     //cascade 어떻게 할것인지.....
@@ -117,5 +117,9 @@ public class Post extends Timestamped {
     public void addTechs(Techs techs) {
         this.techs.add(techs);
     }
+
+//    public void setApplyment(Applyment applyment) {
+//        this.applyment.add(applyment);
+//    }
 }
 
