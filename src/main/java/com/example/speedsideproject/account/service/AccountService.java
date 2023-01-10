@@ -9,8 +9,8 @@ import com.example.speedsideproject.account.entity.RefreshToken;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.account.repository.RefreshTokenRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
-import com.example.speedsideproject.comment.dto.CommentResponseDto;
-import com.example.speedsideproject.comment.repository.CommentRepository;
+import com.example.speedsideproject.applyment.dto.ApplymentResponseDto;
+import com.example.speedsideproject.applyment.repository.ApplymentRepository;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
@@ -48,7 +48,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
+    private final ApplymentRepository applymentRepository;
     private final S3UploadUtil s3UploadUtil;
 
 
@@ -106,8 +106,8 @@ public class AccountService {
     }
 
     // 내 댓글 가져오기
-    public List<CommentResponseDto> getMyComment(Account account) {
-        return commentRepository.findAllByAccount(account).stream().map(CommentResponseDto::new).collect(Collectors.toList());
+    public List<ApplymentResponseDto> getMyComment(Account account) {
+        return applymentRepository.findAllByAccount(account).stream().map(ApplymentResponseDto::new).collect(Collectors.toList());
     }
 
     //logout 기능
