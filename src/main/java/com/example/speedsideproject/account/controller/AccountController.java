@@ -91,8 +91,8 @@ public class AccountController {
 
     /*이메일 중복체크*/
     @PostMapping("/email")
-    public ResponseDto<?> emailCheck(@RequestPart String email) {
-        return ResponseDto.success(accountService.emailCheck(email));
+    public ResponseDto<?> emailCheck(@RequestBody @Valid EmailRequestDto email) {
+        return ResponseDto.success(accountService.emailCheck(email.getEmail()));
     }
 }
 
