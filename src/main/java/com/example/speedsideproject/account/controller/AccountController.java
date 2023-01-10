@@ -11,6 +11,7 @@ import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,8 +83,9 @@ public class AccountController {
 
     //내 프로필 편집하기
     @ApiOperation(value = "내 프로필 편집하기", notes = "나의 프로필 편집")
-    @PatchMapping
+    @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> editMyInfo(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails, @RequestPart(required = false, name = "userInfo") UserInfoDto userInfoDto, @RequestPart(required = false, name = "profileImg") MultipartFile profileImg) throws IOException {
+        System.out.println("컨트롤러 시작");
         return accountService.editMyInfo(userDetails.getAccount(), userInfoDto, profileImg);
     }
 
