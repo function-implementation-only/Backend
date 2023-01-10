@@ -198,6 +198,6 @@ public class AccountService {
     /*email 중복 체크*/
     public boolean emailCheck(String email) {
         log.info(email);
-        return accountRepository.existsByEmail(email);
+        return !accountRepository.existsByEmail(email);
     }
 }
