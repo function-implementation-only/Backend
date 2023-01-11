@@ -50,7 +50,6 @@ public class Chat {
     @param message 내용
     @return Chat entity
      */
-
     public static Chat createChat(Room room, String sender, String message){
         return Chat.builder()
                 .room(room)
