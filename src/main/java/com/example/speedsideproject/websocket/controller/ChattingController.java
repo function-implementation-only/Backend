@@ -26,7 +26,7 @@ public class ChattingController {
     public void message(@DestinationVariable Long roomId, @Valid ChatReqDto message, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws MessagingException {
 
         //채팅 저장
-        Chat chat = chatService.createChat(roomId, userDetails.getAccount().getUsername(), message);
+        Chat chat = chatService.createChat(roomId, userDetails.getAccount().getNickname(), message);
 
         ChatResDto chatResDto = new ChatResDto(message, chat.getSendDate());
         template.convertAndSend("/sub/" + roomId,chatResDto);
