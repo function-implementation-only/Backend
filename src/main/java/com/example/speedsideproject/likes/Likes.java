@@ -2,6 +2,7 @@ package com.example.speedsideproject.likes;
 
 
 import com.example.speedsideproject.account.entity.Account;
+import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Likes {
+public class Likes extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

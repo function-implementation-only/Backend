@@ -4,6 +4,7 @@ package com.example.speedsideproject.account.entity;
 import com.example.speedsideproject.account.dto.AccountReqDto;
 import com.example.speedsideproject.account.dto.UserInfoDto;
 import com.example.speedsideproject.applyment.entity.Applyment;
+import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.post.Post;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Account {
+public class Account extends Timestamped {
 
     @Id
     @Column(name = "account_id")
