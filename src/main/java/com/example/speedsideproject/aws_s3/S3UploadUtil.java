@@ -45,6 +45,25 @@ public class S3UploadUtil {
             put("url", uploadImageUrl);
         }};
     }
+    // S3 파일 업로드2
+    public Map<String, String> upload(File convertFile, String dirName) throws IOException {
+        // MultipartFile -> File
+
+
+        // S3에 저장할 파일명
+        String fileName = dirName + "/" + UUID.randomUUID() + "_" + convertFile.getName();
+
+        // S3에 파일 업로드
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, convertFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        String uploadImageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
+
+        // 로컬 파일 삭제
+        convertFile.delete();
+        return new HashMap<String, String>() {{
+            put("key", fileName);
+            put("url", uploadImageUrl);
+        }};
+    }
 
     // S3 파일 삭제
     public void delete(String path) {

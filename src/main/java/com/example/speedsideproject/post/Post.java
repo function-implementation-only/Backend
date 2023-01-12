@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @Getter
@@ -47,6 +48,12 @@ public class Post extends Timestamped {
 
     @Column(nullable = true)
     private String startDate;
+
+    //html소스로 된 contents
+    @Column(nullable = true)
+    private String contentUrl;
+    @Column(nullable = true)
+    private String contentKey;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -90,8 +97,21 @@ public class Post extends Timestamped {
         this.postState = requestDto.getPostState();
     }
 
+    //create v2
+    public Post(PostRequestDto2 requestDto, Account account) {
+//        this.contents = requestDto.getContents();
+        this.title = requestDto.getTitle();
+        this.account = account;
+        this.category = requestDto.getCategory();
+        this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
+        this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
+        this.postState = requestDto.getPostState();
+    }
+
     //method
-    //글내용만 업데이트
+    //글내용만 업데이트 v1
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
@@ -101,6 +121,20 @@ public class Post extends Timestamped {
         this.place = requestDto.getPlace();
         this.startDate = requestDto.getStartDate();
         this.postState = requestDto.getPostState();
+    }
+
+    //글내용 업데이트 v2
+    public void update2(PostRequestDto2 requestDto, Map<String, String> urlMap) {
+        this.title = requestDto.getTitle();
+        this.category = requestDto.getCategory();
+        this.duration = requestDto.getDuration();
+        this.peopleNum = requestDto.getPeopleNum();
+        this.place = requestDto.getPlace();
+        this.startDate = requestDto.getStartDate();
+        this.postState = requestDto.getPostState();
+        this.contentUrl = urlMap.get("url");
+        this.contentKey = urlMap.get("key");
+//        this.techs = techsList;
     }
 
     //라이크의 갯수를 추가하는 메소드
@@ -114,12 +148,14 @@ public class Post extends Timestamped {
         image.setPost(this);
     }
 
+    // html url set
+    public void setContent(Map<String, String> content) {
+        this.contentUrl = content.get("url");
+        this.contentKey = content.get("key");
+    }
+
     public void addTechs(Techs techs) {
         this.techs.add(techs);
     }
-
-//    public void setApplyment(Applyment applyment) {
-//        this.applyment.add(applyment);
-//    }
 }
 
