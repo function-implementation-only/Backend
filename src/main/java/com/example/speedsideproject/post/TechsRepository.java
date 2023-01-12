@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TechsRepository extends JpaRepository<Techs,Long> {
     List<Techs> findAllByPostId(Long id);
+
 }

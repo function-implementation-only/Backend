@@ -31,4 +31,7 @@ public class Techs {
         this.post = post;
         post.addTechs(this);
     }
+    public Techs(Tech tech){
+        this.tech = tech;
+    }
 }
