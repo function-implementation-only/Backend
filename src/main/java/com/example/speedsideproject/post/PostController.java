@@ -14,17 +14,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.swing.text.html.HTML;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/posts")
+@RequestMapping(value = "/posts")
 public class PostController {
     private final PostService postService;
 
@@ -134,16 +135,18 @@ public class PostController {
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "category", value = "모집구분(STUDY/PROJECT)"),
-            @ApiImplicitParam(name = "Duration", value = "예상기간(UNDEFINED/ONE/TWO/THREE/FOUR/FIVE/SIX)"),
+            @ApiImplicitParam(name = "Duration", value = "예상기간(Long 타입)"),
             @ApiImplicitParam(name = "Place", value = "진행방식(ONLINE/OFFLINE)"),
             @ApiImplicitParam(name = "Tech", value = "사용언어(...)")
     })
-    @PostMapping(value = "/v2", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/v2",
+            produces = APPLICATION_JSON_VALUE)
     public ResponseDto<?> createPost2(@RequestPart(name = "data", required = false) PostRequestDto2 postRequestDto2,
                                       @RequestPart(name = "contents", required = false) String contents,
                                       @RequestPart(name = "techList", required = false) List<Tech> techList,
 
-                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
+                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails,
+                                      HttpServletRequest httpServletRequest) throws IOException {
         return ResponseDto.success(postService.createPost2(postRequestDto2, contents, techList, userDetails.getAccount()));
     }
 
@@ -155,7 +158,7 @@ public class PostController {
                                       @PathVariable Long id,
                                       @RequestPart(name = "techList", required = false) List<Tech> techList,
                                       @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
-        return ResponseDto.success(postService.updatePost2(postRequestDto2,contents , techList, id, userDetails.getAccount()));
+        return ResponseDto.success(postService.updatePost2(postRequestDto2, contents, techList, id, userDetails.getAccount()));
     }
 
     //글 삭제
@@ -171,29 +174,28 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseDto<?> getOnePost(@PathVariable Long id,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-
-
         return ResponseDto.success(postService.getOnePost(id, userDetails));
     }
 
 
-    //글쓰기 + img 업로드
-    @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")
+// v1 create 글쓰기 + img 업로드
+/*
+ @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "category", value = "모집구분(STUDY/PROJECT)"),
             @ApiImplicitParam(name = "Duration", value = "예상기간(UNDEFINED/ONE/TWO/THREE/FOUR/FIVE/SIX)"),
             @ApiImplicitParam(name = "Place", value = "진행방식(ONLINE/OFFLINE)"),
-            @ApiImplicitParam(name = "Tech", value = "사용언어(...)")
-    })
+            @ApiImplicitParam(name = "Tech", value = "사용언어(...)")})
     @PostMapping(value = "/v1", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> createPost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
                                      @RequestPart(name = "image", required = false) List<MultipartFile> imgFiles,
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
         return ResponseDto.success(postService.createPost(postRequestDto, imgFiles, techList, userDetails.getAccount()));
-    }
+    }*/
 
-    //글 수정
+//글 수정 v1 update
+/*
     @ApiOperation(value = "게시글 수정", notes = "자신의 글을 수정합니다.(토큰필요)")
     @PatchMapping(value = "v1/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> updatePost(@RequestPart(name = "data", required = false) PostRequestDto postRequestDto,
@@ -202,5 +204,6 @@ public class PostController {
                                      @RequestPart(name = "techList", required = false) List<Tech> techList,
                                      @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
         return ResponseDto.success(postService.updatePost(postRequestDto, imgFiles, techList, id, userDetails.getAccount()));
-    }
+    }*/
+
 }

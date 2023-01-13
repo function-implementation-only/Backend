@@ -48,4 +48,5 @@ public class RoomController {
     public GlobalResponseDto<?> roomList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return roomService.roomList(userDetails);
     }
+
 }

@@ -2,9 +2,9 @@ package com.example.speedsideproject.quarydsl.post;
 
 
 import com.example.speedsideproject.account.entity.QAccount;
-import com.example.speedsideproject.post.PostResponseDto;
+import com.example.speedsideproject.post.PostResponseDto2;
 import com.example.speedsideproject.post.QPost;
-import com.example.speedsideproject.post.QPostResponseDto;
+import com.example.speedsideproject.post.QPostResponseDto2;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
@@ -60,8 +60,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
         log.info("v7시작");
 
-        List<PostResponseDto> list = queryFactory.
-                select(new QPostResponseDto(post))
+        List<PostResponseDto2> list = queryFactory.
+                select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .where(checkCategory(category), checkPlace(place))
@@ -91,8 +91,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public List<?> findAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place) {
         log.info("v6시작");
 
-        List<PostResponseDto> fetch = queryFactory.
-                select(new QPostResponseDto(post))
+        List<PostResponseDto2> fetch = queryFactory.
+                select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .where(checkCategory(category), checkPlace(place))
@@ -151,8 +151,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public Page<?> findAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place) {
 
 
-        JPAQuery<PostResponseDto> query = queryFactory.
-                select(new QPostResponseDto(post))
+        JPAQuery<PostResponseDto2> query = queryFactory.
+                select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .where(checkCategory(category), checkPlace(place))
@@ -169,7 +169,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     pathBuilder.get(o.getProperty())));
         }
 
-        List<PostResponseDto> list
+        List<PostResponseDto2> list
                 = query.fetch();
         JPAQuery<Long> countQuery = queryFactory
                 .select(post.count())
@@ -187,8 +187,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public List<?> findAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place) {
 
 
-        List<PostResponseDto> list = queryFactory.
-                select(new QPostResponseDto(post))
+        List<PostResponseDto2> list = queryFactory.
+                select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .where(checkCategory(category), checkPlace(place))
@@ -220,8 +220,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         if (techList != null) {
 
-            JPAQuery<PostResponseDto> query = queryFactory.
-                    select(new QPostResponseDto(post))
+            JPAQuery<PostResponseDto2> query = queryFactory.
+                    select(new QPostResponseDto2(post))
                     .from(post)
                     .leftJoin(post.account, account).fetchJoin()
                     .where(checkCategory(category), checkPlace(place))
@@ -236,15 +236,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
                         pathBuilder.get(o.getProperty())));
             }
-            List<PostResponseDto> list = query.fetch();
+            List<PostResponseDto2> list = query.fetch();
             JPAQuery<Long> countQuery = queryFactory
                     .select(post.count())
                     .from(post)
                     .where(checkTechList(techList));
             return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
         } else {
-            JPAQuery<PostResponseDto> query = queryFactory.
-                    select(new QPostResponseDto(post))
+            JPAQuery<PostResponseDto2> query = queryFactory.
+                    select(new QPostResponseDto2(post))
                     .from(post)
                     .leftJoin(post.account, account).fetchJoin()
                     .where(checkCategory(category), checkPlace(place))
@@ -257,7 +257,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
                         pathBuilder.get(o.getProperty())));
             }
-            List<PostResponseDto> list = query.fetch();
+            List<PostResponseDto2> list = query.fetch();
             JPAQuery<Long> countQuery = queryFactory
                     .select(post.count())
                     .from(post)
@@ -305,8 +305,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public Page<?> findAllPostWithCategory(Pageable pageable, List<Tech> techList) {
 
 
-        JPAQuery<PostResponseDto> query = queryFactory.
-                select(new QPostResponseDto(post))
+        JPAQuery<PostResponseDto2> query = queryFactory.
+                select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .leftJoin(post.techs, techs)
@@ -321,7 +321,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
             query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
                     pathBuilder.get(o.getProperty())));
         }
-        List<PostResponseDto> list = query.fetch();
+        List<PostResponseDto2> list = query.fetch();
         JPAQuery<Long> countQuery = queryFactory
                 .select(post.count())
                 .from(post)
@@ -336,8 +336,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         QPost qPost = QPost.post;
         QAccount qAccount = QAccount.account;
 
-        JPAQuery<PostResponseDto> query = queryFactory
-                .select(new QPostResponseDto(post))
+        JPAQuery<PostResponseDto2> query = queryFactory
+                .select(new QPostResponseDto2(post))
                 .from(post)
                 .leftJoin(post.account, account).fetchJoin()
                 .offset(pageable.getOffset())
@@ -356,7 +356,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                     pathBuilder.get(o.getProperty())));
         }
 
-        List<PostResponseDto> list = query.fetch();
+        List<PostResponseDto2> list = query.fetch();
         log.info("query 끝");
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }

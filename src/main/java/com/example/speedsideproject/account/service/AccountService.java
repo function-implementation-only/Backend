@@ -8,15 +8,15 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.entity.RefreshToken;
 import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.account.repository.RefreshTokenRepository;
-import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.applyment.dto.ApplymentResponseDto;
 import com.example.speedsideproject.applyment.repository.ApplymentRepository;
+import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.post.PostRepository;
-import com.example.speedsideproject.post.PostResponseDto;
+import com.example.speedsideproject.post.PostResponseDto2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -101,8 +101,8 @@ public class AccountService {
     }
 
     //내 글목록 가져오기
-    public List<PostResponseDto> getMyPost(Account account) {
-        return postRepository.findAllByAccount(account).stream().map(post -> new PostResponseDto(post, account)).collect(Collectors.toList());
+    public List<PostResponseDto2> getMyPost(Account account) {
+        return postRepository.findAllByAccount(account).stream().map(post -> new PostResponseDto2(post, account)).collect(Collectors.toList());
     }
 
     // 내 댓글 가져오기

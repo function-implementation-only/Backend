@@ -28,10 +28,14 @@ public class ApplymentService {
     //지원 생성
     public ApplymentResponseDto createApplyment(ApplymentRequestDto requestDto, Account account) {
         var r = new Applyment(requestDto, account);
-        Post post = postRepository.findById(requestDto.getPostId()).orElseThrow(()-> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        applymentRepository.save(r);
+        Post post = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+        if(applymentRepository.existsByAccountAndPost(account, post)){
+            throw new RuntimeException("이미 지원했어요");
+        }
+
         r.setPost(post);
-        return new ApplymentResponseDto(r,requestDto.getPostId());
+        applymentRepository.save(r);
+        return new ApplymentResponseDto(r, requestDto.getPostId());
     }
 
     // 지원 수정
@@ -47,12 +51,14 @@ public class ApplymentService {
     }
 
     //지원 삭제
+
     public String deleteApplyment(Long Id, Account account) {
         var r = applymentRepository.findById(Id).orElseThrow(
                 () -> new CustomException(DOESNT_EXIST_APPLYMENT_FOR_READ));
         if (!account.getId().equals(r.getAccount().getId())) {
             throw new CustomException(ONLY_CAN_DELETE_APPLYMENT_WRITER);
         }
+        r.deleteNum();
         applymentRepository.deleteById(Id);
         return "Delete success";
     }
@@ -68,7 +74,7 @@ public class ApplymentService {
     }
 
     //지원1개 읽기
-    public ApplymentResponseDto getOneApplyment(Long Id, Account account) {
+    public ApplymentResponseDto getOneApplyment(Long Id) {
         var r = applymentRepository.findById(Id).orElseThrow(
                 () -> new CustomException(DOESNT_EXIST_APPLYMENT_FOR_READ)
         );

@@ -15,8 +15,9 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Long> {
 
     List<Applyment> findAllByAccount(Account account);
     //포지션별 갯수
-
     Long countByPostAndPosition(Post post, Position position);
+
+   Boolean existsByAccountAndPost(Account account, Post post);
 
 
 }

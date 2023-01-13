@@ -9,12 +9,10 @@ import com.example.speedsideproject.post.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Setter
 @Getter
 @Entity
 public class Applyment extends Timestamped {
@@ -39,18 +37,48 @@ public class Applyment extends Timestamped {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Applyment(ApplymentRequestDto requestDto) {
-        this.position = requestDto.getPosition();
-    }
-
     public Applyment(ApplymentRequestDto requestDto, Account account) {
         this.position = requestDto.getPosition();
-//        this.post = requestDto.getPostId();
         this.account = account;
     }
 
+    //method
+    public void setPost(Post post) {
+        this.post = post;
+        System.out.println("여기?");
+        extracted(+1L);
+    }
+
     public void update(ApplymentRequestDto requestDto) {
+        deleteNum();
         this.position = requestDto.getPosition();
+        extracted(+1L);
+    }
+
+    public void deleteNum() {
+        extracted(-1L);
+    }
+
+    private void extracted(Long num) {
+        if (position.equals(Position.BACKEND)) {
+            this.post.setBackendNum(post.getBackendNum() + num);
+            return;
+        }
+        if (position.equals(Position.FRONTEND)) {
+            this.post.setFrontendNum(post.getFrontendNum() + num);
+            return;
+        }
+        if (position.equals(Position.DESIGN)) {
+            this.post.setDesignNum(post.getDesignNum() + num);
+            return;
+        }
+        if (position.equals(Position.PM)) {
+            this.post.setPmNum(post.getPmNum() + num);
+            return;
+        }
+        if (position.equals(Position.MOBILE)) {
+            this.post.setMobileNum(post.getMobileNum() + num);
+        }
     }
 
 }
