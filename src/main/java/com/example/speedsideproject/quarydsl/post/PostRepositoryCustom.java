@@ -17,19 +17,17 @@ public interface PostRepositoryCustom {
     //post get all
     Page<?> findAllPost(Pageable pageable);
 
-    //post get all v2
-//    Page<?> findAllMyPost2(Pageable pageable);
-    // post get all - search
-//    Page<PostResponseDto> findAllMyPostWithSearch(Pageable pageable, String string);
-
-
     //    post - category 정렬
     Page<?> findAllPostWithCategory(Pageable pageable, List<Tech> techList);
+
     Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place);
-    List<?> findAllPostWithCategory4(Long offset,Long size, List<Tech> techList, Category category, Place place);
+
+    List<?> findAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place);
+
     Page<?> findAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place);
 
-    List<?> findAllPostWithCategory6(String sort,Long size, Long page, List<Tech> techList, Category category, Place place);
-    Page<?> findAllPostWithCategory7( Pageable pageable,String sort, List<Tech> techList, Category category, Place place);
+    List<?> findAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place);
+
+    Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place);
 
 }

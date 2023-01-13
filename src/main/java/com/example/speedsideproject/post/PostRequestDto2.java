@@ -12,12 +12,15 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostRequestDto2 {
+class PostRequestDto2 {
     private String title;
-//    private String contents;
     private Category category;
     private Long duration;
-    private Long peopleNum;
+    private Long frontReqNum=0L;
+    private Long backReqNum=0L;
+    private Long designReqNum=0L;
+    private Long pmReqNum=0L;
+    private Long mobileReqNum=0L;
     private Place place;
     private String startDate;
     private PostState postState;

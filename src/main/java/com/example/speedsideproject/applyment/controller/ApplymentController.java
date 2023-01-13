@@ -17,13 +17,13 @@ public class ApplymentController {
     private final ApplymentService applymentService;
 
     // 댓글쓰기 api
-    @PostMapping("/")
+    @PostMapping
     public ResponseDto<?> createApplyment(@RequestBody ApplymentRequestDto requestDto, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.createApplyment(requestDto, userDetails.getAccount()));
     }
 
     // 댓글수정 api
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseDto<?> updateApplyment(@RequestBody ApplymentRequestDto requestDto, @PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.updateApplyment(requestDto, id, userDetails.getAccount()));
     }
@@ -37,7 +37,7 @@ public class ApplymentController {
     //댓글 1개 읽기 api
     @GetMapping("/{id}")
     public ResponseDto<?> getOneApplyment(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(applymentService.getOneApplyment(id, userDetails.getAccount()));
+        return ResponseDto.success(applymentService.getOneApplyment(id));
     }
 
     //내 모든 comments 보여주기
