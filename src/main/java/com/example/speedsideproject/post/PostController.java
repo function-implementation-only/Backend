@@ -1,5 +1,6 @@
 package com.example.speedsideproject.post;
 
+import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
@@ -99,7 +100,7 @@ public class PostController {
                                                   @RequestParam(name = "page", required = false) Long page,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
                                                   @RequestParam(name = "category", required = false) Category category,
-                                                  @RequestParam(name = "place", required = false) Place place) {
+                                                  @RequestParam(name = "place", required = false) Place place){
 
         //params 체크
         log.info("sort: {}", sort);
@@ -119,7 +120,7 @@ public class PostController {
                                                   @RequestParam(name = "sort", required = false) String sort,
                                                   @RequestParam(name = "techList", required = false) List<Tech> techList,
                                                   @RequestParam(name = "category", required = false) Category category,
-                                                  @RequestParam(name = "place", required = false) Place place) {
+                                                  @RequestParam(name = "place", required = false) Place place) throws CustomException {
 
         //params 체크
         log.info("sort: {}", sort);

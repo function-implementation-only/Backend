@@ -172,7 +172,9 @@ public class SocialKakaoService {
 
         setHeader(response, tokenDto);
 
-        return tokenDto;
+        return new TokenDto(tokenDto){
+            public Long accountId =account.getId();
+        };
     }
 
     private void setHeader(HttpServletResponse response, TokenDto tokenDto) {

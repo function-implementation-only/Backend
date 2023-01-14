@@ -113,6 +113,7 @@ public class PostService {
 
     //V7 카테고리별 get
     public Object getAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
+
         return postRepository.findAllPostWithCategory7(pageable, sort, techList, category, place);
     }
 

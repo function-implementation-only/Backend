@@ -14,5 +14,9 @@ public class TokenDto {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
+    public TokenDto(TokenDto tokenDto){
+        this.accessToken = tokenDto.getAccessToken();
+        this.refreshToken = tokenDto.getRefreshToken();
+    }
 
 }
