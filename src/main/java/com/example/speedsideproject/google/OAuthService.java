@@ -91,9 +91,14 @@ public class OAuthService {
 
                 setHeader(response, tokenDto);
                 out.println("access_token:" + tokenDto.getAccessToken());
-               // forceLoginUser(account);
+                // forceLoginUser(account);
                 out.println("oAuthLogin끝===");
-                return tokenDto;
+                
+
+                Long account_id = account.getId();
+                return new TokenDto(tokenDto) {
+                    public Long accountId = account_id;
+                };
 
             }
 

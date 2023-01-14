@@ -71,7 +71,7 @@ public class AccountService {
     }
 
 
-    public ResponseDto<?> login(LoginReqDto loginReqDto, HttpServletResponse response) {
+    public TokenDto login(LoginReqDto loginReqDto, HttpServletResponse response) {
 
         Account account = accountRepository.findByEmail(loginReqDto.getEmail()).orElseThrow(() -> new RuntimeException("Not found Account"));
 
@@ -92,7 +92,9 @@ public class AccountService {
 
         setHeader(response, tokenDto);
 
-        return ResponseDto.success(tokenDto);
+        return new TokenDto(tokenDto){
+            public Long accountId =account.getId();
+        };
     }
 
     private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
