@@ -1,21 +1,33 @@
 package com.example.speedsideproject.account.dto;
 
 import com.example.speedsideproject.account.entity.Account;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfoDto {
 
+    private Long accountId;
+    private String email;
     private String nickname="";
     private String introduction="";
     private String field="";
 
-    @Builder
+    private String imgUrl;
+
+    private String availableTime;
+
+
+
+@Builder
     public UserInfoDto(Account account) {
+        this.accountId =account.getId();
+        this.email = account.getEmail();
+        this.imgUrl = account.getImgUrl();
+        this.availableTime = "언제든 가능합니다";
         this.nickname = account.getNickname();
         this.introduction = account.getIntroduction();
         this.field = account.getField();

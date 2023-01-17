@@ -85,7 +85,6 @@ public class AccountController {
     @ApiOperation(value = "내 프로필 편집하기", notes = "나의 프로필 편집")
     @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseDto<?> editMyInfo(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails, @RequestPart(required = false, name = "userInfo") UserInfoDto userInfoDto, @RequestPart(required = false, name = "profileImg") MultipartFile profileImg) throws IOException {
-        System.out.println("컨트롤러 시작");
         return accountService.editMyInfo(userDetails.getAccount(), userInfoDto, profileImg);
     }
 
@@ -93,6 +92,14 @@ public class AccountController {
     @PostMapping("/email")
     public ResponseDto<?> emailCheck(@RequestBody @Valid EmailRequestDto email) {
         return ResponseDto.success(accountService.emailCheck(email.getEmail()));
+    }
+
+    /*내 프로필 */
+    @ApiOperation(value = "내 프로필", notes = "나의 프로필")
+    @GetMapping("/info")
+    public ResponseDto<?> myInfo(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
+        System.out.println("컨트롤러 시작");
+        return ResponseDto.success(accountService.myInfo(userDetails));
     }
 }
 

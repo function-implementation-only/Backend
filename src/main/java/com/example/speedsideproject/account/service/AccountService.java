@@ -12,11 +12,13 @@ import com.example.speedsideproject.applyment.dto.ApplymentResponseDto;
 import com.example.speedsideproject.applyment.repository.ApplymentRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
+import com.example.speedsideproject.error.ErrorCode;
 import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.post.PostRepository;
 import com.example.speedsideproject.post.PostResponseDto2;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -92,8 +94,8 @@ public class AccountService {
 
         setHeader(response, tokenDto);
 
-        return new TokenDto(tokenDto){
-            public Long accountId =account.getId();
+        return new TokenDto(tokenDto) {
+            public Long accountId = account.getId();
         };
     }
 
@@ -201,5 +203,14 @@ public class AccountService {
     public boolean emailCheck(String email) {
         log.info(email);
         return !accountRepository.existsByEmail(email);
+    }
+
+    /*내 프로필 확인*/
+    public UserInfoDto myInfo(UserDetailsImpl userDetails) {
+        if (userDetails == null) throw new CustomException(NOT_FOUND_USER);
+        Account account = accountRepository.findById(userDetails.getAccount().getId()).orElseThrow(() -> new CustomException(NOT_FOUND_USER));
+        return UserInfoDto.builder()
+                .account(account)
+                .build();
     }
 }
