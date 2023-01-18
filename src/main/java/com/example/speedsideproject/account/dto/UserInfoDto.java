@@ -18,7 +18,7 @@ public class UserInfoDto {
 
     private String imgUrl;
 
-    private String availableTime;
+    private String availableTime;;
 
 
 

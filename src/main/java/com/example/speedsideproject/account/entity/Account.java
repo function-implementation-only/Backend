@@ -36,6 +36,10 @@ public class Account extends Timestamped {
     private String field;
     /*본인 소개글 */
     private String introduction;
+
+    /* 연락 가능 시간 */
+    private String availableTime;
+
     @Column
     private Boolean isAccepted = false;
     @Column
@@ -57,7 +61,6 @@ public class Account extends Timestamped {
         this.isDeleted = isDeleted;
     }
 
-
     public Account(AccountReqDto accountReqDto) {
         this.email = accountReqDto.getEmail();
         this.password = accountReqDto.getPassword();
@@ -67,15 +70,19 @@ public class Account extends Timestamped {
     public void update(UserInfoDto userInfoDto, Map<String, String> urlMap) {
         this.nickname =
                 (userInfoDto.getNickname().isBlank()) ? this.getNickname() : userInfoDto.getNickname();
+        this.field = (userInfoDto.getField().isBlank()) ? this.getField() : userInfoDto.getField();
+        this.introduction = (userInfoDto.getIntroduction().isBlank()) ? this.getIntroduction() : userInfoDto.getIntroduction();
+        this.availableTime = (userInfoDto.getAvailableTime().isBlank()) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
         this.imgUrl = urlMap.get("url");
         this.imgKey = urlMap.get("key");
     }
-
     public void update(UserInfoDto userInfoDto) {
         this.nickname = (userInfoDto.getNickname().isBlank()) ? this.getNickname() : userInfoDto.getNickname();
         this.field = (userInfoDto.getField().isBlank()) ? this.getField() : userInfoDto.getField();
         this.introduction = (userInfoDto.getIntroduction().isBlank()) ? this.getIntroduction() : userInfoDto.getIntroduction();
+        this.availableTime = (userInfoDto.getAvailableTime().isBlank()) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
     }
-    }
+
+}
 
 
