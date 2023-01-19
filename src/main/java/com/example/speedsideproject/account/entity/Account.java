@@ -33,12 +33,12 @@ public class Account extends Timestamped {
     private String imgUrl;
     private String imgKey;
     /*본인 개발 직군*/
-    private String field="";
+    private String field = "";
     /*본인 소개글 */
-    private String introduction="";
+    private String introduction = "";
 
     /* 연락 가능 시간 */
-    private String availableTime="";
+    private String availableTime = "";
 
     @Column
     private Boolean isAccepted = false;
@@ -68,20 +68,25 @@ public class Account extends Timestamped {
     }
 
     public void update(UserInfoDto userInfoDto, Map<String, String> urlMap) {
-        this.nickname = (userInfoDto.getNickname()==null) ? this.getNickname() : userInfoDto.getNickname();
-        this.field = (userInfoDto.getField()==null) ? this.getField() : userInfoDto.getField();
-        this.introduction = (userInfoDto.getIntroduction()==null) ? this.getIntroduction() : userInfoDto.getIntroduction();
-        this.availableTime = (userInfoDto.getAvailableTime()==null) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
+        this.nickname = (userInfoDto.getNickname() == null) ? this.getNickname() : userInfoDto.getNickname();
+        this.field = (userInfoDto.getField() == null) ? this.getField() : userInfoDto.getField();
+        this.introduction = (userInfoDto.getIntroduction() == null) ? this.getIntroduction() : userInfoDto.getIntroduction();
+        this.availableTime = (userInfoDto.getAvailableTime() == null) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
         this.imgUrl = urlMap.get("url");
         this.imgKey = urlMap.get("key");
     }
+
     public void update(UserInfoDto userInfoDto) {
-        this.nickname = (userInfoDto.getNickname()==null) ? this.getNickname() : userInfoDto.getNickname();
-        this.field = (userInfoDto.getField()==null) ? this.getField() : userInfoDto.getField();
-        this.introduction = (userInfoDto.getIntroduction()==null) ? this.getIntroduction() : userInfoDto.getIntroduction();
-        this.availableTime = (userInfoDto.getAvailableTime()==null) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
+        this.nickname = (userInfoDto.getNickname() == null) ? this.getNickname() : userInfoDto.getNickname();
+        this.field = (userInfoDto.getField() == null) ? this.getField() : userInfoDto.getField();
+        this.introduction = (userInfoDto.getIntroduction() == null) ? this.getIntroduction() : userInfoDto.getIntroduction();
+        this.availableTime = (userInfoDto.getAvailableTime() == null) ? this.getAvailableTime() : userInfoDto.getAvailableTime();
     }
 
+    /*비밀번호 재설정*/
+    public void setPassword(String encode) {
+        this.password = encode;
+    }
 }
 
 
