@@ -101,5 +101,17 @@ public class AccountController {
         System.out.println("컨트롤러 시작");
         return ResponseDto.success(accountService.myInfo(userDetails));
     }
+    /*비밀번호 체크 로직*/
+    @ApiOperation(value = "비밀번호 일치?", notes = "비밀번호 일치?")
+    @PostMapping("/password/check")
+    public ResponseDto<?> checkPassword(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails,@RequestBody @Valid LoginReqDto loginReqDto) throws IOException{
+        return ResponseDto.success(accountService.checkPassword(userDetails,loginReqDto));
+    }
+    /*비밀번호 변경 로직*/
+    @ApiOperation(value = "비밀번호 변경", notes = "비밀변호 변경")
+    @PatchMapping("/password/change")
+    public ResponseDto<?> changePassword(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails,@RequestBody @Valid LoginReqDto loginReqDto) throws IOException{
+        return ResponseDto.success(accountService.changePassword(userDetails,loginReqDto));
+    }
 }
 

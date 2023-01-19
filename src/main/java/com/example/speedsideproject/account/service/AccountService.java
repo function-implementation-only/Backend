@@ -213,4 +213,16 @@ public class AccountService {
                 .account(account)
                 .build();
     }
+/*비밀번호 체크*/
+    public boolean checkPassword(UserDetailsImpl userDetails, LoginReqDto loginReqDto) {
+        if (userDetails == null) throw new CustomException(NOT_FOUND_USER);
+        return passwordEncoder.matches(loginReqDto.getPassword(), userDetails.getAccount().getPassword());
+    }
+/*비밀번호 변경로직*/
+    public boolean changePassword(UserDetailsImpl userDetails, LoginReqDto loginReqDto) {
+        Account account = accountRepository.findById(userDetails.getAccount().getId()).orElseThrow(
+                ()->new CustomException(NOT_FOUND_USER));
+        account.setPassword(passwordEncoder.encode(loginReqDto.getPassword()));
+        return true;
+    }
 }
