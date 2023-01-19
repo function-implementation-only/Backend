@@ -26,6 +26,9 @@ public class Applyment extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Position position;
 
+    @Column(nullable = false)
+    private String comment;
+
 
     // many applyment to one post.
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,19 +42,20 @@ public class Applyment extends Timestamped {
 
     public Applyment(ApplymentRequestDto requestDto, Account account) {
         this.position = requestDto.getPosition();
+        this.comment = requestDto.getComment();
         this.account = account;
     }
 
     //method
     public void setPost(Post post) {
         this.post = post;
-        System.out.println("여기?");
         extracted(+1L);
     }
 
     public void update(ApplymentRequestDto requestDto) {
         deleteNum();
         this.position = requestDto.getPosition();
+        this.comment = requestDto.getComment();
         extracted(+1L);
     }
 

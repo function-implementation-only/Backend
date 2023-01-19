@@ -10,6 +10,8 @@ public class ApplymentResponseDto {
     private Long applymentId;
     private Long postId;
     private Position position;
+    private String comment;
+
 
     //account 관련
     private Long accountId;
@@ -23,6 +25,7 @@ public class ApplymentResponseDto {
         this.accountId = applyment.getAccount().getId();
         this.nickname = applyment.getAccount().getNickname();
         this.introduction = applyment.getAccount().getIntroduction();
+        this.comment = applyment.getComment();
     }
     public ApplymentResponseDto(Applyment applyment, Long postId) {
         this.applymentId = applyment.getId();
@@ -31,6 +34,7 @@ public class ApplymentResponseDto {
         this.accountId = applyment.getAccount().getId();
         this.nickname = applyment.getAccount().getNickname();
         this.introduction = applyment.getAccount().getIntroduction();
+        this.comment = applyment.getComment();
     }
 
 

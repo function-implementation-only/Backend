@@ -11,6 +11,6 @@ import lombok.Setter;
 public class ApplymentRequestDto {
     private Long postId;
     private Position position;
-
+    private String comment;
 
 }
