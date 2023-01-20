@@ -27,7 +27,7 @@ public class UserInfoDto {
         this.accountId =account.getId();
         this.email = account.getEmail();
         this.imgUrl = account.getImgUrl();
-        this.availableTime = "언제든 가능합니다";
+        this.availableTime = account.getAvailableTime();
         this.nickname = account.getNickname();
         this.introduction = account.getIntroduction();
         this.field = account.getField();
