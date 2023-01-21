@@ -38,6 +38,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.error.ErrorCode.*;
+import static java.util.stream.Collectors.toList;
 
 @Transactional
 @Slf4j
@@ -106,12 +107,12 @@ public class AccountService {
 
     //내 글목록 가져오기
     public List<PostResponseDto2> getMyPost(Account account) {
-        return postRepository.findAllByAccount(account).stream().map(post -> new PostResponseDto2(post, account)).collect(Collectors.toList());
+        return postRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(post -> new PostResponseDto2(post, account)).collect(toList());
     }
 
     // 내 댓글 가져오기
     public List<ApplymentResponseDto> getMyComment(Account account) {
-        return applymentRepository.findAllByAccount(account).stream().map(ApplymentResponseDto::new).collect(Collectors.toList());
+        return applymentRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(ApplymentResponseDto::new).collect(toList());
     }
 
     //logout 기능
@@ -213,16 +214,24 @@ public class AccountService {
                 .account(account)
                 .build();
     }
-/*비밀번호 체크*/
+
+    /*비밀번호 체크*/
     public boolean checkPassword(UserDetailsImpl userDetails, LoginReqDto loginReqDto) {
         if (userDetails == null) throw new CustomException(NOT_FOUND_USER);
         return passwordEncoder.matches(loginReqDto.getPassword(), userDetails.getAccount().getPassword());
     }
-/*비밀번호 변경로직*/
+
+    /*비밀번호 변경로직*/
     public boolean changePassword(UserDetailsImpl userDetails, LoginReqDto loginReqDto) {
         Account account = accountRepository.findById(userDetails.getAccount().getId()).orElseThrow(
-                ()->new CustomException(NOT_FOUND_USER));
+                () -> new CustomException(NOT_FOUND_USER));
         account.setPassword(passwordEncoder.encode(loginReqDto.getPassword()));
         return true;
     }
+
+    /*내가 북마크 한 리스트*/
+    public List<?> getMyLikes(Account account) {
+        return postRepository.findTop5ByMyLikes(account).stream().map(PostResponseDto2::new).collect(toList());
+    }
+
 }
