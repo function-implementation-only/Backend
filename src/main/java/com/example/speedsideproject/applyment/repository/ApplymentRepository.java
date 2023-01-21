@@ -14,6 +14,8 @@ public interface ApplymentRepository extends JpaRepository<Applyment, Long> {
     List<Applyment> findAllByOrderByCreatedAtDesc();
 
     List<Applyment> findAllByAccount(Account account);
+    List<Applyment> findTop5ByAccountOrderByIdDesc(Account account);
+
     //포지션별 갯수
     Long countByPostAndPosition(Post post, Position position);
 

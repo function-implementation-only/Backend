@@ -1,7 +1,10 @@
 package com.example.speedsideproject.quarydsl.post;
 
 
+import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.entity.QAccount;
+import com.example.speedsideproject.likes.QLikes;
+import com.example.speedsideproject.post.Post;
 import com.example.speedsideproject.post.PostResponseDto2;
 import com.example.speedsideproject.post.QPost;
 import com.example.speedsideproject.post.QPostResponseDto2;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
+import static com.example.speedsideproject.likes.QLikes.likes;
 import static com.example.speedsideproject.post.QPost.post;
 import static com.example.speedsideproject.post.QTechs.techs;
 
@@ -42,17 +46,20 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    //    @Override
-//    public List<Post> findAllMyLikes(Member mem) {
-//        QPost qPost = post;
-//        QLike qLike = like;
-//
-//        return queryFactory
-//                .select(post)
-//                .from(post)
-//                .join(post.likes, like).on(like.member.eq(mem))
-//                .fetch();
-//    }
+
+    @Override
+    public List<Post> findTop5ByMyLikes(Account account) {
+        QPost qPost = post;
+        QLikes qLike = likes;
+
+        return queryFactory
+                .select(post)
+                .from(post)
+                .join(post.likes, likes).on(likes.account.eq(account))
+                .orderBy(post.id.desc())
+                .limit(5)
+                .fetch();
+    }
 
 
     //카테고리 + 정렬 + 동적처리 v7
