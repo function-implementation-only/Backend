@@ -12,7 +12,6 @@ public class ChatReqDto
 {
     @NotNull
     private String sender;
-
     @NotBlank
     private String message;
 }
