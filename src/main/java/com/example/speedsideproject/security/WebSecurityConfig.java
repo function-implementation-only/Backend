@@ -47,6 +47,7 @@ public class WebSecurityConfig {
         //소셜 로그인을 위해 임시 설정
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+//        configuration.setAllowedOrigins(List.of("http://localhost:18000"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
 //        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "DELETE", "PUT", "PATCH"));
