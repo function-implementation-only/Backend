@@ -16,6 +16,7 @@ public class PostResponseDto2 {
     private Long postId;
     private String title;
 
+    private Long accountId;
     private String email;
     private Category category;
     private Long duration;
@@ -58,6 +59,7 @@ public class PostResponseDto2 {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
+        this.accountId = post.getAccount().getId();
         // this.profileImg=post.getAccount().getImgUrl();
         this.title = post.getTitle();
         this.category = post.getCategory();
@@ -78,6 +80,7 @@ public class PostResponseDto2 {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
+        this.accountId = post.getAccount().getId();
         this.profileImg = post.getAccount().getImgUrl();
         this.title = post.getTitle();
         this.category = post.getCategory();
@@ -109,6 +112,7 @@ public class PostResponseDto2 {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
+        this.accountId = post.getAccount().getId();
         this.profileImg = post.getAccount().getImgUrl();
         this.title = post.getTitle();
         this.category = post.getCategory();
@@ -141,6 +145,7 @@ public class PostResponseDto2 {
     public PostResponseDto2(Post post, List<Long> countList) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
+        this.accountId = post.getAccount().getId();
         this.nickname = post.getAccount().getNickname();
         this.profileImg = post.getAccount().getImgUrl();
         this.title = post.getTitle();
@@ -170,6 +175,7 @@ public class PostResponseDto2 {
 
     public PostResponseDto2(Post post, Account account) {
         this.postId = post.getId();
+        this.accountId = post.getAccount().getId();
         this.title = post.getTitle();
         this.email = post.getAccount().getEmail();
         this.nickname = account.getNickname();
