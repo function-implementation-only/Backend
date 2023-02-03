@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+#        - id: main-service
+#          uri: lb://MAIN-SERVICE
+#          predicates:
+#            - Path=/main-service/**
+
+        - id: main-service
+          uri: lb://MAIN-SERVICE
+          predicates:
+            - Path=/main-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
