@@ -14,7 +14,7 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - AuthorizationHeaderFilter
+#            - AuthorizationHeaderFilter
 #         Spring Cloud config with actuator
         - id: main-service
           uri: lb://MAIN-SERVICE
