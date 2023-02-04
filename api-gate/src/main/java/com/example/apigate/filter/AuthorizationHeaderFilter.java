@@ -27,7 +27,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         //config
     }
 
-
+    /*토큰 검증 필터*/
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
@@ -37,7 +37,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             List<String> accessToken = jwtUtil.getHeaderToken(request, "Access");
             List<String> refreshToken = jwtUtil.getHeaderToken(request, "Refresh");
 
-            if (accessToken==null) {
+            if (accessToken == null) {
                 return jwtUtil.onError(exchange, "No Access token", HttpStatus.UNAUTHORIZED);
             }
             if (!jwtUtil.tokenValidation(accessToken.get(0))) {
@@ -46,5 +46,4 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             return chain.filter(exchange);
         };
     }
-
 }
