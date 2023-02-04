@@ -5,8 +5,8 @@ spring:
       name: test
 #      profile: default
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: refresh
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
