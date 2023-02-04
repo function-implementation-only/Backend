@@ -74,18 +74,15 @@ public class JwtUtil {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-//            log.info(ex.getMessage(), ex);
-            System.out.println("토큰 에러");
+            log.error(ex.getMessage(), ex);
             return false;
         }
-
     }
 
     public Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
-//        log.info(err);
-        System.out.println("에러에러");
+        log.error(err);
         return response.setComplete();
     }
 //    // refreshToken 토큰 검증
