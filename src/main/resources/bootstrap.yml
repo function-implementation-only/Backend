@@ -4,9 +4,17 @@ spring:
       uri: http://222.103.213.25:8888
       name: mainservice
       profile: prod-A
+  #spring cloud bus rabbitmq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 management:
   endpoints:
     web:
       exposure:
-        include: refresh,health
+        include: refresh,health,info,busrefresh
+
+
