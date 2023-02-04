@@ -1,5 +1,6 @@
 package com.example.speedsideproject.server;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,12 @@ public class ServerController {
 
     private final Environment env;
 
-
+    @Timed(value="users.status", longTask = true)
     @GetMapping("/health_check")
 //    @Timed(value="users.status", longTask = true)
     public String status() {
         return String.format("Main-service is working\n"
-                +"my name is =" + env.getProperty("get.my")
+                +"my name is =" + env.getProperty("get.my.name")
                 +"my name is =" + env.getProperty("test.my.profile")
 
 //                + ", port(local.server.port)=" + env.getProperty("local.server.port")
