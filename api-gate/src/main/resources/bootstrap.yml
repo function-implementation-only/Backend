@@ -4,6 +4,12 @@ spring:
       uri: http://127.0.0.1:8888
       name: test
 #      profile: default
+  #spring cloud bus rabbitmq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
 #management:
 #  endpoints:
