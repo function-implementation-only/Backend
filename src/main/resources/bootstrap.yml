@@ -1,12 +1,12 @@
 spring:
   cloud:
     config:
-      uri: http://127.0.0.1:8888
-      name: test
-#      profile: default
+      uri: http://222.103.213.25:8888
+      name: mainservice
+      profile: prod-A
 
 management:
   endpoints:
     web:
       exposure:
-        include: refresh
+        include: refresh,health
