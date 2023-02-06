@@ -47,6 +47,10 @@ public class WebSecurityConfig {
         //소셜 로그인을 위해 임시 설정
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+//        configuration.setAllowedOrigins(List.of("http://localhost:18000"));
+        configuration.setAllowedOrigins(List.of("http://222.103.213.25:18000"));
+        configuration.setAllowedOrigins(List.of("http://222.103.213.25:8761"));
+
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
 //        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "DELETE", "PUT", "PATCH"));
@@ -77,7 +81,7 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/main-service/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/account/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
@@ -85,6 +89,8 @@ public class WebSecurityConfig {
                 .antMatchers("/create/**").permitAll()
                 .antMatchers("/ws/chat/**").permitAll()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/main-service/actuator/**").permitAll()
                 //swagger
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .anyRequest().authenticated()
