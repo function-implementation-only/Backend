@@ -11,9 +11,9 @@ spring:
           uri: lb://MAIN-SERVICE
           predicates:
             - Path=/main-service/**
-            - Method=GET
-          filters:
-            - RemoveRequestHeader=Cookie
+#            - Method=GET
+#          filters:
+#            - RemoveRequestHeader=Cookie
 #            - AuthorizationHeaderFilter
 #         Spring Cloud config with actuator
         - id: main-service
