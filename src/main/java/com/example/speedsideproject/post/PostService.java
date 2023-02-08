@@ -4,6 +4,7 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.applyment.repository.ApplymentRepository;
 import com.example.speedsideproject.aws_s3.S3UploadUtil;
 import com.example.speedsideproject.error.CustomException;
+import com.example.speedsideproject.likes.Likes;
 import com.example.speedsideproject.likes.LikesRepository;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
@@ -21,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.applyment.Position.*;
@@ -80,7 +82,7 @@ public class PostService {
         countList.add(applymentRepository.countByPostAndPosition(post, FRONTEND));
         countList.add(applymentRepository.countByPostAndPosition(post, DESIGN));
         if (userDetails != null) {
-            return new PostResponseDto2(post,myLikeCheck(userDetails.getAccount(), post), countList);
+            return new PostResponseDto2(post, myLikeCheck(userDetails.getAccount(), post), countList);
         }
         return new PostResponseDto2(post, countList);
     }
@@ -127,9 +129,9 @@ public class PostService {
         fos.close();
         //html 저장
         var r = s3UploadUtil.upload(htmlFile, "html");
-        Post post = new Post(postRequestDto2, account,r);
+        Post post = new Post(postRequestDto2, account, r);
 //        post.setContent(r);
-        log.info("url:{}",r.get("url"));
+        log.info("url:{}", r.get("url"));
         //techs 추가
         List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         postRepository.save(post);
@@ -165,14 +167,11 @@ public class PostService {
     //method
     /*check my like at post*/
     private Boolean myLikeCheck(Account account, Post post) {
-        return likesRepository.findLikeCheckByAccountAndPost(account, post);
+        Boolean result = null;
+        Optional<Likes> likes = likesRepository.findByAccountAndPost(account, post);
+        if (likes.isPresent()) result = likes.get().getLikeCheck();
+        return result;
     }
-
-
-
-
-
-
 
 
 //글쓰기 v1

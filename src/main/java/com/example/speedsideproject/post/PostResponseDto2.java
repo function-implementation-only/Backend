@@ -8,11 +8,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 public class PostResponseDto2 {
+
+    private LocalDateTime createdAt;
     private Long postId;
     private String title;
 
@@ -60,7 +63,7 @@ public class PostResponseDto2 {
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
         this.accountId = post.getAccount().getId();
-        // this.profileImg=post.getAccount().getImgUrl();
+        this.profileImg = post.getAccount().getImgUrl();
         this.title = post.getTitle();
         this.category = post.getCategory();
         this.duration = post.getDuration();
@@ -70,6 +73,8 @@ public class PostResponseDto2 {
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
         this.contentUrl = post.getContentUrl();
+//        시간
+        this.createdAt = post.createdAt;
 //        this.frontReqNum = post.getFrontReqNum();
 //        this.backReqNum = post.getBackReqNum();
 //        this.designReqNum = post.getDesignReqNum();
@@ -105,6 +110,8 @@ public class PostResponseDto2 {
         this.pmNum = post.getPmNum();
         this.mobileNum = post.getMobileNum();
         this.contentUrl = post.getContentUrl();
+//        시간
+        this.createdAt = post.createdAt;
     }
 
     //단일
@@ -138,7 +145,8 @@ public class PostResponseDto2 {
         this.mobileNum = post.getMobileNum();
 
         this.contentUrl = post.getContentUrl();
-
+//        시간
+        this.createdAt = post.createdAt;
     }
 
     //단일 + no auth
@@ -171,6 +179,8 @@ public class PostResponseDto2 {
         this.mobileNum = post.getMobileNum();
 
         this.contentUrl = post.getContentUrl();
+        //        시간
+        this.createdAt = post.createdAt;
     }
 
     public PostResponseDto2(Post post, Account account) {
@@ -179,6 +189,7 @@ public class PostResponseDto2 {
         this.title = post.getTitle();
         this.email = post.getAccount().getEmail();
         this.nickname = account.getNickname();
+        this.profileImg = post.getAccount().getImgUrl();
         this.category = post.getCategory();
         this.duration = post.getDuration();
         this.place = post.getPlace();
@@ -186,7 +197,8 @@ public class PostResponseDto2 {
         this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
-
+//        시간
+        this.createdAt = post.createdAt;
     }
 
 

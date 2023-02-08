@@ -53,9 +53,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory3(pageable, techList, category, place));
     }
@@ -69,9 +69,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory4(offset, size, techList, category, place));
     }
@@ -85,9 +85,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory5(pageable, techList, category, place));
     }
