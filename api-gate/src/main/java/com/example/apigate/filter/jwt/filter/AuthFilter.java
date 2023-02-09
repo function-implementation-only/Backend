@@ -37,12 +37,13 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             List<String> refreshToken = jwtUtil.getHeaderToken(request, "Refresh");
 
 
-            if (jwtUtil.tokenValidation(accessToken.get(0))) {
+            if (accessToken != null && jwtUtil.tokenValidation(accessToken.get(0))) {
 //                response.getHeaders().set("Auth", "true");
                 request.mutate().header("Auth", "true").build();
                 request.mutate().header("Account-Value", jwtUtil.getEmailFromToken(accessToken.get(0))).build();
                 return chain.filter(exchange);
             }
+
             request.mutate().header("Auth", "false").build();
             return chain.filter(exchange);
         };
