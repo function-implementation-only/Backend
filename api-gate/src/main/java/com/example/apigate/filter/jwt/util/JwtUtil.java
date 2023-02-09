@@ -1,4 +1,4 @@
-package com.example.apigate.jwt.util;
+package com.example.apigate.filter.jwt.util;
 
 
 import io.jsonwebtoken.Jwts;
@@ -17,7 +17,6 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 
@@ -26,8 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-//    private final UserDetailsServiceImpl userDetailsService;
-//    private final RefreshTokenRepository refreshTokenRepository;
+
 
     private static final long ACCESS_TIME = 24 * 60 * 60 * 1000L;
     private static final long REFRESH_TIME = 24 * 60 * 60 * 2000L;
@@ -51,23 +49,6 @@ public class JwtUtil {
         return type.equals("Access") ? request.getHeaders().get(ACCESS_TOKEN) : request.getHeaders().get(REFRESH_TOKEN);
     }
 
-//    /*토큰 생성*/
-//    public TokenDto createAllToken(String email) {
-//        return new TokenDto(createToken(email, "Access"), createToken(email, "Refresh"));
-//    }
-
-    public String createToken(String email, String type) {
-        Date date = new Date();
-        long time = type.equals("Access") ? ACCESS_TIME : REFRESH_TIME;
-
-        return Jwts.builder()
-                .setSubject(email)
-                .setExpiration(new Date(date.getTime() + time))
-                .setIssuedAt(date)
-                .signWith(key, signatureAlgorithm)
-                .compact();
-    }
-
     /*토큰 검증*/
     public Boolean tokenValidation(String token) {
         try {
@@ -85,27 +66,15 @@ public class JwtUtil {
         log.error(err);
         return response.setComplete();
     }
-//    // refreshToken 토큰 검증
-//    public Boolean refreshTokenValidation(String token) {
-//
-//        // 1차 토큰 검증
-//        if(!tokenValidation(token)) return false;
-//
-//        // DB에 저장한 토큰 비교
-//        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountEmail(getEmailFromToken(token));
-//
-//        return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken());
-//    }
 
-//    // 인증 객체 생성
-//    public Authentication createAuthentication(String email) {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//    }
-
-        /*토큰에서 email 가져오는 기능*/
-        public String getEmailFromToken(String token){
+    /*토큰에서 email 가져오는 기능*/
+    public String getEmailFromToken(String token) {
+        try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
-        }
 
+        } catch (Exception e) {
+            return null;
+        }
     }
+
+}

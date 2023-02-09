@@ -2,20 +2,24 @@ spring:
   cloud:
     gateway:
       routes:
-#        - id: main-service
-#          uri: lb://MAIN-SERVICE
-#          predicates:
-#            - Path=/main-service/**
+        #        - id: main-service
+        #          uri: lb://MAIN-SERVICE
+        #          predicates:
+        #            - Path=/main-service/**
 
         - id: main-service
           uri: lb://MAIN-SERVICE
           predicates:
             - Path=/main-service/**
-#            - Method=GET
-#          filters:
-#            - RemoveRequestHeader=Cookie
+          #            - Method=GET
+          filters:
+            #            - RemoveRequestHeader=Cookie
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
 #            - AuthorizationHeaderFilter
-#         Spring Cloud config with actuator
+            - AuthFilter
+            - RemoveRequestHeader=Cookie
+        
+        #         Spring Cloud config with actuator
         - id: main-service
           uri: lb://MAIN-SERVICE
           predicates:
