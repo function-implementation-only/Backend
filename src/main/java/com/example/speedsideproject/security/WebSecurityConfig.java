@@ -95,8 +95,8 @@ public class WebSecurityConfig {
                 //swagger
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .anyRequest().authenticated()
-//                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-                .and().addFilterBefore(new AuthFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//                .and().addFilterBefore(new AuthFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
