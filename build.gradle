@@ -48,8 +48,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     //Spring Cloud Bus
     implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1")
+    //Microservice Monitoring system
+    implementation "io.micrometer:micrometer-registry-prometheus:1.10.3"
     //Jasypt
     implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.4'
+    //model mapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
 }
 
 //Spring Cloud Settings
