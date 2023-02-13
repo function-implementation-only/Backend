@@ -17,7 +17,7 @@ jobs:
         if: contains(github.ref, 'master')
         with:
           host: ec2-52-78-230-80.ap-northeast-2.compute.amazonaws.com
-          username: ubuntu
+          username: ec2-user
           key: admin
           envs: GITHUB_SHA
           script: |
