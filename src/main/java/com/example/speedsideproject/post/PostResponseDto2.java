@@ -4,8 +4,10 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.PostState;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.BooleanPath;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -55,7 +57,8 @@ public class PostResponseDto2 {
     private String contentUrl;
     private String contentKey;
 
-
+    //조회수
+    private Long viewCount;
     //서비스 분리
     @QueryProjection
     public PostResponseDto2(Post post) {
@@ -78,7 +81,12 @@ public class PostResponseDto2 {
 //        this.frontReqNum = post.getFrontReqNum();
 //        this.backReqNum = post.getBackReqNum();
 //        this.designReqNum = post.getDesignReqNum();
+        //조회수
+        this.viewCount = post.getViewCount();
+        //북마크 ...
+        this.likeCheck = likeCheck;
     }
+
 
     //단일
     public PostResponseDto2(Post post, Boolean likeCheck) {
@@ -112,6 +120,8 @@ public class PostResponseDto2 {
         this.contentUrl = post.getContentUrl();
 //        시간
         this.createdAt = post.createdAt;
+        //조회수
+        this.viewCount = post.getViewCount();
     }
 
     //단일
@@ -147,6 +157,8 @@ public class PostResponseDto2 {
         this.contentUrl = post.getContentUrl();
 //        시간
         this.createdAt = post.createdAt;
+        //조회수
+        this.viewCount = post.getViewCount();
     }
 
     //단일 + no auth
@@ -181,6 +193,8 @@ public class PostResponseDto2 {
         this.contentUrl = post.getContentUrl();
         //        시간
         this.createdAt = post.createdAt;
+        //조회수
+        this.viewCount = post.getViewCount();
     }
 
     public PostResponseDto2(Post post, Account account) {
@@ -199,6 +213,8 @@ public class PostResponseDto2 {
         this.postState = post.getPostState();
 //        시간
         this.createdAt = post.createdAt;
+        //조회수
+        this.viewCount = post.getViewCount();
     }
 
 

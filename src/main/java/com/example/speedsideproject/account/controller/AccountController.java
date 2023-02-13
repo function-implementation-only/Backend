@@ -105,6 +105,7 @@ public class AccountController {
     @GetMapping("/info")
     public ResponseDto<?> myInfo(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) throws IOException {
         System.out.println("컨트롤러 시작");
+        System.out.println(userDetails);
         return ResponseDto.success(accountService.myInfo(userDetails));
     }
     /*비밀번호 체크 로직*/

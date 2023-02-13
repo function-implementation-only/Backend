@@ -72,10 +72,12 @@ public class PostService {
 //        }
         return "delete success";
     }
-
+@Transactional
     //글 1개 get
     public PostResponseDto2 getOnePost(Long id, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
+        //조회수
+        post.setViewCount(post.getViewCount() + 1);
         //포지션별 카운트
         List<Long> countList = new ArrayList<>();
         countList.add(applymentRepository.countByPostAndPosition(post, BACKEND));
@@ -117,6 +119,11 @@ public class PostService {
     public Object getAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
 
         return postRepository.findAllPostWithCategory7(pageable, sort, techList, category, place);
+    }
+    //v8 카테고리별 get
+    public Object getAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl  userDetails) {
+
+        return postRepository.findAllPostWithCategory8(pageable, sort, techList, category, place, userDetails);
     }
 
     //V2 글쓰기

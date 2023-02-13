@@ -3,21 +3,24 @@ package com.example.speedsideproject.quarydsl.post;
 
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.account.entity.QAccount;
+import com.example.speedsideproject.likes.Likes;
+import com.example.speedsideproject.likes.LikesRepository;
 import com.example.speedsideproject.likes.QLikes;
-import com.example.speedsideproject.post.Post;
-import com.example.speedsideproject.post.PostResponseDto2;
-import com.example.speedsideproject.post.QPost;
-import com.example.speedsideproject.post.QPostResponseDto2;
+import com.example.speedsideproject.post.*;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,6 +31,7 @@ import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
 import static com.example.speedsideproject.likes.QLikes.likes;
@@ -41,9 +45,12 @@ import static com.example.speedsideproject.post.QTechs.techs;
 public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final LikesRepository likesRepository;
 
-    public PostRepositoryImpl(EntityManager em) {
+    @Autowired
+    public PostRepositoryImpl(EntityManager em, LikesRepository likesRepository) {
         this.queryFactory = new JPAQueryFactory(em);
+        this.likesRepository = likesRepository;
     }
 
 
@@ -61,6 +68,41 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .fetch();
     }
 
+    //카테고리 + 정렬 + 동적처리 v8
+    @Override
+    public Object findAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails) {
+        log.info("v8시작");
+
+
+        List<?> list = queryFactory.
+                select(new QPostResponseDto3(post, likes.likeCheck))
+                .from(post)
+                .leftJoin(post.account, account).fetchJoin()
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct()
+                .leftJoin(post.likes, likes).on(likes.account.id.eq(userDetails.getAccount().getId()))
+//                .where(likes.account.eq(userDetails.getAccount()).or(null))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(getSort(sort))
+                .fetch();
+
+
+
+        /*count query*/
+        JPAQuery<Long> countQuery = queryFactory
+                .select(post.count())
+                .from(post)
+                .where(checkCategory(category), checkPlace(place))
+                .leftJoin(post.techs, techs)
+                .where(checkTechList(techList))
+                .distinct();
+
+
+        return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
+    }
 
     //카테고리 + 정렬 + 동적처리 v7
     @Override
