@@ -16,9 +16,9 @@ jobs:
         id: deploy-prod
         if: contains(github.ref, 'master')
         with:
-          host: ${{ secrets.EC2_IP_2 }}
+          host: ec2-52-78-230-80.ap-northeast-2.compute.amazonaws.com
           username: ubuntu
-          key: ${{ secrets.EC2_PASSWORD }}
+          key: admin
           envs: GITHUB_SHA
           script: |
             sudo docker rm -f $(docker container rm -f main-service)
