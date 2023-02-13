@@ -11,13 +11,11 @@ spring:
           uri: lb://MAIN-SERVICE
           predicates:
             - Path=/main-service/**
-          #            - Method=GET
           filters:
-            #            - RemoveRequestHeader=Cookie
             - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-#            - AuthorizationHeaderFilter
+
             - AuthFilter
-            - RemoveRequestHeader=Cookie
+#            - RemoveRequestHeader=Cookie
         
         #         Spring Cloud config with actuator
         - id: main-service
@@ -28,7 +26,6 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
 
-
         # Chat-Service
         - id: chat-service
           uri: lb://CHAT-SERVICE
@@ -38,4 +35,4 @@ spring:
           filters:
               - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
               - AuthFilter
-              - RemoveRequestHeader=Cookie
+#              - RemoveRequestHeader=Cookie

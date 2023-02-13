@@ -45,9 +45,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             if (!jwtUtil.tokenValidation(accessToken.get(0))) {
                 return jwtUtil.onError(exchange, "AccessToken is not Valid", HttpStatus.UNAUTHORIZED);
             }
-//            Long testId = 4758L;
-//            response.getHeaders().add("TEST", "testId:" + testId);
-//            request.getHeaders().add("TEST22", "testId22:" + testId);
             return chain.filter(exchange);
         };
     }
