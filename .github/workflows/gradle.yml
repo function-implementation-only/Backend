@@ -71,8 +71,7 @@ jobs:
           key: ${{ secrets.EC2_PASSWORD }}
           envs: GITHUB_SHA
           script: |
-                    sudo docker rm -f $(docker container rm -f main-service)
-                    docker image prune -f -a
-            #            sudo docker pull ${{ secrets.DOCKER_REPO }}/main-service
-                    docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" ${{ secrets.DOCKER_REPO }}/main-service
+            sudo docker rm -f $(docker container rm -f main-service)
+            docker image prune -f -a
+            docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" ${{ secrets.DOCKER_REPO }}/main-service
 
