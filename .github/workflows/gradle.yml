@@ -16,11 +16,11 @@ jobs:
         id: deploy-prod
         if: contains(github.ref, 'master')
         with:
-          host: ec2-52-78-230-80.ap-northeast-2.compute.amazonaws.com
-          username: ec2-user
-          key: admin
-          envs: GITHUB_SHA
-          script: |
+           host: ${{ secrets.EC2_IP }}
+           username: ubuntu
+           password: ${{ secrets.EC2_PASSWORD }}
+           port: 22
+           script: |
             sudo docker rm -f $(docker container rm -f main-service)
             docker image prune -f -a
             docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" refinedstone/main-service
