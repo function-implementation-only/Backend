@@ -1,12 +1,12 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-# Repo Action 페이지에 나타날 이름 
-name: Spring Boot & Gradle CI/CD 
+# Repo Action 페이지에 나타날 이름
+name: Spring Boot & Gradle CI/CD
 
 # Event Trigger
 # master branch에 push 또는 pull request가 발생할 경우 동작
-# branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음 
+# branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음
 on:
   push:
     branches: [ master ]
@@ -17,19 +17,19 @@ jobs:
 
     # Task의 sequence를 명시한다.
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
-    
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: make application-cicd.properties
-      if: contains(github.ref, 'master')
-      run: |
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: make application-cicd.properties
+        if: contains(github.ref, 'master')
+        run: |
           echo "ls -a . & pwd"
           pwd
           ls -a .
@@ -43,59 +43,36 @@ jobs:
           echo $jasypt_encryptor_password  >> ./application-cicd.properties
           echo $slack_webhook_uri >> ./application-cicd.properties
           cat application-cicd.properties
-          
-      env:
+
+        env:
           jasypt_encryptor_password : ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
           slack_webhook_uri : ${{ secrets.SLACK_WEBHOOK_URI }}
-   
-   
-    - name: Build with Gradle
-      env:
-       jasypt.encryptor.password: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
-      run: ./gradlew clean build
-       
-   # 전송할 파일을 담을 디렉토리 생성
-    - name: Make Directory for deliver
-      run: mkdir deploy
 
-    # Jar 파일 Copy
-    - name: Copy Jar
-      run: cp ./build/libs/*.jar ./deploy/
-      
-    # appspec.yml Copy
-    - name: Copy appspec
-      run: cp appspec.yml ./deploy/
-      
-    # script file Copy
-    - name: Copy shell
-      run: cp ./scripts/* ./deploy/
 
-    # 압축파일 형태로 전달
-    - name: Make zip file
-      run: zip -r -qq -j ./springbootcicdtest.zip ./deploy
-      
+      - name: Build with Gradle
+        run: ./gradlew clean build
 
-      
-    # S3 Bucket으로 copy
-    - name: Deliver to AWS S3
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.CICD_AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.CICD_AWS_SECRET_ACCESS_KEY }}
-      run: |
-        aws s3 cp \
-         --region ap-northeast-2 \
-         --acl private \./springbootcicdtest.zip s3://springbootcicdtest/ 
+      ## docker build & push to production
+      - name: Docker build & push to prod
+        if: contains(github.ref, 'master')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build --tag ${{ secrets.DOCKER_REPO }}/main-service .
+          docker push ${{ secrets.DOCKER_REPO }}/main-service
 
-  # Deploy
-    - name: Deploy
-      env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.CICD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CICD_AWS_SECRET_ACCESS_KEY }}
-      run: |
-          aws deploy create-deployment \
-          --application-name springboot-cicd \
-          --deployment-group-name cicdgroup \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=springbootcicdtest,bundleType=zip,key=springbootcicdtest.zip \
-          --region ap-northeast-2
+      ## deploy to production
+      - name: Deploy to prod
+        uses: appleboy/ssh-action@master
+        id: deploy-prod
+        if: contains(github.ref, 'master')
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PASSWORD }}
+          envs: GITHUB_SHA
+          script: |
+                    sudo docker rm -f $(docker container rm -f main-service)
+                    docker image prune -f -a
+            #            sudo docker pull ${{ secrets.DOCKER_REPO }}/main-service
+                    docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" ${{ secrets.DOCKER_REPO }}/main-service
 

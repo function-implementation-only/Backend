@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -53,9 +54,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory3(pageable, techList, category, place));
     }
@@ -69,9 +70,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory4(offset, size, techList, category, place));
     }
@@ -85,9 +86,9 @@ public class PostController {
                                                   @RequestParam(name = "place", required = false) Place place) {
 
         //체크한 techList 체크
-        System.out.println(techList);
-        System.out.println(category);
-        System.out.println(place);
+//        System.out.println(techList);
+//        System.out.println(category);
+//        System.out.println(place);
 
         return ResponseDto.success(postService.getAllPostWithCategory5(pageable, techList, category, place));
     }
@@ -130,7 +131,25 @@ public class PostController {
 
         return ResponseDto.success(postService.getAllPostWithCategory7(pageable, sort, techList, category, place));
     }
+    /*v8 카테고리별 읽어오기*/
+    @ApiOperation(value = "카테고리별 게시글 조회", notes = "예시 page,size,sort기능 [api/posts/v6/all?page=0&size=3&sort=postId,DESC]")
+    @GetMapping("/v8/all")
+    public ResponseDto<?> getAllPostWithCategory8(Pageable pageable,
+                                                  @RequestParam(name = "sort", required = false) String sort,
+                                                  @RequestParam(name = "techList", required = false) List<Tech> techList,
+                                                  @RequestParam(name = "category", required = false) Category category,
+                                                  @RequestParam(name = "place", required = false) Place place,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails
+                                                  ) throws CustomException {
 
+        //params 체크
+        log.info("sort: {}", sort);
+        log.info("techList: {}", techList);
+        log.info("category: {}", category);
+        log.info("place: {}", place);
+
+        return ResponseDto.success(postService.getAllPostWithCategory8(pageable, sort, techList, category, place,userDetails));
+    }
 
     //글쓰기 v2
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.(토큰필요)")

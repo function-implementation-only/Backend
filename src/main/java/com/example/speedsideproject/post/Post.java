@@ -71,7 +71,12 @@ public class Post extends Timestamped {
     private String contentUrl;
     @Column(nullable = true)
     private String contentKey;
+    //조회수
+    @Setter
+    @Column(nullable = true)
+    private Long viewCount = 0L;
 
+    //연관관계 시작
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_Id")

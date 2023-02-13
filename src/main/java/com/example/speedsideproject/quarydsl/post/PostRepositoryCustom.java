@@ -6,6 +6,7 @@ import com.example.speedsideproject.post.Post;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
+import com.example.speedsideproject.security.user.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,5 +32,7 @@ public interface PostRepositoryCustom {
     List<?> findAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place);
 
     Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place);
+
+    Object findAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails);
 
 }
