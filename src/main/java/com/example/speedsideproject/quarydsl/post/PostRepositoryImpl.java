@@ -82,8 +82,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .leftJoin(post.techs, techs)
                 .where(checkTechList(techList))
                 .distinct()
-                .leftJoin(post.likes, likes)
-                .where(usernameEq(userDetails))
+                .leftJoin(post.likes, likes).on(usernameEq(userDetails))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getSort(sort))
@@ -178,7 +177,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     /*check userDetail*/
     private BooleanExpression usernameEq(UserDetailsImpl userDetails) {
-        return userDetails == null ? null : likes.account.id.eq(userDetails.getAccount().getId());
+        return userDetails == null ? likes.account.id.eq(-1L) : likes.account.id.eq(userDetails.getAccount().getId());
     }
 
     /*minor method*/
