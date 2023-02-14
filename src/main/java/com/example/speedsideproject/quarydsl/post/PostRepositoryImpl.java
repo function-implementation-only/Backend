@@ -82,8 +82,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .leftJoin(post.techs, techs)
                 .where(checkTechList(techList))
                 .distinct()
-                .leftJoin(post.likes, likes).on(likes.account.id.eq(userDetails.getAccount().getId()))
-//                .where(likes.account.eq(userDetails.getAccount()).or(null))
+                .leftJoin(post.likes, likes)
+                .where(usernameEq(userDetails))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getSort(sort))
@@ -174,6 +174,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     /*getSort*/
     private OrderSpecifier<Long> getSort(String sort) {
         return sort == null ? post.id.desc() : getSortValue(sort);
+    }
+
+    /*check userDetail*/
+    private BooleanExpression usernameEq(UserDetailsImpl userDetails) {
+        return userDetails == null ? null : likes.account.id.eq(userDetails.getAccount().getId());
     }
 
     /*minor method*/
