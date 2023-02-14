@@ -19,4 +19,7 @@ public class ResponseConstants {
 
     public static final ResponseEntity<String> NOT_FOUND_CHATROOM =
         new ResponseEntity<>("존재하지 않는 채팅방입니다.", HttpStatus.NOT_FOUND);
+
+    public static final ResponseEntity<String> DUPLICATED_CHATROOM =
+        new ResponseEntity<>("이미 존재하는 채팅방입니다.", HttpStatus.CONFLICT);
 }

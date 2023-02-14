@@ -1,5 +1,6 @@
 package com.example.chatservice.model;
 
+import com.example.chatservice.dto.ChatDto.CreateRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +10,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Entity
 public class ChatMessage extends BaseTimeEntity{
     @Id
@@ -36,4 +40,11 @@ public class ChatMessage extends BaseTimeEntity{
 
     private boolean messageCheckStatus;
 
+    public static ChatMessage createMessage(CreateRequest request, ChatRoom room) {
+        return ChatMessage.builder()
+            .sender(request.getSender())
+            .message(request.getMessage())
+            .room(room)
+            .build();
+    }
 }

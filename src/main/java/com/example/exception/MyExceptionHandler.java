@@ -1,11 +1,12 @@
 package com.example.exception;
 
 
+import static com.example.chatservice.constants.ResponseConstants.DUPLICATED_CHATROOM;
 import static com.example.chatservice.constants.ResponseConstants.NOT_FOUND_CHATROOM;
 
 import com.example.exception.chatroom.ChatRoomNotFoundException;
+import com.example.exception.chatroom.DuplicatedChatRoomException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,5 +23,11 @@ public class MyExceptionHandler {
         return NOT_FOUND_CHATROOM;
     }
 
+    @ExceptionHandler(DuplicatedChatRoomException.class)
+    public final ResponseEntity<String> handleDuplicatedChatRoomException(
+        DuplicatedChatRoomException exception) {
+        log.debug("이미 존재하는 채팅방입니다", exception);
+        return DUPLICATED_CHATROOM;
+    }
 }
 

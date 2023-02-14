@@ -41,9 +41,10 @@ public class ChatRoom extends BaseTimeEntity {
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ChatMessage> chats;
 
-    private Long lastChatId;
+    private String lastChatMessage;
 
     public void changeStatus() {
         this.isDeleted = true;
     }
+
 }

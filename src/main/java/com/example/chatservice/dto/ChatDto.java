@@ -17,7 +17,7 @@ public class ChatDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
-    public static class Request {
+    public static class CreateRequest {
 
         //roomId
         @NotNull
@@ -30,6 +30,17 @@ public class ChatDto {
 
     }
 
+    @Getter
+    public static class CreateResponse {
+
+        private String roomName;
+        @Builder
+        CreateResponse(String name){
+            this.roomName =name;
+        }
+    }
+
+    @Getter
     public static class Response {
         //채팅 Id
         private Long id;

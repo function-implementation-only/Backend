@@ -35,25 +35,25 @@ public class ChatRoomDto {
 
     @Getter
     public static class Response {
+
         private Long roomId; //방 번호
         private String roomName; // 방 이름
         private List<ChatDto.Response> chatList;
 
         // getChatroomDetail 메서드에서는 response에 할당되지 않음
-        private int unreadMessageCount;
+        private Long unreadMessageCount;
         private String latestChatMessage;
-        
 
-        @Builder Response(ChatRoom room, List<ChatDto.Response> chats){
+
+        @Builder
+        Response(ChatRoom room, List<ChatDto.Response> chats, Long unreadMessageCount
+            , String latestChatMessage) {
             this.roomId = room.getId();
-            this.roomName=room.getRoomName();
+            this.roomName = room.getRoomName();
+            this.unreadMessageCount = unreadMessageCount;
+            this.latestChatMessage = latestChatMessage;
             this.chatList = chats;
         }
     }
-    //채팅방 List response 할때 
-    // 필요한것
-    //방마다 현재 사용자가 읽지 않는 채팅메세지 수
-    //가장 최신 메세지 내용
-    //
 
 }
