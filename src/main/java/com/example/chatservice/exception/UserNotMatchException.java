@@ -1,4 +1,4 @@
-package com.example.exception;
+package com.example.chatservice.exception;
 
 public class UserNotMatchException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.example.exception.chatroom;
+package com.example.chatservice.exception.chatroom;
 
 public class ChatRoomNotFoundException extends NullPointerException{
 

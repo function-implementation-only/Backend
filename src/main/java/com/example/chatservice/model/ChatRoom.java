@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Getter
 @AllArgsConstructor
@@ -23,6 +24,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "is_deleted = '0'")
 @Entity
+@CrossOrigin("*")
 public class ChatRoom extends BaseTimeEntity {
 
     @Id

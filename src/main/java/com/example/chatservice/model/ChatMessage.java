@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
+@CrossOrigin("*")
 public class ChatMessage extends BaseTimeEntity{
     @Id
     @Column(name="message_id")
