@@ -1,4 +1,4 @@
-package com.example.exception.chatroom;
+package com.example.chatservice.exception.chatroom;
 
 public class DuplicatedChatRoomException extends RuntimeException {
     public DuplicatedChatRoomException(String message) {

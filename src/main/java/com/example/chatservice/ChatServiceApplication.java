@@ -10,6 +10,7 @@ import org.springframework.data.web.config.PageableHandlerMethodArgumentResolver
 @EnableFeignClients
 @SpringBootApplication
 @EnableJpaAuditing // JPA Auditing 활성화
+
 public class ChatServiceApplication {
 
     public static void main(String[] args) {

@@ -1,19 +1,16 @@
 package com.example.chatservice.controller;
 
-import com.example.chatservice.dto.ChatDto;
 import com.example.chatservice.dto.ChatDto.CreateRequest;
 import com.example.chatservice.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class ChatMessageController {
 
     private final SimpMessageSendingOperations sendingOperations;

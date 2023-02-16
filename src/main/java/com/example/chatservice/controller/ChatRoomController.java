@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chat")
-@CrossOrigin("*")
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;

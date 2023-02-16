@@ -5,7 +5,7 @@ import com.example.chatservice.model.ChatMessage;
 import com.example.chatservice.model.ChatRoom;
 import com.example.chatservice.repository.ChatMessageRepository;
 import com.example.chatservice.repository.ChatRoomRepository;
-import com.example.exception.chatroom.ChatRoomNotFoundException;
+import com.example.chatservice.exception.chatroom.ChatRoomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
