@@ -1,6 +1,5 @@
 package com.example.chatservice.repository;
 
-import com.example.chatservice.dto.ChatRoomDto.CreateRequest;
 import com.example.chatservice.model.ChatRoom;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -28,5 +27,10 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
         + "WHERE (r.receiver = :receiver AND r.sender = :sender) "
         + "OR r.sender = :receiver AND r.receiver = :sender")
     boolean existsByReceiverAndSender(@Param("receiver") String receiver,
+        @Param("sender") String sender);
+
+    @Query("SELECT r FROM ChatRoom r " + "WHERE (r.receiver = :receiver AND r.sender = :sender) "
+        + "OR r.sender = :receiver AND r.receiver = :sender")
+    ChatRoom findByReceiverAndSender(@Param("receiver") String receiver,
         @Param("sender") String sender);
 }

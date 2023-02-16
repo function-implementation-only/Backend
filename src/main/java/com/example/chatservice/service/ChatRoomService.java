@@ -35,16 +35,19 @@ public class ChatRoomService {
 
     @Transactional
     public CreateResponse createRoom(@Valid CreateRequest request, UserDetailsImpl userDetails) {
-        checkDuplicatedForCreate(request,userDetails.getAccount());
-        ChatRoom chatRoom = request.toEntity(userDetails.getAccount(), request.getTargetEmail());
-        chatRoomRepository.save(chatRoom);
-        return CreateResponse.builder().name(chatRoom.getRoomName()).build();
+        if(checkDuplicatedForCreate(request,userDetails.getAccount())){
+            ChatRoom room = chatRoomRepository.findByReceiverAndSender(request.getTargetEmail(),userDetails.getAccount());
+            return CreateResponse.builder().name(room.getRoomName()).build();
+        }else {
+            ChatRoom chatRoom = request.toEntity(userDetails.getAccount(),
+                request.getTargetEmail());
+            chatRoomRepository.save(chatRoom);
+            return CreateResponse.builder().name(chatRoom.getRoomName()).build();
+        }
     }
 
-    private void checkDuplicatedForCreate(CreateRequest request, String sender) {
-        if(chatRoomRepository.existsByReceiverAndSender(sender,request.getTargetEmail())){
-            throw new DuplicatedChatRoomException("이미 존재하는 채팅방입니다.");
-        }
+    private boolean checkDuplicatedForCreate(CreateRequest request, String sender) {
+        return chatRoomRepository.existsByReceiverAndSender(sender,request.getTargetEmail());
     }
 
     @Transactional
@@ -87,17 +90,24 @@ public class ChatRoomService {
     public Page<ChatRoomDto.Response> getChatRoomList(String email, Pageable pageable) {
         Page<ChatRoom> rooms = new PageImpl<>(Collections.emptyList());
         rooms = chatRoomRepository.findAllByEmail(email, pageable);
-        return new PageImpl<>(entityToListDto(rooms), pageable, rooms.getTotalElements());
+        return new PageImpl<>(entityToListDto(rooms,email), pageable, rooms.getTotalElements());
     }
 
-    private List<ChatRoomDto.Response> entityToListDto(Page<ChatRoom> rooms) {
-
+    private List<ChatRoomDto.Response> entityToListDto(Page<ChatRoom> rooms, String email) {
         return rooms.stream().map(room -> ChatRoomDto.Response.builder()
                 .room(room)
                 .unreadMessageCount(getUnreadCount(room))
                 .latestChatMessage(getLatestChatMessage(room))
+                .nickname(getReceiverNickname(room,email))
                 .build())
             .collect(Collectors.toList());
+    }
+
+    private String getReceiverNickname(ChatRoom room, String email) {
+        String nickname ="";
+        if(room.getReceiver().equals(email)){
+            return room.getSender();
+        }else return room.getReceiver();
     }
 
     private String getLatestChatMessage(ChatRoom room) {

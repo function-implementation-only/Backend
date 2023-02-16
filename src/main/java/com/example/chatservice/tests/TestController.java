@@ -30,6 +30,7 @@ public class TestController {
         log.info("유저 이름{}",userDetails.getUsername());
         return userDetails.getAccount();
     }
+
     @GetMapping("/test3")
     public Object test3(@RequestHeader("auth") String auth, @RequestHeader("ACCOUNT-VALUE") String accountValue) {
         Object myInfo = mainServiceClient.getInfo(auth,accountValue);
