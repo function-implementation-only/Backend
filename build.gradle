@@ -66,6 +66,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     //kafka
     implementation 'org.springframework.kafka:spring-kafka'
+
     //feignClient
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     //SSE

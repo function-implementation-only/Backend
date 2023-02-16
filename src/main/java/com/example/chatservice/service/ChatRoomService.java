@@ -85,11 +85,11 @@ public class ChatRoomService {
         /*Response Dto*/
         UserResponseDto userResponseDto = new UserResponseDto();
         if (account.equals(room.getReceiver())) {
-          userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getSender()), throwable -> new UserResponseDto());
+            userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getSender()), throwable -> new UserResponseDto());
         } else {
             userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getReceiver()), throwable -> new UserResponseDto());
         }
-        log.info("value:{}",userResponseDto);
+        log.info("value:{}", userResponseDto);
         return ChatRoomDto.Response.builder()
                 .room(room)
                 .chats(chatConverToResponseDto(room.getChats()))

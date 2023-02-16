@@ -4,15 +4,17 @@ package com.example.chatservice.kafka;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class Payload {
-
-    private String order_id;
-    private String user_id;
-    private String product_id;
-    private int qty;
-    private int unit_price;
-    private int total_price;
+    private Long          message_id;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
+    private String         message;
+    private String         message_check_status;
+    private String         sender;
+    private Long           room_id;
 
 }
