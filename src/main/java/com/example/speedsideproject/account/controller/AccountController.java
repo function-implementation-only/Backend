@@ -43,6 +43,7 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseDto<?> login(@RequestBody @Valid LoginReqDto loginReqDto, HttpServletResponse response) {
+
         return ResponseDto.success(accountService.login(loginReqDto, response));
     }
 
