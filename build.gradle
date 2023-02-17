@@ -78,6 +78,12 @@ dependencies {
     implementation "io.micrometer:micrometer-registry-prometheus:1.10.3"
 //    implementation 'io.micrometer:micrometer-registry-prometheus:1.9.7'
 
+    //feignClient
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    //SSE
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    //model mapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 
 }
 //Spring Cloud Settings
