@@ -1,4 +1,4 @@
-package com.example.speedsideproject.sse;
+package com.example.chatservice.sse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

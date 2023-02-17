@@ -1,7 +1,6 @@
-package com.example.speedsideproject.sse;
+package com.example.chatservice.sse;
 
-import com.example.speedsideproject.account.entity.Account;
-import com.example.speedsideproject.global.Timestamped;
+import com.example.chatservice.model.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public class Notification extends Timestamped {
+public class Notification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +35,10 @@ public class Notification extends Timestamped {
     @Column(nullable = false)
     private Boolean isRead;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Account receiver;
+    private String receiver;
 
     @Builder
-    public Notification(Account receiver, String sender, String url, Boolean isRead) {
+    public Notification(String receiver, String sender, String url, Boolean isRead) {
         this.receiver = receiver;
         this.sender = sender;
         this.url =url;

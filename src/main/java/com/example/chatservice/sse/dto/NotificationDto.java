@@ -1,4 +1,4 @@
-package com.example.speedsideproject.sse.dto;
+package com.example.chatservice.sse.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

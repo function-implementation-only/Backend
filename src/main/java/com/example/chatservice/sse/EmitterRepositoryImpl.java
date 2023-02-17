@@ -1,4 +1,4 @@
-package com.example.speedsideproject.sse;
+package com.example.chatservice.sse;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

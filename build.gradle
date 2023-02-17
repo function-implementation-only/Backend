@@ -30,8 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //웹소켓
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    //SSE
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -69,7 +68,8 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     //feignClient
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-
+    //SSE
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 //Spring Cloud Settings

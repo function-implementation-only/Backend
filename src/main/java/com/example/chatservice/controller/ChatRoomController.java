@@ -33,9 +33,7 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    /**
-     * 채팅방 생성 메서드
-     */
+    /**채팅방 생성 메서드 */
     @PostMapping
     public ResponseEntity<CreateResponse> createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
         @Valid @RequestBody CreateRequest request) {
@@ -43,9 +41,7 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomService.createRoom(request, userDetails));
     }
 
-    /**
-     * 채팅방 삭제 메서드
-     */
+    /** 채팅방 삭제 메서드 */
     @PostMapping("/{roomName}")
     public ResponseEntity<Void> deleteBoard(@PathVariable String roomName,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -53,9 +49,7 @@ public class ChatRoomController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 채팅방 상세 조회 메서드
-     */
+    /** 채팅방 상세 조회 메서드 */
     @GetMapping("/{roomName}")
     public ResponseEntity<Response> getChatRoomDetail(@PathVariable String roomName,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -63,9 +57,7 @@ public class ChatRoomController {
             chatRoomService.getChatRoomDetail(roomName, userDetails.getAccount()));
     }
 
-    /**
-     * 내가 참여중인 채팅방 리스트
-     */
+    /** 내가 참여중인 채팅방 리스트 */
     @GetMapping("/list")
     public ResponseEntity<Page<Response>> getChatRoomList(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
