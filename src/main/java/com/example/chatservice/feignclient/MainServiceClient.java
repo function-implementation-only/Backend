@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface MainServiceClient{
 
     @GetMapping("/main-service/account/info")
-    Object getInfo(@RequestHeader("auth") String auth, @RequestHeader("ACCOUNT-VALUE") String accountValue);
+    Object getMyInfo(@RequestHeader("auth") String auth, @RequestHeader("ACCOUNT-VALUE") String accountValue);
 
 
     @GetMapping("/main-service/account/info")
-    ResponseDto<?> myInfo(@AuthenticationPrincipal UserDetailsImpl userDetails);
+    UserResponseDto getInfo(@RequestHeader("auth") String auth, @RequestHeader("ACCOUNT-VALUE") String accountValue);
 }

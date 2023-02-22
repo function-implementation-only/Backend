@@ -22,7 +22,7 @@ public class ChatMessageController {
         String roomName = chatMessageService.save(request);
         log.info("roomName:{}",roomName);
         log.info(request.getMessage());
-        sendingOperations.convertAndSend("/sub/chatroom/" + roomName, request.getMessage());
+        sendingOperations.convertAndSend("/sub/chatroom/" + roomName, request);
     }
 }
 

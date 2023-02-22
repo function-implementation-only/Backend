@@ -1,18 +1,13 @@
 package com.example.chatservice.dto;
 
-import com.example.chatservice.dto.ChatDto.Response;
-import com.example.chatservice.model.ChatMessage;
+import com.example.chatservice.feignclient.UserResponseDto;
 import com.example.chatservice.model.ChatRoom;
-import java.time.LocalDateTime;
+import lombok.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
-import javax.validation.constraints.NotBlank;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin("*")
 public class ChatRoomDto {
@@ -28,10 +23,10 @@ public class ChatRoomDto {
 
         public ChatRoom toEntity(String account, String targetEmail) {
             return ChatRoom.builder()
-                .roomName(UUID.randomUUID().toString())
-                .sender(account)
-                .receiver(targetEmail)
-                .build();
+                    .roomName(UUID.randomUUID().toString())
+                    .sender(account)
+                    .receiver(targetEmail)
+                    .build();
         }
     }
 
@@ -46,16 +41,20 @@ public class ChatRoomDto {
         private Long unreadMessageCount;
         private String latestChatMessage;
 
+        private UserResponseDto.UserData userData;
 
         @Builder
         Response(ChatRoom room, List<ChatDto.Response> chats, Long unreadMessageCount, String nickname
-            , String latestChatMessage) {
+                , String latestChatMessage, UserResponseDto userResponseDto) {
             this.roomId = room.getId();
             this.roomName = room.getRoomName();
             this.unreadMessageCount = unreadMessageCount;
             this.latestChatMessage = latestChatMessage;
-            this.nickname=nickname;
+            this.nickname = nickname;
             this.chatList = chats;
+            if (userResponseDto != null) {
+                this.userData = userResponseDto.getData();
+            }
         }
     }
 
