@@ -7,7 +7,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfoDto {
 
     private Long accountId;
