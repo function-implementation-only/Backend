@@ -84,5 +84,5 @@ jobs:
           script: |
             sudo docker rm -f $(docker container rm -f main-service)
             docker image prune -f -a
-            docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" refinedstone/main-service
+            docker run -d --network joinus-network --name main-service -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" -e "logging.file=/api-logs/users-ws.log" -e "spring.zipkin.base-url=http://zipkin:9411" refinedstone/main-service
 
