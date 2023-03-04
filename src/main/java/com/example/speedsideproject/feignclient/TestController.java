@@ -27,7 +27,6 @@ public class TestController {
     }
     @GetMapping("/test")
     public String test(HttpServletRequest request, HttpServletResponse response) {
-
         return "test";
     }
 }
