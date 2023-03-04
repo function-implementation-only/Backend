@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        #        - id: main-service
+        #          uri: lb://MAIN-SERVICE
+        #          predicates:
+        #            - Path=/main-service/**
+
+        - id: main-service
+          uri: lb://MAIN-SERVICE
+          predicates:
+            - Path=/main-service/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+            - AuthFilter
+#            - RemoveRequestHeader=Cookie
+        
+        #         Spring Cloud config with actuator
+        - id: main-service
+          uri: lb://MAIN-SERVICE
+          predicates:
+            - Path=/main-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+
+        # Chat-Service
+        - id: chat-service
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat-service/**
+            #            - Method=GET
+          filters:
+              - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+              - AuthFilter
+#              - RemoveRequestHeader=Cookie
