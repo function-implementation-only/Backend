@@ -13,7 +13,6 @@ spring:
             - Path=/main-service/**
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-
             - AuthFilter
 #            - RemoveRequestHeader=Cookie
         
