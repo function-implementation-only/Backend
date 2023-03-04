@@ -36,7 +36,7 @@ public class ChatRoomDto {
         private Long roomId; //방 번호
         private String roomName; // 방 이름
         private List<ChatDto.Response> chatList;
-        private String nickname;
+        private String email;
         // getChatroomDetail 메서드에서는 response에 할당되지 않음
         private Long unreadMessageCount;
         private String latestChatMessage;
@@ -44,13 +44,13 @@ public class ChatRoomDto {
         private UserResponseDto.UserData userData;
 
         @Builder
-        Response(ChatRoom room, List<ChatDto.Response> chats, Long unreadMessageCount, String nickname
+        Response(ChatRoom room, List<ChatDto.Response> chats, Long unreadMessageCount, String email
                 , String latestChatMessage, UserResponseDto userResponseDto) {
             this.roomId = room.getId();
             this.roomName = room.getRoomName();
             this.unreadMessageCount = unreadMessageCount;
             this.latestChatMessage = latestChatMessage;
-            this.nickname = nickname;
+            this.email = email;
             this.chatList = chats;
             if (userResponseDto != null) {
                 this.userData = userResponseDto.getData();

@@ -5,25 +5,15 @@ import com.example.chatservice.dto.ChatDto.CreateResponse;
 import com.example.chatservice.dto.ChatDto.Response;
 import com.example.chatservice.dto.ChatRoomDto;
 import com.example.chatservice.dto.ChatRoomDto.CreateRequest;
+import com.example.chatservice.exception.UserNotMatchException;
+import com.example.chatservice.exception.chatroom.ChatRoomNotFoundException;
 import com.example.chatservice.feignclient.MainServiceClient;
 import com.example.chatservice.feignclient.UserResponseDto;
 import com.example.chatservice.model.ChatMessage;
 import com.example.chatservice.model.ChatRoom;
 import com.example.chatservice.repository.ChatRoomRepository;
-import com.example.chatservice.exception.chatroom.DuplicatedChatRoomException;
-import com.example.chatservice.exception.UserNotMatchException;
-import com.example.chatservice.exception.chatroom.ChatRoomNotFoundException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.data.domain.Page;
@@ -31,6 +21,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -80,21 +77,28 @@ public class ChatRoomService {
         chatRoomRepository.save(room);
         /*Sender Receiver 식별*/
         String profileImg = "";
-        /*CircuitBreaker*/
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
         /*Response Dto*/
-        UserResponseDto userResponseDto = new UserResponseDto();
-        if (account.equals(room.getReceiver())) {
-            userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getSender()), throwable -> new UserResponseDto());
-        } else {
-            userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getReceiver()), throwable -> new UserResponseDto());
-        }
+        UserResponseDto userResponseDto = getUserInfo(room,account);
         log.info("value:{}", userResponseDto);
         return ChatRoomDto.Response.builder()
                 .room(room)
                 .chats(chatConverToResponseDto(room.getChats()))
                 .userResponseDto(userResponseDto)
                 .build();
+    }
+
+    /*user정보 feignclient*/
+    private UserResponseDto getUserInfo(ChatRoom room, String account) {
+        /*CircuitBreaker*/
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+        UserResponseDto userResponseDto = new UserResponseDto();
+        if (account.equals(room.getReceiver())) {
+            userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getSender()), throwable -> new UserResponseDto());
+        } else {
+            userResponseDto = circuitBreaker.run(() -> mainServiceClient.getInfo("true", room.getReceiver()), throwable -> new UserResponseDto());
+        }
+        return userResponseDto;
     }
 
     private List<Response> chatConverToResponseDto(List<ChatMessage> chats) {
@@ -120,9 +124,16 @@ public class ChatRoomService {
                         .room(room)
                         .unreadMessageCount(getUnreadCount(room))
                         .latestChatMessage(getLatestChatMessage(room))
-                        .nickname(getReceiverNickname(room, email))
+                        .userResponseDto(getUserInfo(room,email))
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private String getReceiverEmail(ChatRoom room, String email) {
+        String nickname = "";
+        if (room.getReceiver().equals(email)) {
+            return room.getSender();
+        } else return room.getReceiver();
     }
 
     private String getReceiverNickname(ChatRoom room, String email) {

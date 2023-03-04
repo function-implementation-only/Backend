@@ -3,6 +3,7 @@ package com.example.chatservice.tests;
 import com.example.chatservice.config.security.user.UserDetailsImpl;
 import com.example.chatservice.feignclient.MainServiceClient;
 import com.example.chatservice.feignclient.UserResponseDto;
+import com.example.chatservice.kafka.Field;
 import com.example.chatservice.tests.init.Testing;
 import com.example.chatservice.tests.kafkatest.TestDto;
 import com.example.chatservice.tests.kafkatest.TestProducer;
@@ -17,6 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Slf4j
@@ -125,8 +127,22 @@ public class TestController {
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
-        kafkaTemplate.send("temple-test",jsonInString);
+        kafkaTemplate.send("temple-test", jsonInString);
         return "test";
     }
 
+    /*Timestamped test*/
+    @GetMapping("/test10")
+    public Timestamp test10() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        System.out.println(timestamp);
+        Long longvalue = timestamp.getTime();
+        System.out.println(longvalue);
+        return timestamp;
+    }
+/*이너클래스 테스트*/
+    @GetMapping("/test11")
+    public Field test11() {
+        return new Field("int64", false, "updated_at"){public String name="org.apache.kafka.connect.data.Timestamp";public int version =1;};
+    }
 }

@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class Payload {
-    private Long          message_id;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+//    private Long          message_id;
+    private Long           created_at;
+    private Long           updated_at;
     private String         message;
-    private String         message_check_status;
+    private byte       message_check_status;
     private String         sender;
     private Long           room_id;
 

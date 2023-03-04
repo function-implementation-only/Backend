@@ -13,17 +13,16 @@ import java.util.List;
 
 @Service
 @Slf4j
-    public class ChatProducer {
-        private KafkaTemplate<String, String> kafkaTemplate;
+public class ChatProducer {
+    private KafkaTemplate<String, String> kafkaTemplate;
 
-        List<Field> fields = Arrays.asList(
-            new Field("bigint", true, "message_id"),
-            new Field("datetime", true, "created_at"),
-            new Field("datetime", true, "updated_at"),
-            new Field("varchar", true,  "message"),
-            new Field("bit", true,  "message_check_status"),
-            new Field("varchar", true,  "sender"),
-            new Field("bigint", true,  "room_id"));
+    List<Field> fields = Arrays.asList(
+            new Field("int64", false, "created_at"){public String name="org.apache.kafka.connect.data.Timestamp";public int version =1;},
+            new Field("int64", false, "updated_at"){public String name="org.apache.kafka.connect.data.Timestamp";public int version =1;},
+            new Field("string", true, "message"),
+            new Field("int8", false, "message_check_status"),
+            new Field("string", true, "sender"),
+            new Field("int64", true, "room_id"));
     Schema schema = Schema.builder()
             .type("struct")
             .fields(fields)
@@ -39,13 +38,12 @@ import java.util.List;
 
     public ChatSimpleDto send(String topic, ChatSimpleDto chatSimpleDto) {
         Payload payload = Payload.builder()
-                .message_id               (chatSimpleDto.getMessage_id())
-                .created_at               (chatSimpleDto.getCreated_at())
-                .updated_at               (chatSimpleDto.getUpdated_at())
-                .message                  (chatSimpleDto.getMessage())
-                .message_check_status     (chatSimpleDto.getMessage_check_status())
-                .sender                   (chatSimpleDto.getSender())
-                .room_id                  (chatSimpleDto.getRoom_id())
+                .created_at(System.currentTimeMillis())
+                .updated_at(System.currentTimeMillis())
+                .message(chatSimpleDto.getMessage())
+                .message_check_status((byte) 0)
+                .sender(chatSimpleDto.getSender())
+                .room_id(chatSimpleDto.getRoom_id())
                 .build();
 
         KafkaChatDto kafkaChatDto = new KafkaChatDto(schema, payload);
@@ -54,12 +52,12 @@ import java.util.List;
         String jsonInString = "";
         try {
             jsonInString = mapper.writeValueAsString(kafkaChatDto);
-        } catch(JsonProcessingException ex) {
+        } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
 
         kafkaTemplate.send(topic, jsonInString);
-        log.info("Order Producer sent data from the Order microservice: " + kafkaChatDto);
+        log.info("Chat Producer sent data from the chat-service: " + kafkaChatDto);
 
         return chatSimpleDto;
     }
