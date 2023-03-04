@@ -1,4 +1,4 @@
-# [MUCOSA] 대규모 패션 플랫폼 사이트
+# [Joinus] 개발을 위한 인력 매칭 서비스
 
 [![mocusa](https://user-images.githubusercontent.com/47559613/190395847-58c23322-89a6-4e1a-a3dc-0295212b9995.png)](https://youtu.be/T2y4gs5TT-Y)
 
@@ -471,7 +471,6 @@
 
 |이름|포지션|분담|@ Email|Github|
 |------|------|------|------|------|
-|김동일|BackEnd|검색(쿼리 최적화)<br/>데이터 생성<br/>CD<br/>부하 테스트|ehddlf618@gmail.com|https://github.com/dongil618|
-|박소윤|BackEnd|검색(쿼리 최적화) <br/>사용자/판매자 마이페이지<br/>주문 취소<br/>부하 테스트|parksoyun98@naver.com|https://github.com/dongil618|
-|백승찬|BackEnd|회원가입<br/>로그인<br/>재입고 알림<br/>상품 주문(동시성 제어)<br/>로깅|bsc980504@outlook.com|https://github.com/Backseungchan|
-|주유찬|BackEnd|재입고 알림<br/>상품 주문(로직)<br/>상품 주문(동시성 제어)<br/>로깅|jjucc99@naver.com|https://github.com/jjucc99|
+|이승주|BackEnd|검색(쿼리 최적화)<br/>데이터 생성<br/>CD<br/>부하 테스트|ehddlf618@gmail.com|https://github.com/dongil618|
+|주재정|BackEnd|검색(쿼리 최적화) <br/>사용자/판매자 마이페이지<br/>주문 취소<br/>부하 테스트|parksoyun98@naver.com|https://github.com/dongil618|
+||BackEnd|회원가입<br/>로그인<br/>재입고 알림<br/>상품 주문(동시성 제어)<br/>로깅|bsc980504@outlook.com|https://github.com/Backseungchan|
