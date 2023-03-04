@@ -71,6 +71,7 @@ jobs:
       - name: Docker build & push to prod
         if: contains(github.ref, 'prod/main-service')
         run: |
+          cd ./main-service
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build --tag ${{ secrets.DOCKER_USERNAME }}/main-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/main-service
