@@ -36,7 +36,9 @@ jobs:
 #            ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: |
+          cd ./main-service
+          chmod +x gradlew
 
       - name: make application-cicd.properties
         if: contains(github.ref, 'prod/main-service')
@@ -61,12 +63,15 @@ jobs:
 
 
       - name: Build with Gradle
-        run: ./main-service/gradlew clean build
+        run: |
+          cd ./main-service
+          ./gradlew clean build
 
       ## docker build & push to production
       - name: Docker build & push to prod
         if: contains(github.ref, 'prod/main-service')
         run: |
+          cd ./main-service
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build --tag ${{ secrets.DOCKER_USERNAME }}/main-service .
           docker push ${{ secrets.DOCKER_USERNAME }}/main-service
