@@ -63,7 +63,9 @@ jobs:
 
 
       - name: Build with Gradle
-        run: ./main-service/gradlew clean build
+        run: |
+          cd ./main-service
+          ./gradlew clean build
 
       ## docker build & push to production
       - name: Docker build & push to prod
