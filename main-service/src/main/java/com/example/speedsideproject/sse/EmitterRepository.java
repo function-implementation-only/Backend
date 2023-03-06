@@ -1,4 +1,4 @@
-package com.example.chatservice.sse;
+package com.example.speedsideproject.sse;
 
 import java.util.Map;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

@@ -72,8 +72,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public Object findAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails) {
         log.info("v8시작");
-
-
+        /*main query*/
         List<?> list = queryFactory.
                 select(new QPostResponseDto3(post, likes.likeCheck))
                 .from(post)
@@ -88,8 +87,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .orderBy(getSort(sort))
                 .fetch();
 
-
-
         /*count query*/
         JPAQuery<Long> countQuery = queryFactory
                 .select(post.count())
@@ -98,7 +95,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .leftJoin(post.techs, techs)
                 .where(checkTechList(techList))
                 .distinct();
-
 
         return PageableExecutionUtils.getPage(list, pageable, countQuery::fetchOne);
     }
@@ -160,7 +156,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(checkTechList(techList))
                 .distinct()
                 .fetch();
-
 
         Map<List<?>, List<?>> map = new HashMap<>();
         map.put(count, fetch);

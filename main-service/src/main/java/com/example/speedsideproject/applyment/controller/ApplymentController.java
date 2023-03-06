@@ -16,31 +16,31 @@ import springfox.documentation.annotations.ApiIgnore;
 public class ApplymentController {
     private final ApplymentService applymentService;
 
-    // 댓글쓰기 api
+    // 지원쓰기 api
     @PostMapping
     public ResponseDto<?> createApplyment(@RequestBody ApplymentRequestDto requestDto, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.createApplyment(requestDto, userDetails.getAccount()));
     }
 
-    // 댓글수정 api
+    // 지원수정 api
     @PatchMapping("/{id}")
     public ResponseDto<?> updateApplyment(@RequestBody ApplymentRequestDto requestDto, @PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.updateApplyment(requestDto, id, userDetails.getAccount()));
     }
 
-    // 댓글삭제 api
+    // 지원삭제 api
     @DeleteMapping("/{id}")
     public ResponseDto<?> deleteApplyment(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.deleteApplyment(id, userDetails.getAccount()));
     }
 
-    //댓글 1개 읽기 api
+    //지원 1개 읽기 api
     @GetMapping("/{id}")
     public ResponseDto<?> getOneApplyment(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.getOneApplyment(id));
     }
 
-    //내 모든 comments 보여주기
+    //내 모든 지원 보여주기
     @GetMapping("/my")
     public ResponseDto<?> getAllMyApplyments(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.getAllMyApplyments(userDetails.getAccount()));

@@ -9,9 +9,16 @@ import com.example.speedsideproject.applyment.repository.ApplymentRepository;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.post.Post;
 import com.example.speedsideproject.post.PostRepository;
+import com.example.speedsideproject.sse.NotificationRepository;
+import com.example.speedsideproject.sse.NotificationService;
+import com.example.speedsideproject.sse.dto.NotificationDto;
+import com.example.speedsideproject.sse.dto.NotificationDto.CreateRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +31,25 @@ import static com.example.speedsideproject.error.ErrorCode.*;
 public class ApplymentService {
     private final ApplymentRepository applymentRepository;
     private final PostRepository postRepository;
+    private final NotificationService notificationService;
 
     //지원 생성
     public ApplymentResponseDto createApplyment(ApplymentRequestDto requestDto, Account account) {
         var r = new Applyment(requestDto, account);
         Post post = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
-        if(applymentRepository.existsByAccountAndPost(account, post)){
+        if (applymentRepository.existsByAccountAndPost(account, post)) {
             throw new RuntimeException("이미 지원했어요");
         }
 
         r.setPost(post);
         applymentRepository.save(r);
+        /*지원 알람*/
+        CreateRequest createRequest = CreateRequest.builder()
+                .sender(account.getEmail())
+                .receiver(post.getAccount().getEmail())
+                .applyment(r)
+                .build();
+        notificationService.send(createRequest);
         return new ApplymentResponseDto(r, requestDto.getPostId());
     }
 
@@ -51,7 +66,6 @@ public class ApplymentService {
     }
 
     //지원 삭제
-
     public String deleteApplyment(Long Id, Account account) {
         var r = applymentRepository.findById(Id).orElseThrow(
                 () -> new CustomException(DOESNT_EXIST_APPLYMENT_FOR_READ));
@@ -78,6 +92,11 @@ public class ApplymentService {
         var r = applymentRepository.findById(Id).orElseThrow(
                 () -> new CustomException(DOESNT_EXIST_APPLYMENT_FOR_READ)
         );
+        var notification = notificationRepository.findByApplyment(r).orElseThrow(
+                ()-> new CustomException(DOESNT_EXIST_NOTIFICATION)
+        );
+        notification.setIsRead(true);
         return new ApplymentResponseDto(r);
     }
+    private final NotificationRepository notificationRepository;
 }

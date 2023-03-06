@@ -53,18 +53,8 @@ public enum ErrorCode {
     ONLY_CAN_UPDATE_APPLYMENT_WRITER(HttpStatus.FORBIDDEN.value(), "A003","댓글을 작성한 유저만 수정할 수 있습니다."),
     ONLY_CAN_DELETE_APPLYMENT_WRITER(HttpStatus.FORBIDDEN.value(), "A004","댓글을 작성한 유저만 삭제할 수 있습니다."),
 
-    //VOICE
-    VOICE_FILE_INVALID(HttpStatus.BAD_REQUEST.value(), "V001","잘못된 파일 형식입니다."),
-
-    //LOTTO
-
-    LACK_OF_LOTTO_COUNT(HttpStatus.BAD_REQUEST.value(), "L001","오늘 참여가능 횟수 부족"),
-    LACK_OF_POINT(HttpStatus.BAD_REQUEST.value(), "L002","포인트 부족"),
-    CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L003","추첨할 수 없습니다."),
-    PERSONAL_INFO_DISAGREE(HttpStatus.BAD_REQUEST.value(), "L004","개인정보 수집 동의 필요"),
-    NO_WINNER(HttpStatus.FORBIDDEN.value(), "L005","당첨자가 아닙니다."),
-    WRONG_FORMAT(HttpStatus.BAD_REQUEST.value(), "L006","잘못된 전화번호 형식 입니다."),
-
+    //Notification
+    DOESNT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND.value(), "N001", "해당하는 알림이 존재하지 않습니다")
 
     ;
 
