@@ -6,6 +6,7 @@ import com.example.speedsideproject.applyment.Position;
 import com.example.speedsideproject.applyment.dto.ApplymentRequestDto;
 import com.example.speedsideproject.global.Timestamped;
 import com.example.speedsideproject.post.Post;
+import com.example.speedsideproject.sse.Notification;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Applyment extends Timestamped {
 
 
     // many applyment to one post.
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
@@ -39,6 +41,11 @@ public class Applyment extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    // one applyment to one notification
+    @OneToOne(mappedBy = "applyment",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "notification_id")
+    private Notification notification;
 
     public Applyment(ApplymentRequestDto requestDto, Account account) {
         this.position = requestDto.getPosition();
