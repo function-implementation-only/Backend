@@ -19,20 +19,6 @@ public interface PostRepositoryCustom {
 
     //post get all
     Page<?> findAllPost(Pageable pageable);
-
-    //    post - category 정렬
-    Page<?> findAllPostWithCategory(Pageable pageable, List<Tech> techList);
-
-    Page<?> findAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place);
-
-    List<?> findAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place);
-
-    Page<?> findAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place);
-
-    List<?> findAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place);
-
-    Page<?> findAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place);
-
-    Object findAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails);
+    Page<?> findAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails);
 
 }

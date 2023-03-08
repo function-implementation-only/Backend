@@ -16,25 +16,25 @@ import springfox.documentation.annotations.ApiIgnore;
 public class ApplymentController {
     private final ApplymentService applymentService;
 
-    // 지원쓰기 api
+    // 지원하기
     @PostMapping
     public ResponseDto<?> createApplyment(@RequestBody ApplymentRequestDto requestDto, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.createApplyment(requestDto, userDetails.getAccount()));
     }
 
-    // 지원수정 api
+    // 지원수정
     @PatchMapping("/{id}")
     public ResponseDto<?> updateApplyment(@RequestBody ApplymentRequestDto requestDto, @PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.updateApplyment(requestDto, id, userDetails.getAccount()));
     }
 
-    // 지원삭제 api
+    // 지원삭제
     @DeleteMapping("/{id}")
     public ResponseDto<?> deleteApplyment(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.deleteApplyment(id, userDetails.getAccount()));
     }
 
-    //지원 1개 읽기 api
+    //지원 1개 읽기
     @GetMapping("/{id}")
     public ResponseDto<?> getOneApplyment(@PathVariable Long id, @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(applymentService.getOneApplyment(id));

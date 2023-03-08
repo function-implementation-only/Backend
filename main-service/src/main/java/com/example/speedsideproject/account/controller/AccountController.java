@@ -120,4 +120,3 @@ public class AccountController {
         return ResponseDto.success(accountService.changePassword(userDetails,loginReqDto));
     }
 }
-

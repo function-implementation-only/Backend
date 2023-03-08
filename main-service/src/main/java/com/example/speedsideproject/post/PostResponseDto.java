@@ -4,10 +4,8 @@ import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.PostState;
-import com.example.speedsideproject.security.user.UserDetailsImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.types.dsl.BooleanPath;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,7 +13,7 @@ import java.util.List;
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
-public class PostResponseDto2 {
+public class PostResponseDto {
 
     private LocalDateTime createdAt;
     private Long postId;
@@ -32,7 +30,6 @@ public class PostResponseDto2 {
     //이 부분을 염두하고 코드 수정 바랍니다
     private List<Techs> techs;
     //private List<Image> imageList;
-    private String startDate;
     private Long likesLength;
     private Boolean likeCheck;
     //null이라면 이 필드 값 ignore
@@ -61,7 +58,7 @@ public class PostResponseDto2 {
     private Long viewCount;
     //서비스 분리
     @QueryProjection
-    public PostResponseDto2(Post post) {
+    public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
@@ -72,7 +69,6 @@ public class PostResponseDto2 {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
         this.contentUrl = post.getContentUrl();
@@ -89,7 +85,7 @@ public class PostResponseDto2 {
 
 
     //단일
-    public PostResponseDto2(Post post, Boolean likeCheck) {
+    public PostResponseDto(Post post, Boolean likeCheck) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
@@ -100,7 +96,6 @@ public class PostResponseDto2 {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
         this.likeCheck = likeCheck;
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
@@ -125,7 +120,7 @@ public class PostResponseDto2 {
     }
 
     //단일
-    public PostResponseDto2(Post post, Boolean likeCheck, List<Long> countList) {
+    public PostResponseDto(Post post, Boolean likeCheck, List<Long> countList) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.nickname = post.getAccount().getNickname();
@@ -136,7 +131,6 @@ public class PostResponseDto2 {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
         this.likeCheck = likeCheck;
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
@@ -162,7 +156,7 @@ public class PostResponseDto2 {
     }
 
     //단일 + no auth
-    public PostResponseDto2(Post post, List<Long> countList) {
+    public PostResponseDto(Post post, List<Long> countList) {
         this.postId = post.getId();
         this.email = post.getAccount().getEmail();
         this.accountId = post.getAccount().getId();
@@ -173,7 +167,6 @@ public class PostResponseDto2 {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
         this.contentUrl = post.getContentUrl();
@@ -197,7 +190,7 @@ public class PostResponseDto2 {
         this.viewCount = post.getViewCount();
     }
 
-    public PostResponseDto2(Post post, Account account) {
+    public PostResponseDto(Post post, Account account) {
         this.postId = post.getId();
         this.accountId = post.getAccount().getId();
         this.title = post.getTitle();
@@ -208,7 +201,6 @@ public class PostResponseDto2 {
         this.duration = post.getDuration();
         this.place = post.getPlace();
         this.techs = post.getTechs();
-        this.startDate = post.getStartDate();
         this.likesLength = post.getLikesLength();
         this.postState = post.getPostState();
 //        시간

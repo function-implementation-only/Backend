@@ -1,9 +1,7 @@
 package com.example.speedsideproject.sse.dto;
 
-import com.example.speedsideproject.account.repository.AccountRepository;
 import com.example.speedsideproject.applyment.entity.Applyment;
 import com.example.speedsideproject.sse.Notification;
-import com.nimbusds.jose.shaded.json.annotate.JsonIgnore;
 import lombok.*;
 
 import java.time.LocalDateTime;
