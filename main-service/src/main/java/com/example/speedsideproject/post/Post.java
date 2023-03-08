@@ -101,24 +101,9 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private PostState postState;
-    //one post to many images
-//    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-//    private List<Image> imageList = new ArrayList<>();
-
-    //    public Post(PostRequestDto requestDto, Account account) {
-//        this.contents = requestDto.getContents();
-//        this.title = requestDto.getTitle();
-//        this.account = account;
-//        this.category = requestDto.getCategory();
-//        this.duration = requestDto.getDuration();
-//        this.peopleNum = requestDto.getPeopleNum();
-//        this.place = requestDto.getPlace();
-//        this.startDate = requestDto.getStartDate();
-//        this.postState = requestDto.getPostState();
-//    }
 
     //create v2
-    public Post(PostRequestDto2 requestDto, Account account, Map<String, String> urlMap) {
+    public Post(PostRequestDto requestDto, Account account, Map<String, String> urlMap) {
         this.title = requestDto.getTitle();
         this.account = account;
         this.category = requestDto.getCategory();
@@ -135,20 +120,8 @@ public class Post extends Timestamped {
     }
 
     //method
-    //글내용만 업데이트 v1
-//    public void update(PostRequestDto requestDto) {
-//        this.title = requestDto.getTitle();
-//        this.contents = requestDto.getContents();
-//        this.category = requestDto.getCategory();
-//        this.duration = requestDto.getDuration();
-//        this.peopleNum = requestDto.getPeopleNum();
-//        this.place = requestDto.getPlace();
-//        this.startDate = requestDto.getStartDate();
-//        this.postState = requestDto.getPostState();
-//    }
-
     //글내용 업데이트 v2
-    public void update2(PostRequestDto2 requestDto, Map<String, String> urlMap) {
+    public void update2(PostRequestDto requestDto, Map<String, String> urlMap) {
         this.title = requestDto.getTitle();
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
@@ -178,12 +151,6 @@ public class Post extends Timestamped {
         this.techs.add(techs);
     }
 
-
-    //연관관계 맵핑
-/*    public void addImg(Image image) {
-        this.imageList.add(image);
-        image.setPost(this);
-    }*/
 
 }
 

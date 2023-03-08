@@ -17,7 +17,7 @@ import com.example.speedsideproject.global.dto.ResponseDto;
 import com.example.speedsideproject.jwt.dto.TokenDto;
 import com.example.speedsideproject.jwt.util.JwtUtil;
 import com.example.speedsideproject.post.PostRepository;
-import com.example.speedsideproject.post.PostResponseDto2;
+import com.example.speedsideproject.post.PostResponseDto;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,8 +106,8 @@ public class AccountService {
     }
 
     //내 글목록 가져오기
-    public List<PostResponseDto2> getMyPost(Account account) {
-        return postRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(post -> new PostResponseDto2(post, account)).collect(toList());
+    public List<PostResponseDto> getMyPost(Account account) {
+        return postRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(post -> new PostResponseDto(post, account)).collect(toList());
     }
 
     // 내 댓글 가져오기
@@ -202,7 +202,7 @@ public class AccountService {
 
     /*email 중복 체크*/
     public boolean emailCheck(String email) {
-        log.info(email);
+//        log.info(email);
         return !accountRepository.existsByEmail(email);
     }
 
@@ -231,7 +231,7 @@ public class AccountService {
 
     /*내가 북마크 한 리스트*/
     public List<?> getMyLikes(Account account) {
-        return postRepository.findTop5ByMyLikes(account).stream().map(PostResponseDto2::new).collect(toList());
+        return postRepository.findTop5ByMyLikes(account).stream().map(PostResponseDto::new).collect(toList());
     }
 
 }

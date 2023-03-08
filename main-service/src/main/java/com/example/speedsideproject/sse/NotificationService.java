@@ -6,7 +6,6 @@ import com.example.speedsideproject.applyment.entity.Applyment;
 import com.example.speedsideproject.error.CustomException;
 import com.example.speedsideproject.error.ErrorCode;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
-import com.example.speedsideproject.sse.dto.NotificationDto;
 import com.example.speedsideproject.sse.dto.NotificationDto.CreateRequest;
 import com.example.speedsideproject.sse.dto.NotificationDto.NotificationResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,26 +29,22 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(String email, String lastEventId) {
-        log.info("1");
+
         String emitterId = makeTimeIncludeId(email);
-        log.info("2");
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
-        log.info("3");
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
-        log.info("4");
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-        log.info("5");
+
 
         // 503 에러를 방지하기 위한 더미 이벤트 전송
         String eventId = makeTimeIncludeId(email);
         sendNotification(emitter, eventId, emitterId,
                 "EventStream Created. [userId=" + email + "]");
-        log.info("6");
+
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
             sendLostData(lastEventId, email, emitterId, emitter);
         }
-        log.info("7");
         return emitter;
     }
 

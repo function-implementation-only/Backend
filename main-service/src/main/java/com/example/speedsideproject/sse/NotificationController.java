@@ -27,20 +27,17 @@ public class NotificationController {
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                 @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
-        log.info("컨트롤러 실행");
         return notificationService.subscribe(userDetails.getAccount().getEmail(), lastEventId);
     }
 
     @GetMapping(value = "/subscribe-test", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribeTest(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
-        log.info("컨트롤러 실행");
         return notificationService.subscribe("string", lastEventId);
     }
 
     @PostMapping(value = "/chat-notification")
     public ResponseEntity send(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                @RequestBody NotificationDto.CreateRequest createRequest) {
-        log.info("컨트롤러 실행");
         notificationService.send(createRequest);
         return ResponseEntity.ok().build();
     }

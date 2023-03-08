@@ -72,9 +72,9 @@ public class PostService {
 //        }
         return "delete success";
     }
-@Transactional
     //글 1개 get
-    public PostResponseDto2 getOnePost(Long id, UserDetailsImpl userDetails) {
+    @Transactional(readOnly = true)
+    public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         //조회수
         post.setViewCount(post.getViewCount() + 1);
@@ -84,51 +84,21 @@ public class PostService {
         countList.add(applymentRepository.countByPostAndPosition(post, FRONTEND));
         countList.add(applymentRepository.countByPostAndPosition(post, DESIGN));
         if (userDetails != null) {
-            return new PostResponseDto2(post, myLikeCheck(userDetails.getAccount(), post), countList);
+            return new PostResponseDto(post, myLikeCheck(userDetails.getAccount(), post), countList);
         }
-        return new PostResponseDto2(post, countList);
+        return new PostResponseDto(post, countList);
     }
 
-    //V2 카테고리별 get
-    @Transactional(readOnly = true)
-    public Page<?> getAllPostWithCategory(Pageable pageable, List<Tech> techlist) {
-        return postRepository.findAllPostWithCategory(pageable, techlist);
-    }
-
-    //V3 카테고리별 get
-    public Page<?> getAllPostWithCategory3(Pageable pageable, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory3(pageable, techList, category, place);
-    }
-
-    //V4 카테고리별 get
-    public List<?> getAllPostWithCategory4(Long offset, Long size, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory4(offset, size, techList, category, place);
-    }
-
-    //V5 카테고리별 get
-    public Page<?> getAllPostWithCategory5(Pageable pageable, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory5(pageable, techList, category, place);
-    }
-
-    //V6 카테고리별 get
-    public List<?> getAllPostWithCategory6(String sort, Long size, Long page, List<Tech> techList, Category category, Place place) {
-        return postRepository.findAllPostWithCategory6(sort, size, page, techList, category, place);
-    }
-
-    //V7 카테고리별 get
-    public Object getAllPostWithCategory7(Pageable pageable, String sort, List<Tech> techList, Category category, Place place) {
-
-        return postRepository.findAllPostWithCategory7(pageable, sort, techList, category, place);
-    }
     //v8 카테고리별 get
-    public Object getAllPostWithCategory8(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl  userDetails) {
+    @Transactional(readOnly = true)
+    public Page<?> getAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl  userDetails) {
 
-        return postRepository.findAllPostWithCategory8(pageable, sort, techList, category, place, userDetails);
+        return postRepository.findAllPostWithCategory(pageable, sort, techList, category, place, userDetails);
     }
 
     //V2 글쓰기
     @Transactional
-    public PostResponseDto2 createPost2(PostRequestDto2 postRequestDto2, String contents, List<Tech> techList, Account account) throws IOException {
+    public PostResponseDto createPost2(PostRequestDto postRequestDto2, String contents, List<Tech> techList, Account account) throws IOException {
         //html 변환
         File htmlFile = new File("StringToHtml.html");
         FileOutputStream fos = new FileOutputStream(htmlFile);
@@ -137,17 +107,15 @@ public class PostService {
         //html 저장
         var r = s3UploadUtil.upload(htmlFile, "html");
         Post post = new Post(postRequestDto2, account, r);
-//        post.setContent(r);
-        log.info("url:{}", r.get("url"));
         //techs 추가
         List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
         postRepository.save(post);
-        return new PostResponseDto2(post);
+        return new PostResponseDto(post);
     }
 
     //글수정 v2
     @Transactional
-    public PostResponseDto2 updatePost2(PostRequestDto2 requestDto, String contents, List<Tech> techList, Long id, Account account) throws IOException {
+    public PostResponseDto updatePost2(PostRequestDto requestDto, String contents, List<Tech> techList, Long id, Account account) throws IOException {
         Post post = postRepository.findByIdAndAccount(id, account);
         if (post == null) throw new CustomException(NOT_FOUND_USER);
         // 기술 스택 제거
@@ -168,7 +136,7 @@ public class PostService {
         post.update2(requestDto, r);
 
         techsRepository.saveAll(techsList);
-        return new PostResponseDto2(post, myLikeCheck(account, post));
+        return new PostResponseDto(post, myLikeCheck(account, post));
     }
 
     //method
@@ -179,63 +147,6 @@ public class PostService {
         if (likes.isPresent()) result = likes.get().getLikeCheck();
         return result;
     }
-
-
-//글쓰기 v1
-/*  @Transactional
-    public PostResponseDto2 createPost(PostRequestDto postRequestDto, List<MultipartFile> imgFiles, List<Tech> techList, Account account) throws IOException {
-        Post post = new Post(postRequestDto, account);
-
-        List<Image> imageList = new ArrayList<>();
-        if (imgFiles != null) {
-            for (MultipartFile image : imgFiles) {
-                Image image1 = new Image(s3UploadUtil.upload(image, "side-post"));
-                imageList.add(image1);
-                post.addImg(image1);
-            }
-            imageRepository.saveAll(imageList);
-        }
-        //techs 추가
-        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
-        techsRepository.saveAll(techsList);
-        postRepository.save(post);
-        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-        return new PostResponseDto(post, isLikedPost(post, likeList));
-    }*/
-//글 수정 v1
-/*    @Transactional
-    public PostResponseDto updatePost(PostRequestDto requestDto, List<MultipartFile> imgFiles, List<Tech> techList, Long id, Account account) throws IOException {
-
-        Post post = postRepository.findByIdAndAccount(id, account);
-        if (post == null) throw new CustomException(NOT_FOUND_USER);
-
-        List<Image> imageList = imageRepository.findAllByPostId(post.getId());
-
-        for (Image i : imageList) {
-            s3UploadUtil.delete(i.getImgKey());
-            imageRepository.delete(i);
-        }
-
-        List<Image> images = new ArrayList<>();
-
-        if (imgFiles != null) {
-            for (MultipartFile m : imgFiles) {
-                Image i = imageRepository.save(new Image(s3UploadUtil.upload(m, "side-post")));
-                images.add(i);
-                post.addImg(i);
-            }
-        }
-
-        //요거보고 이미지도 바꾸세여?
-        List<Techs> techLists = techsRepository.findAllByPostId(post.getId());
-        techsRepository.deleteAllInBatch(techLists);
-
-        List<Techs> techsList = techList.stream().map(te -> new Techs(te, post)).collect(Collectors.toList());
-        techsRepository.saveAll(techsList);
-        post.update(requestDto);
-        List<Likes> likeList = likesRepository.findLikesByAccount(account);
-        return new PostResponseDto(post, isLikedPost(post, likeList));
-    }*/
 
 }
 
