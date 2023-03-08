@@ -63,8 +63,7 @@ public class Post extends Timestamped {
     private Long mobileNum = 0L;
     @Setter
     private Long pmNum = 0L;
-    @Column(nullable = true)
-    private String startDate;
+
 
     //html소스로 된 contents
     @Column(nullable = true)
@@ -125,7 +124,6 @@ public class Post extends Timestamped {
         this.category = requestDto.getCategory();
         this.duration = requestDto.getDuration();
         this.place = requestDto.getPlace();
-        this.startDate = requestDto.getStartDate();
         this.postState = requestDto.getPostState();
         this.frontReqNum = requestDto.getFrontReqNum();
         this.backReqNum = requestDto.getBackReqNum();
@@ -160,7 +158,6 @@ public class Post extends Timestamped {
         this.pmReqNum = requestDto.getPmReqNum();
         this.mobileReqNum = requestDto.getMobileReqNum();
         this.place = requestDto.getPlace();
-        this.startDate = requestDto.getStartDate();
         this.postState = requestDto.getPostState();
         this.contentUrl = urlMap.get("url");
         this.contentKey = urlMap.get("key");
