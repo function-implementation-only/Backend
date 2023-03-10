@@ -3,6 +3,8 @@ package com.example.speedsideproject.quarydsl.post;
 
 import com.example.speedsideproject.account.entity.Account;
 import com.example.speedsideproject.post.Post;
+import com.example.speedsideproject.post.PostDetailResponseDto;
+import com.example.speedsideproject.post.PostOneQuerylResponseDto;
 import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
@@ -14,6 +16,8 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
 
+    List<PostOneQuerylResponseDto> findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails);
+
     //mypage에서 내가 like 한 postList  불러오기
     List<Post> findTop5ByMyLikes(Account account);
 
@@ -21,4 +25,6 @@ public interface PostRepositoryCustom {
     Page<?> findAllPost(Pageable pageable);
     Page<?> findAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails);
 
+    /*post 1개 get 한방쿼리*/
+//    PostDetailResponseDto findOnePostWithQuery(Long id, UserDetailsImpl userDetails);
 }

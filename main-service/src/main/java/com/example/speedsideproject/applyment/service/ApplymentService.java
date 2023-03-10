@@ -99,4 +99,7 @@ public class ApplymentService {
         return new ApplymentResponseDto(r);
     }
     private final NotificationRepository notificationRepository;
+
+
+
 }

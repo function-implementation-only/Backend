@@ -2,6 +2,7 @@ package com.example.speedsideproject.post;
 
 import com.example.speedsideproject.post.enums.Tech;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,12 +27,23 @@ public class Techs {
     private Tech tech;
 
 
-    public Techs(Tech tech,Post post){
+    public Techs(Tech tech, Post post) {
         this.tech = tech;
         this.post = post;
         post.addTechs(this);
     }
-    public Techs(Tech tech){
+
+    public Techs(Tech tech) {
         this.tech = tech;
+    }
+
+    @Data
+    static class TechsResponseDto {
+        private Long id;
+        private Tech tech;
+        public TechsResponseDto(Techs techs){
+            this.id = techs.getId();
+            this.tech = techs.getTech();
+        }
     }
 }

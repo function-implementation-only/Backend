@@ -103,4 +103,11 @@ public class PostController {
         return ResponseDto.success(postService.getOnePost(id, userDetails));
     }
 
+    //글 1개 읽기
+    @ApiOperation(value = "게시글 조회2", notes = "BD에 저장된 하나의 게시글을 조회합니다")
+    @GetMapping("/{id}/v2")
+    public ResponseDto<?> getOnePost2(@PathVariable Long id,
+                                     @AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
+        return ResponseDto.success(postService.getOnePost2(id, userDetails));
+    }
 }

@@ -11,6 +11,7 @@ import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.speedsideproject.applyment.Position.*;
 import static com.example.speedsideproject.error.ErrorCode.CANNOT_FIND_POST_NOT_EXIST;
@@ -72,8 +74,8 @@ public class PostService {
 //        }
         return "delete success";
     }
+
     //글 1개 get
-    @Transactional(readOnly = true)
     public PostResponseDto getOnePost(Long id, UserDetailsImpl userDetails) {
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(CANNOT_FIND_POST_NOT_EXIST));
         //조회수
@@ -89,9 +91,27 @@ public class PostService {
         return new PostResponseDto(post, countList);
     }
 
+    //글 1개 get v2
+    public Object getOnePost2(Long id, UserDetailsImpl userDetails) {
+        PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto();
+        return postRepository.findOnePostWithOneQuery(id, userDetails).stream()
+                .collect(Collectors.groupingBy(
+                        v1 -> {
+                            if (postDetailResponseDto.getAccountId() == null)
+                                BeanUtils.copyProperties(v1,postDetailResponseDto);
+                            return postDetailResponseDto;
+                        }, Collectors.mapping(v2 -> new Techs.TechsResponseDto(v2.getTechs()), Collectors.toList())))
+                .entrySet().stream()
+                .map(v3 -> {
+                    v3.getKey().setTechs(v3.getValue());
+                    return v3.getKey();
+                }).collect(Collectors.toList());
+    }
+
+
     //v8 카테고리별 get
     @Transactional(readOnly = true)
-    public Page<?> getAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl  userDetails) {
+    public Page<?> getAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails) {
 
         return postRepository.findAllPostWithCategory(pageable, sort, techList, category, place, userDetails);
     }
@@ -147,6 +167,7 @@ public class PostService {
         if (likes.isPresent()) result = likes.get().getLikeCheck();
         return result;
     }
+
 
 }
 
