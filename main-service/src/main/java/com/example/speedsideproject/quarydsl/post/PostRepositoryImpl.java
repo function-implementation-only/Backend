@@ -9,13 +9,14 @@ import com.example.speedsideproject.post.enums.Category;
 import com.example.speedsideproject.post.enums.Place;
 import com.example.speedsideproject.post.enums.Tech;
 import com.example.speedsideproject.security.user.UserDetailsImpl;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
 import static com.example.speedsideproject.likes.QLikes.likes;
@@ -46,6 +49,89 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.likesRepository = likesRepository;
     }
 
+//    @Override
+//    public PostDetailResponseDto findOnePostWithQuery(Long id, UserDetailsImpl userDetails) {
+//        /*main-query*/
+//        PostDetailResponseDto postDetail = queryFactory
+////                .select(Projections.constructor(PostDetailResponseDto.class,
+//                        .select(new QPostDetailResponseDto(
+//                                Expressions.asNumber(id).as("postId"),
+//                                post.createdAt,
+////                                techs ,
+//                                post.title,
+//                                post.viewCount,
+//                                post.category,
+//                                post.postState,
+//                                post.place,
+//                                post.likesLength,
+//                                post.frontReqNum,
+//                                post.frontendNum,
+//                                post.backReqNum,
+//                                post.backendNum,
+//                                post.pmReqNum,
+//                                post.pmNum,
+//                                post.mobileReqNum,
+//                                post.mobileNum,
+//                                post.designReqNum,
+//                                post.designNum,
+//                                post.contentUrl,
+//                                account.id.as("accountId"),
+//                                account.email,
+//                                account.nickname,
+//                                account.imgUrl.as("profileImg"),
+//                                likes.likeCheck
+//                        ))
+//                .from(post)
+//                .leftJoin(post.account, account)
+//                .where(post.id.eq(id))
+//                .leftJoin(post.likes, likes).on(usernameEq(userDetails))
+//                .leftJoin(post.techs, techs).on(techs.post.id.eq(id))
+//                .fetchFirst();
+//
+//        return postDetail;
+//    }
+
+    @Override
+    public List<PostOneQuerylResponseDto> findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails) {
+        /*main-query*/
+        List<PostOneQuerylResponseDto> postDetail = queryFactory
+                .select(Projections.fields(PostOneQuerylResponseDto.class,
+                        Expressions.asNumber(id).as("postId"),
+                        post.createdAt,
+                        techs,
+                        post.title,
+                        post.viewCount,
+                        post.category,
+                        post.postState,
+                        post.place,
+                        post.likesLength,
+                        post.frontReqNum,
+                        post.frontendNum,
+                        post.backReqNum,
+                        post.backendNum,
+                        post.pmReqNum,
+                        post.pmNum,
+                        post.mobileReqNum,
+                        post.mobileNum,
+                        post.designReqNum,
+                        post.designNum,
+                        post.contentUrl,
+                        account.id.as("accountId"),
+                        account.email,
+                        account.nickname,
+                        account.imgUrl.as("profileImg"),
+                        likes.likeCheck
+                ))
+                .from(techs)
+                .leftJoin(techs.post, post)
+                .where(post.id.eq(id))
+                .leftJoin(post.account, account)
+                .leftJoin(post.likes, likes).on(usernameEq(userDetails))
+                .fetch();
+
+        return postDetail;
+    }
+
     @Override
     public List<Post> findTop5ByMyLikes(Account account) {
         QPost qPost = post;
@@ -59,6 +145,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .limit(5)
                 .fetch();
     }
+
     //카테고리 + 정렬 + 동적처리 v8
     @Override
     public Page<?> findAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails) {
