@@ -92,20 +92,8 @@ public class PostService {
     }
 
     //글 1개 get v2
-    public Object getOnePost2(Long id, UserDetailsImpl userDetails) {
-        PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto();
-        return postRepository.findOnePostWithOneQuery(id, userDetails).stream()
-                .collect(Collectors.groupingBy(
-                        v1 -> {
-                            if (postDetailResponseDto.getAccountId() == null)
-                                BeanUtils.copyProperties(v1,postDetailResponseDto);
-                            return postDetailResponseDto;
-                        }, Collectors.mapping(v2 -> new Techs.TechsResponseDto(v2.getTechs()), Collectors.toList())))
-                .entrySet().stream()
-                .map(v3 -> {
-                    v3.getKey().setTechs(v3.getValue());
-                    return v3.getKey();
-                }).collect(Collectors.toList());
+    public PostDetailResponseDto getOnePost2(Long id, UserDetailsImpl userDetails) {
+        return postRepository.findOnePostWithOneQuery(id, userDetails);
     }
 
 
@@ -133,7 +121,7 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    //글수정 v2
+    //v2 글수정
     @Transactional
     public PostResponseDto updatePost2(PostRequestDto requestDto, String contents, List<Tech> techList, Long id, Account account) throws IOException {
         Post post = postRepository.findByIdAndAccount(id, account);

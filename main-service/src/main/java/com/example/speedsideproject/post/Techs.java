@@ -38,7 +38,7 @@ public class Techs {
     }
 
     @Data
-    static class TechsResponseDto {
+    public static class TechsResponseDto {
         private Long id;
         private Tech tech;
         public TechsResponseDto(Techs techs){

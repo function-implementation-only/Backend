@@ -27,7 +27,7 @@ public enum ErrorCode {
     CANNOT_DELETE_NOT_EXIST_POST(HttpStatus.NOT_FOUND.value(), "P001","해당 게시물을 찾을 수 없습니다."),
     CANNOT_FIND_POST_NOT_EXIST(HttpStatus.NOT_FOUND.value(), "P002","해당 게시물을 찾을 수 없거나, 권한이 없습니다"),
     ONLY_CAN_DELETE_POST_WRITER(HttpStatus.FORBIDDEN.value(), "P003","게시글 작성자 만이 게시글을 삭제할 수 있습니다."),
-    NotFoundPost(HttpStatus.NOT_FOUND.value (), "P002", "게시물이 존재하지 않습니다."),
+    FAILED_TO_ACCESS_POST(HttpStatus.FORBIDDEN.value(),"P004","게시글 디테일을 읽어 올 수 없습니다"),
 //    DOESNT_EXIST_MAIN_POST_FOR_ANONYMOUS(HttpStatus.NOT_FOUND.value(), "P004","남이 쓴 게시글이 존재하지 않습니다."),
 //    DOESNT_EXIST_POST_FOR_ANONYMOUS(HttpStatus.NOT_FOUND.value(), "P005","해당하는 게시글이 존재하지 않습니다."),
 

@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
 
-    List<PostOneQuerylResponseDto> findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails);
+    PostDetailResponseDto findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails);
 
     //mypage에서 내가 like 한 postList  불러오기
     List<Post> findTop5ByMyLikes(Account account);

@@ -32,9 +32,6 @@ public class Post extends Timestamped {
     private String title;
 
     @Column(nullable = true)
-    private String contents;
-
-    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Category category;
 
