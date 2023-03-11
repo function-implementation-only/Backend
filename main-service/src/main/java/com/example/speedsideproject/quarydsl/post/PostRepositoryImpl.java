@@ -2,6 +2,8 @@ package com.example.speedsideproject.quarydsl.post;
 
 
 import com.example.speedsideproject.account.entity.Account;
+import com.example.speedsideproject.error.CustomException;
+import com.example.speedsideproject.error.ErrorCode;
 import com.example.speedsideproject.likes.LikesRepository;
 import com.example.speedsideproject.likes.QLikes;
 import com.example.speedsideproject.post.*;
@@ -27,9 +29,11 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.account.entity.QAccount.account;
+import static com.example.speedsideproject.error.ErrorCode.FAILED_TO_ACCESS_POST;
 import static com.example.speedsideproject.likes.QLikes.likes;
 import static com.example.speedsideproject.post.QPost.post;
 import static com.example.speedsideproject.post.QTechs.techs;
@@ -49,52 +53,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         this.likesRepository = likesRepository;
     }
 
-//    @Override
-//    public PostDetailResponseDto findOnePostWithQuery(Long id, UserDetailsImpl userDetails) {
-//        /*main-query*/
-//        PostDetailResponseDto postDetail = queryFactory
-////                .select(Projections.constructor(PostDetailResponseDto.class,
-//                        .select(new QPostDetailResponseDto(
-//                                Expressions.asNumber(id).as("postId"),
-//                                post.createdAt,
-////                                techs ,
-//                                post.title,
-//                                post.viewCount,
-//                                post.category,
-//                                post.postState,
-//                                post.place,
-//                                post.likesLength,
-//                                post.frontReqNum,
-//                                post.frontendNum,
-//                                post.backReqNum,
-//                                post.backendNum,
-//                                post.pmReqNum,
-//                                post.pmNum,
-//                                post.mobileReqNum,
-//                                post.mobileNum,
-//                                post.designReqNum,
-//                                post.designNum,
-//                                post.contentUrl,
-//                                account.id.as("accountId"),
-//                                account.email,
-//                                account.nickname,
-//                                account.imgUrl.as("profileImg"),
-//                                likes.likeCheck
-//                        ))
-//                .from(post)
-//                .leftJoin(post.account, account)
-//                .where(post.id.eq(id))
-//                .leftJoin(post.likes, likes).on(usernameEq(userDetails))
-//                .leftJoin(post.techs, techs).on(techs.post.id.eq(id))
-//                .fetchFirst();
-//
-//        return postDetail;
-//    }
-
+    /*게시물 단건 조회*/
     @Override
-    public List<PostOneQuerylResponseDto> findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails) {
+    public PostDetailResponseDto findOnePostWithOneQuery(Long id, UserDetailsImpl userDetails) {
+        /*dto*/
+        PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto();
         /*main-query*/
-        List<PostOneQuerylResponseDto> postDetail = queryFactory
+        return queryFactory
                 .select(Projections.fields(PostOneQuerylResponseDto.class,
                         Expressions.asNumber(id).as("postId"),
                         post.createdAt,
@@ -127,9 +92,22 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(post.id.eq(id))
                 .leftJoin(post.account, account)
                 .leftJoin(post.likes, likes).on(usernameEq(userDetails))
-                .fetch();
-
-        return postDetail;
+                .fetch()
+                /*application region*/
+                .stream()
+                .collect(Collectors.groupingBy(
+                        v1 -> {
+                            if (postDetailResponseDto.getAccountId() == null)
+                                BeanUtils.copyProperties(v1, postDetailResponseDto);
+                            return postDetailResponseDto;
+                        },
+                        Collectors.mapping(v2 -> new Techs.TechsResponseDto(v2.getTechs()), Collectors.toList())))
+                .entrySet().stream()
+                .map(v3 -> {
+                    v3.getKey().setTechs(v3.getValue());
+                    return v3.getKey();
+                })
+                .findAny().orElseThrow(()->new CustomException(FAILED_TO_ACCESS_POST));
     }
 
     @Override
