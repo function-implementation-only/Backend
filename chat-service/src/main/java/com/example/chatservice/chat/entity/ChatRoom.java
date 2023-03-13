@@ -1,0 +1,54 @@
+package com.example.chatservice.chat.entity;
+
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+
+import com.example.chatservice.global.Timestamped;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@Getter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "is_deleted = '0'")
+@Entity
+@CrossOrigin("*")
+public class ChatRoom extends Timestamped {
+
+    @Id
+    @Column(name = "ROOM_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String roomName;
+
+    private String sender;
+
+    private String receiver;
+
+    private boolean isDeleted;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ChatMessage> chats;
+
+    private String lastChatMessage;
+
+    public void changeStatus() {
+        this.isDeleted = true;
+    }
+
+}

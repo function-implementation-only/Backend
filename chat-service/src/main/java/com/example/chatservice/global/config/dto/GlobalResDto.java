@@ -1,4 +1,4 @@
-package com.example.speedsideproject.global.dto;
+package com.example.chatservice.global.config.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

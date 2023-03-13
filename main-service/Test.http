@@ -8,11 +8,11 @@ Content-Type: application/json // used only for IDE highlighting.
 }
 === wait-for-server
 {
-    "message": "Wait for the server message and send the current message as response"
+    "message": "Wait for the tests message and send the current message as response"
 }
 ===
 {
-    "message": "Send after previous message without waiting for the server message"
+    "message": "Send after previous message without waiting for the tests message"
 }
 
 ###

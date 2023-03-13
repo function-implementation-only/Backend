@@ -1,13 +1,13 @@
 package com.example.chatservice.tests;
 
-import com.example.chatservice.config.security.user.UserDetailsImpl;
+import com.example.chatservice.global.security.user.UserDetailsImpl;
 import com.example.chatservice.feignclient.MainServiceClient;
 import com.example.chatservice.feignclient.UserResponseDto;
-import com.example.chatservice.kafka.Field;
-import com.example.chatservice.tests.init.Testing;
-import com.example.chatservice.tests.kafkatest.TestDto;
-import com.example.chatservice.tests.kafkatest.TestProducer;
-import com.example.chatservice.tests.init.TestingRepository;
+import com.example.chatservice.kafka.schema.Field;
+import com.example.chatservice.tests.entity.Testing;
+import com.example.chatservice.tests.module.kafkatest.TestDto;
+import com.example.chatservice.tests.module.kafkatest.TestProducer;
+import com.example.chatservice.tests.repository.TestingRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
