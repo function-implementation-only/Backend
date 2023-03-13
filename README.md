@@ -73,7 +73,9 @@
 |![장신원](https://user-images.githubusercontent.com/116439064/215262142-47067e5c-59ab-4097-aa89-9c1ca56199c8.png)|![이민규](https://user-images.githubusercontent.com/116439064/215262141-5c84b7e9-1a76-4c89-93a9-9b2f404f829a.png)|![안은솔](https://user-images.githubusercontent.com/116439064/215262140-71f4049c-30c5-4bf3-8072-af2b3ebc7ec9.png)|![김재영](https://user-images.githubusercontent.com/116439064/215262138-c0d1dddd-0394-454e-b721-75269dc1bdb4.png)|![서혁수](https://user-images.githubusercontent.com/116439064/215262139-23bf246f-f9f2-4703-a367-8af22628c549.png)|![황미경](https://user-images.githubusercontent.com/116439064/215262240-af881f71-ac78-4b7a-8e6d-f0cd32ff044b.png)| ![조문정](https://user-images.githubusercontent.com/116439064/216855877-eaa237cb-6d28-49ed-a7d7-b02014d2b0a6.png) |
 |FRONT-END|FRONT-END|FRONT-END|BACK-END|BACK-END|DESIGN|                                                     DESIGN                                                     |
 
+## 실행 방법
 
+아래는 이 프로젝트를 실행하는 방법입니다.
 
 
 
