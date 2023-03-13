@@ -1,7 +1,5 @@
 package com.example.speedsideproject.global.dto;
 
-import com.example.speedsideproject.error.ErrorCode;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
