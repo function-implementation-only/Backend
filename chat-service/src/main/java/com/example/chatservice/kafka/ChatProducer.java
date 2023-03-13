@@ -1,6 +1,11 @@
 package com.example.chatservice.kafka;
 
 
+import com.example.chatservice.kafka.dto.ChatSimpleDto;
+import com.example.chatservice.kafka.dto.KafkaChatDto;
+import com.example.chatservice.kafka.schema.Field;
+import com.example.chatservice.kafka.schema.Payload;
+import com.example.chatservice.kafka.schema.Schema;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
