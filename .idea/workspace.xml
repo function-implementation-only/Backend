@@ -8,7 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb9ff352-1800-4fa0-bdb2-8d7321fb4a41" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/main-service/123.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +131,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "create.test.in.the.same.root": "true",
     "last_directory_selection": "E:/dev/spring/side-project/src/main/java",
-    "last_opened_file_path": "E:/dev/spring/side-project/main-service",
+    "last_opened_file_path": "E:/dev/spring/week6/final",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
@@ -494,6 +494,7 @@
       <workItem from="1677920444799" duration="2081000" />
       <workItem from="1678000236733" duration="2000" />
       <workItem from="1678457770409" duration="16000" />
+      <workItem from="1678726945873" duration="330000" />
     </task>
     <servers />
   </component>

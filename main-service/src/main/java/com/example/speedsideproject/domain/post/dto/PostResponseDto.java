@@ -76,9 +76,6 @@ public class PostResponseDto {
         this.contentUrl = post.getContentUrl();
 //        시간
         this.createdAt = post.createdAt;
-//        this.frontReqNum = post.getFrontReqNum();
-//        this.backReqNum = post.getBackReqNum();
-//        this.designReqNum = post.getDesignReqNum();
         //조회수
         this.viewCount = post.getViewCount();
         //북마크 ...

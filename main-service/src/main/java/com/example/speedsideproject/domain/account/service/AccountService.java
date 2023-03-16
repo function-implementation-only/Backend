@@ -108,9 +108,9 @@ public class AccountService {
         return postRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(post -> new PostResponseDto(post, account)).collect(toList());
     }
 
-    // 내 댓글 가져오기
-    public List<ApplymentResponseDto> getMyComment(Account account) {
-        return applymentRepository.findTop5ByAccountOrderByIdDesc(account).stream().map(ApplymentResponseDto::new).collect(toList());
+    // 내 지원 가져오기
+    public List<?> getMyComment(UserDetailsImpl userDetails) {
+        return postRepository.findTop5ByMyApplyment(userDetails);
     }
 
     //logout 기능
@@ -227,9 +227,9 @@ public class AccountService {
         return true;
     }
 
-    /*내가 북마크 한 리스트*/
+    /*내가 북마크 한 리스트 */
     public List<?> getMyLikes(Account account) {
-        return postRepository.findTop5ByMyLikes(account).stream().map(PostResponseDto::new).collect(toList());
+        return postRepository.findTop5ByMyLikes(account).stream().map(x -> new PostResponseDto(x,true){}).collect(toList());
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.speedsideproject.domain.post.quarydsl;
 
 
 import com.example.speedsideproject.domain.account.entity.Account;
+import com.example.speedsideproject.domain.post.dto.PostResponseDto;
 import com.example.speedsideproject.domain.post.entity.Post;
 import com.example.speedsideproject.domain.post.dto.PostDetailResponseDto;
 import com.example.speedsideproject.domain.post.enums.Category;
@@ -20,6 +21,8 @@ public interface PostRepositoryCustom {
     //mypage에서 내가 like 한 postList  불러오기
     List<Post> findTop5ByMyLikes(Account account);
 
+    //mypage에서 내가 지원 한 postList  불러오기
+    List<?> findTop5ByMyApplyment(UserDetailsImpl userDetails);
     //post get all
     Page<?> findAllPost(Pageable pageable);
     Page<?> findAllPostWithCategory(Pageable pageable, String sort, List<Tech> techList, Category category, Place place, UserDetailsImpl userDetails);

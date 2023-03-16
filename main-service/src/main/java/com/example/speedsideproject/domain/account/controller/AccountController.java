@@ -67,19 +67,18 @@ public class AccountController {
         return ResponseDto.success(accountService.getMyPost(userDetails.getAccount()));
     }
 
-    //내 커멘트 불러오기
+    //내 지원 불러오기
     @ApiOperation(value = "내 지원 불러오기 ", notes = "내 지원 불러오기 최근 5개")
     @GetMapping("/mycomment")
     public ResponseDto<?> getMyComment(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
-        return ResponseDto.success(accountService.getMyComment(userDetails.getAccount()));
+        return ResponseDto.success(accountService.getMyComment(userDetails));
     }
     //내 북마크 불러오기
-    @ApiOperation(value = "내 북마크 불러오기 ", notes = "내 북마크 불러오기 최근 5개")
+    @ApiOperation(value = "내 북마크 불러오기 ", notes = "내 북마크 불러오기 최근 10개")
     @GetMapping("/mylikes")
     public ResponseDto<?> getMyLikes(@AuthenticationPrincipal @ApiIgnore UserDetailsImpl userDetails) {
         return ResponseDto.success(accountService.getMyLikes(userDetails.getAccount()));
     }
-
     //로그 아웃
     @ApiOperation(value = "로그 아웃", notes = "백엔드에서는 리프래시 토큰만 삭제 합니다")
     @PostMapping(value = "/logout")

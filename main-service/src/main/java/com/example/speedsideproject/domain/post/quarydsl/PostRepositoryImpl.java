@@ -2,6 +2,7 @@ package com.example.speedsideproject.domain.post.quarydsl;
 
 
 import com.example.speedsideproject.domain.account.entity.Account;
+import com.example.speedsideproject.domain.account.entity.QAccount;
 import com.example.speedsideproject.domain.likes.QLikes;
 import com.example.speedsideproject.domain.likes.repository.LikesRepository;
 import com.example.speedsideproject.domain.post.dto.*;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.speedsideproject.domain.account.entity.QAccount.account;
+import static com.example.speedsideproject.domain.applyment.entity.QApplyment.applyment;
 import static com.example.speedsideproject.domain.likes.QLikes.likes;
 import static com.example.speedsideproject.domain.post.entity.QPost.post;
 import static com.example.speedsideproject.domain.post.entity.QTechs.techs;
@@ -130,7 +132,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .from(post)
                 .join(post.likes, likes).on(likes.account.eq(account))
                 .orderBy(post.id.desc())
-                .limit(5)
+                .limit(10)
                 .fetch();
     }
 
@@ -185,6 +187,25 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .select(post.count())
                 .from(post);
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+    @Override
+    public List<?> findTop5ByMyApplyment(UserDetailsImpl userDetails){
+
+        JPAQuery<Long> id = queryFactory
+                .select(applyment.post.id)
+                .from(applyment)
+                .rightJoin(applyment.account, account).on(applyment.account.eq(userDetails.getAccount()))
+                .distinct();
+
+        return queryFactory
+                .select(new QPostQueryResponseDto(post,likes.likeCheck))
+                .distinct()
+                .from(post)
+                .leftJoin(post.account,account).fetchJoin()
+                .leftJoin(post.techs, techs)
+                .where(post.id.in(id))
+                .leftJoin(post.likes, likes).on(usernameEq(userDetails))
+                .fetch();
     }
 
     //동적관리 method
