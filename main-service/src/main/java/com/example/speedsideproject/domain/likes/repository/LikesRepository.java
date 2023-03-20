@@ -2,7 +2,7 @@ package com.example.speedsideproject.domain.likes.repository;
 
 
 import com.example.speedsideproject.domain.account.entity.Account;
-import com.example.speedsideproject.domain.likes.Likes;
+import com.example.speedsideproject.domain.likes.entity.Likes;
 import com.example.speedsideproject.domain.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 

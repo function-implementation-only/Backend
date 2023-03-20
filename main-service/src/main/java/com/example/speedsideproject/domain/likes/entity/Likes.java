@@ -1,4 +1,4 @@
-package com.example.speedsideproject.domain.likes;
+package com.example.speedsideproject.domain.likes.entity;
 
 
 import com.example.speedsideproject.domain.account.entity.Account;

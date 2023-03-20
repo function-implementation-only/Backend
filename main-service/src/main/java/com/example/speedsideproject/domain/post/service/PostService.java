@@ -2,7 +2,7 @@ package com.example.speedsideproject.domain.post.service;
 
 import com.example.speedsideproject.domain.account.entity.Account;
 import com.example.speedsideproject.domain.applyment.repository.ApplymentRepository;
-import com.example.speedsideproject.domain.likes.Likes;
+import com.example.speedsideproject.domain.likes.entity.Likes;
 import com.example.speedsideproject.domain.likes.repository.LikesRepository;
 import com.example.speedsideproject.domain.post.entity.Post;
 import com.example.speedsideproject.domain.post.dto.PostRequestDto;
