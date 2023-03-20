@@ -9,6 +9,6 @@ public class TestController {
 
     @GetMapping("/test")
     public String index() {
-        return "index";
+        return "api-gateway-test";
     }
 }

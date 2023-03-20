@@ -29,7 +29,6 @@ public class CORSConfiguration implements WebFluxConfigurer {
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedOrigin("http://127.0.0.1:5173");
         corsConfiguration.addAllowedOrigin("https://www.joinus.store");
         corsConfiguration.addAllowedOriginPattern("*");

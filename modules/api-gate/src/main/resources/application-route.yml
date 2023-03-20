@@ -1,30 +1,24 @@
 spring:
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       routes:
-        #        - id: main-service
-        #          uri: lb://MAIN-SERVICE
-        #          predicates:
-        #            - Path=/main-service/**
-
+        # Main-service
         - id: main-service
           uri: lb://MAIN-SERVICE
           predicates:
             - Path=/main-service/**
           filters:
-            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
             - AuthFilter
-#            - RemoveRequestHeader=Cookie
-        
-        #         Spring Cloud config with actuator
+        # Main-service Auth filtering
         - id: main-service
           uri: lb://MAIN-SERVICE
           predicates:
-            - Path=/main-service/actuator/**
-            - Method=GET,POST
+            - Path=/main-service/applyments/**, /main-service/likes/**, /main-service/notifications/**, /main-service/posts
+            - Method=PATCH,DELETE,POST
           filters:
-            - RemoveRequestHeader=Cookie
-
+            - AuthPermissionFilter
         # Chat-Service
         - id: chat-service
           uri: lb://CHAT-SERVICE
@@ -32,6 +26,33 @@ spring:
             - Path=/chat-service/**
             #            - Method=GET
           filters:
-              - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-              - AuthFilter
-#              - RemoveRequestHeader=Cookie
+            - AuthFilter
+            #              - RemoveRequestHeader=Cookie
+        # Chat-service 인증인가 filtering
+        - id: chat-service
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat-service/chat/**
+            - Method=POST
+          filters:
+            - AuthPermissionFilter
+
+
+
+        # Spring Cloud config with actuator
+        - id: main-service
+          uri: lb://MAIN-SERVICE
+          predicates:
+            - Path=/main-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: chat-service
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat-service/actuator/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+
+
