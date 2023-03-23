@@ -1,8 +1,7 @@
 # [Joinus] 개발을 위한 인력 매칭 서비스
 ![홍보물](https://user-images.githubusercontent.com/113455892/224764143-2113d06e-08bf-4612-bb58-2a5c9457beba.svg)
 ## 시연영상
-
-### 준비중
+https://youtu.be/lchUEy-PWBQ
 
 
 ## ✨ 기술스택
