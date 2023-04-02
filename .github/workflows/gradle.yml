@@ -88,6 +88,13 @@ jobs:
           chmod +x gradlew
 
       ## chat-service
+      ## auth
+      - name: Grant execute permission for gradlew
+        if: contains(github.ref, 'prod/chat-service')
+        run: |
+          cd ./chat-service
+          chmod +x gradlew
+      # properties
       - name: make application-cicd.properties
         if: contains(github.ref, 'prod/chat-service')
         run: |
