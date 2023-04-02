@@ -69,7 +69,7 @@ jobs:
       # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
-        id: deploy-prod
+        id: deploy-prod-main-service
         if: contains(github.ref, 'prod/main-service')
         with:
           host: ${{ secrets.EC2_IP }}
@@ -88,6 +88,13 @@ jobs:
           chmod +x gradlew
 
       ## chat-service
+      ## auth
+      - name: Grant execute permission for gradlew
+        if: contains(github.ref, 'prod/chat-service')
+        run: |
+          cd ./chat-service
+          chmod +x gradlew
+      # properties
       - name: make application-cicd.properties
         if: contains(github.ref, 'prod/chat-service')
         run: |
@@ -110,7 +117,7 @@ jobs:
       - name: Build with Gradle
         if: contains(github.ref, 'prod/chat-service')
         run: |
-          cd ./main-service
+          cd ./chat-service
           ./gradlew clean build
 
       ## docker build & push to production
@@ -125,7 +132,7 @@ jobs:
       ## deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
-        id: deploy-prod
+        id: deploy-prod-chat-service
         if: contains(github.ref, 'prod/chat-service')
         with:
           host: ${{ secrets.EC2_IP }}
