@@ -69,7 +69,7 @@ jobs:
       # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
-        id: deploy-prod
+        id: deploy-prod-main-service
         if: contains(github.ref, 'prod/main-service')
         with:
           host: ${{ secrets.EC2_IP }}
@@ -125,7 +125,7 @@ jobs:
       ## deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
-        id: deploy-prod
+        id: deploy-prod-chat-service
         if: contains(github.ref, 'prod/chat-service')
         with:
           host: ${{ secrets.EC2_IP }}
