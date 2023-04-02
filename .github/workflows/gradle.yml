@@ -110,7 +110,7 @@ jobs:
       - name: Build with Gradle
         if: contains(github.ref, 'prod/chat-service')
         run: |
-          cd ./main-service
+          cd ./chat-service
           ./gradlew clean build
 
       ## docker build & push to production
